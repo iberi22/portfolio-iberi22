@@ -1,18 +1,14 @@
 import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  integrations: [
-    svelte(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
-  ],
+  integrations: [svelte()],
   site: 'https://iberi22.github.io',
   base: '/portfolio-iberi22',
   output: 'static',
   vite: {
+    plugins: [tailwindcss()],
     ssr: {
       noExternal: ['@astrojs/svelte'],
     },

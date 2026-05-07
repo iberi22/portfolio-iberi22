@@ -1,113 +1,104 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { fade, fly } from 'svelte/transition';
-  import { quintOut } from 'svelte/easing';
-
-  let mounted = false;
-
   const techStack = [
-    { name: 'Rust', icon: '🦀', color: '#ff6b35' },
-    { name: 'TypeScript', icon: '📘', color: '#3178c6' },
-    { name: 'Python', icon: '🐍', color: '#3776ab' },
-    { name: 'Flutter', icon: '🪶', color: '#02569b' },
-    { name: 'React', icon: '⚛️', color: '#61dafb' },
-    { name: 'Svelte', icon: '🧡', color: '#ff3e00' },
-    { name: 'Astro', icon: '🚀', color: '#ff5a01' },
-    { name: 'Docker', icon: '🐳', color: '#2496ed' },
-    { name: 'Kubernetes', icon: '☸', color: '#326ce5' },
-    { name: 'SurrealDB', icon: '🗄️', color: '#ff00a0' },
-    { name: 'PostgreSQL', icon: '🐘', color: '#4169e1' },
-    { name: 'Redis', icon: '🔴', color: '#dc382d' },
+    { name: 'Rust' },
+    { name: 'TypeScript' },
+    { name: 'Python' },
+    { name: 'Flutter' },
+    { name: 'React' },
+    { name: 'Svelte' },
+    { name: 'Astro' },
+    { name: 'Docker' },
+    { name: 'Kubernetes' },
+    { name: 'SurrealDB' },
+    { name: 'PostgreSQL' },
+    { name: 'Redis' },
   ];
 
   const specialties = [
     {
       title: 'Systems Architecture',
-      desc: 'Designing distributed systems with Rust & cloud-native patterns',
-      icon: '🏗️',
+      desc: 'Designing distributed systems with Rust and cloud-native patterns',
+      code: '0x01'
     },
     {
       title: 'AI Orchestration',
-      desc: 'Building multi-agent systems with Gestalt & SurrealDB',
-      icon: '🧠',
+      desc: 'Building multi-agent systems with Gestalt and SurrealDB',
+      code: '0x02'
     },
     {
       title: 'Memory Systems',
       desc: 'Persistent knowledge graphs with Xavier2 vector storage',
-      icon: '💾',
+      code: '0x03'
     },
     {
       title: 'Full-Stack Development',
       desc: 'End-to-end applications from embedded to PWA',
-      icon: '⚡',
+      code: '0x04'
     },
   ];
-
-  onMount(() => {
-    mounted = true;
-  });
 </script>
 
 <section id="about" class="relative py-32 px-6">
   <div class="max-w-6xl mx-auto">
-    {#if mounted}
-      <div in:fly={{ y: 40, duration: 800, easing: quintOut }}>
-        <span class="text-neon-green font-mono text-sm tracking-widest mb-4 block"># about</span>
-        <h2 class="section-title">
-          <span class="text-gradient">Crafting</span> the future<br />of AI infrastructure
-        </h2>
-      </div>
+    <div class="entry-clip">
+      <span class="text-accent text-sm tracking-widest mb-4 block"># about</span>
+      <h2 class="section-title">
+        Architecting <span class="text-accent">resilient</span> infrastructure
+      </h2>
+    </div>
 
-      <div
-        in:fly={{ y: 40, duration: 800, delay: 200, easing: quintOut }}
-        class="grid md:grid-cols-2 gap-12 mt-12"
-      >
-        <div>
-          <p class="text-gray-400 text-lg leading-relaxed mb-6">
-            I'm Samuel Belalcazar — a systems architect and developer focused on 
-            building resilient, distributed infrastructure for AI agents. 
-            Founder of <span class="text-neon-green">SouthWest AI Labs</span>, 
-            where I push the boundaries of what's possible with memory systems 
-            and agent coordination.
-          </p>
-          <p class="text-gray-500 leading-relaxed">
-            From orchestrating multi-agent swarms to crafting offline-first 
-            health apps, every project is built with the same philosophy: 
-            <span class="text-white">clean architecture, zero compromise</span>.
-          </p>
-        </div>
-        <div>
-          <div class="glass-card p-8">
-            <h3 class="text-lg font-semibold mb-6 text-gray-300">Core Competencies</h3>
-            <div class="space-y-4">
-              {#each specialties as s, i}
-                <div
-                  class="flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors"
-                  style="transition-delay: {i * 100}ms"
-                >
-                  <span class="text-2xl">{s.icon}</span>
-                  <div>
-                    <h4 class="text-white font-medium">{s.title}</h4>
-                    <p class="text-gray-500 text-sm">{s.desc}</p>
-                  </div>
-                </div>
-              {/each}
-            </div>
+    <div class="grid md:grid-cols-2 gap-16 mt-16">
+      <div>
+        <p class="entry-rise text-text-secondary text-lg leading-relaxed mb-8" style="animation-delay: 120ms">
+          I'm Samuel Belalcazar - a systems architect and developer focused on
+          building resilient, distributed infrastructure for AI agents.
+          Founder of <span class="text-accent">SouthWest AI Labs</span>,
+          where I push the boundaries of memory systems and agent coordination.
+        </p>
+        <p class="entry-rise text-text-muted leading-relaxed" style="animation-delay: 220ms">
+          From orchestrating multi-agent swarms to crafting offline-first
+          health apps, every project is built with the same philosophy:
+          <span class="text-text-primary">clean architecture, zero compromise</span>.
+        </p>
+        <div class="entry-scan mt-12 flex gap-4" style="animation-delay: 320ms">
+          <div class="flex flex-col">
+            <span class="text-accent text-2xl font-bold">5+</span>
+            <span class="text-text-muted text-xs uppercase tracking-tighter">Core Projects</span>
+          </div>
+          <div class="w-px h-10 bg-white/10 mx-4"></div>
+          <div class="flex flex-col">
+            <span class="text-secondary text-2xl font-bold">Rust</span>
+            <span class="text-text-muted text-xs uppercase tracking-tighter">Primary Stack</span>
           </div>
         </div>
       </div>
-    {/if}
 
-    <!-- Tech Stack -->
-    <div class="mt-24">
-      <h3 class="text-center text-sm font-mono text-gray-500 tracking-widest mb-10">TECHNOLOGIES I WORK WITH</h3>
-      <div class="flex flex-wrap justify-center gap-3">
-        {#each techStack as tech, i}
+      <div>
+        <div class="glass-card p-8 entry-rise" style="animation-delay: 180ms">
+          <h3 class="text-xs mb-8 text-text-muted uppercase tracking-[0.2em]">Core Competencies</h3>
+          <div class="space-y-6">
+            {#each specialties as s}
+              <div class="group flex items-start gap-5">
+                <span class="text-accent text-xs mt-1 transition-transform group-hover:translate-x-1">{s.code}</span>
+                <div>
+                  <h4 class="text-text-primary font-bold text-base mb-1">{s.title}</h4>
+                  <p class="text-text-muted text-sm leading-relaxed">{s.desc}</p>
+                </div>
+              </div>
+            {/each}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-32 entry-scan" style="animation-delay: 420ms">
+      <h3 class="text-center text-[10px] text-text-muted tracking-[0.3em] mb-12 uppercase">Stack Index</h3>
+      <div class="flex flex-wrap justify-center gap-4">
+        {#each techStack as tech}
           <span
-            class="tech-badge text-base px-4 py-1.5 transition-all duration-300 hover:scale-110 hover:shadow-lg"
-            style="border-color: {tech.color}33; color: {tech.color}; transition-delay: {i * 50}ms"
+            class="px-4 py-2 rounded border border-white/5 bg-bg-surface-dark/50 text-xs text-text-secondary hover:border-accent hover:text-accent hover:-translate-y-1 transition-all duration-300 cursor-default"
           >
-            {tech.icon} {tech.name}
+            {tech.name}
           </span>
         {/each}
       </div>

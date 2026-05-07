@@ -1,9 +1,9 @@
 {
   "name": "portfolio-iberi22",
   "type": "module",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Samuel Belalcazar (iberi22) — High-End Developer Portfolio",
+  "description": "Samuel Belalcazar (iberi22) — Systems Architect & Developer Portfolio",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -11,11 +11,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.16.0",
-    "@astrojs/svelte": "^5.7.0",
-    "@astrojs/tailwind": "^5.1.0",
-    "svelte": "^4.2.0",
-    "tailwindcss": "^3.4.0",
-    "typescript": "^5.5.0"
+    "@astrojs/svelte": "^8.1.0",
+    "@tailwindcss/vite": "^4.2.4",
+    "astro": "^6.2.2",
+    "svelte": "^5.55.5",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^6.0.3"
   }
 }

@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import Nav from '../components/Nav.svelte';
+import HeroSection from '../components/HeroSection.svelte';
+import AboutSection from '../components/AboutSection.svelte';
+import ProjectsTimeline from '../components/ProjectsTimeline.svelte';
+import BlogSection from '../components/BlogSection.svelte';
+import ContactSection from '../components/ContactSection.svelte';
+import Footer from '../components/Footer.svelte';
+---
+
+<Layout>
+  <Nav client:load />
+  <main>
+    <HeroSection client:load />
+    <AboutSection client:load />
+    <ProjectsTimeline client:load />
+    <BlogSection client:load />
+    <ContactSection client:load />
+    <Footer client:load />
+  </main>
+</Layout>

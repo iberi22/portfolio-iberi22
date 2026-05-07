@@ -1,23 +1,22 @@
 <script lang="ts">
+  import { t } from '../i18n/index';
+
   const blogPosts = [
     {
       title: 'Building Xavier2: A Memory Core for AI Agents',
       excerpt: 'How I built a persistent memory system in Rust with vector search and knowledge graphs.',
-      date: 'COMING SOON',
       tags: ['Rust', 'AI', 'Systems'],
       draft: true,
     },
     {
       title: 'Multi-Agent Orchestration with Gestalt',
       excerpt: 'Designing a CLI orchestrator that coordinates multiple AI agents using SurrealDB.',
-      date: 'COMING SOON',
       tags: ['Rust', 'Agents', 'Architecture'],
       draft: true,
     },
     {
       title: 'Offline-First Architecture for Mobile',
       excerpt: 'Patterns and trade-offs for building resilient mobile apps with Flutter.',
-      date: 'COMING SOON',
       tags: ['Flutter', 'Mobile', 'Architecture'],
       draft: true,
     },
@@ -34,12 +33,12 @@
 <section id="blog" class="relative py-32 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="entry-clip">
-      <span class="text-accent text-sm tracking-widest mb-4 block"># blog</span>
+      <span class="text-accent text-sm tracking-widest mb-4 block">{t('blog.heading')}</span>
       <h2 class="section-title">
-        Insights & <span class="text-accent">architecture</span>
+        {t('blog.title')} <span class="text-accent">{t('blog.titleAccent')}</span>
       </h2>
       <p class="text-text-secondary text-lg mt-4 max-w-2xl">
-        Deep dives into systems architecture, AI infrastructure, and the engineering behind my projects.
+        {t('blog.subtitle')}
       </p>
     </div>
 
@@ -52,10 +51,10 @@
           onmousemove={handleMouseMove}
         >
           <div class="flex items-center justify-between mb-6">
-            <span class="text-[10px] text-text-muted tracking-widest">{post.date}</span>
+            <span class="text-[10px] text-text-muted tracking-widest">{t('blog.comingSoon')}</span>
             {#if post.draft}
               <span class="px-2 py-0.5 rounded-full text-[9px] bg-accent-dark/10 text-accent-dark border border-accent-dark/20 uppercase">
-                Draft
+                {t('blog.draft')}
               </span>
             {/if}
           </div>
@@ -78,7 +77,7 @@
 
     <div class="text-center mt-20 entry-scan" style="animation-delay: 500ms">
       <p class="text-text-muted text-[10px] uppercase tracking-[0.2em]">
-        Automated pipeline active / System status: nominal
+        {t('blog.pipelineStatus')}
       </p>
     </div>
   </div>

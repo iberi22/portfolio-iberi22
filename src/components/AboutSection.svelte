@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { t } from '../i18n/index';
+
   const techStack = [
     { name: 'Rust' },
     { name: 'TypeScript' },
@@ -41,41 +43,37 @@
 <section id="about" class="relative py-32 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="entry-clip">
-      <span class="text-accent text-sm tracking-widest mb-4 block"># about</span>
+      <span class="text-accent text-sm tracking-widest mb-4 block">{t('about.heading')}</span>
       <h2 class="section-title">
-        Architecting <span class="text-accent">resilient</span> infrastructure
+        {t('about.title')} <span class="text-accent">{t('about.titleAccent')}</span> {t('about.titleSuffix')}
       </h2>
     </div>
 
     <div class="grid md:grid-cols-2 gap-16 mt-16">
       <div>
         <p class="entry-rise text-text-secondary text-lg leading-relaxed mb-8" style="animation-delay: 120ms">
-          I'm Samuel Belalcazar - a systems architect and developer focused on
-          building resilient, distributed infrastructure for AI agents.
-          Founder of <span class="text-accent">SouthWest AI Labs</span>,
-          where I push the boundaries of memory systems and agent coordination.
+          {t('about.bio')}
         </p>
         <p class="entry-rise text-text-muted leading-relaxed" style="animation-delay: 220ms">
-          From orchestrating multi-agent swarms to crafting offline-first
-          health apps, every project is built with the same philosophy:
-          <span class="text-text-primary">clean architecture, zero compromise</span>.
+          {t('about.philosophy')}
+          <span class="text-text-primary"> {t('about.philosophyAccent')}</span>
         </p>
         <div class="entry-scan mt-12 flex gap-4" style="animation-delay: 320ms">
           <div class="flex flex-col">
             <span class="text-accent text-2xl font-bold">5+</span>
-            <span class="text-text-muted text-xs uppercase tracking-tighter">Core Projects</span>
+            <span class="text-text-muted text-xs uppercase tracking-tighter">{t('about.statProjects')}</span>
           </div>
           <div class="w-px h-10 bg-white/10 mx-4"></div>
           <div class="flex flex-col">
             <span class="text-secondary text-2xl font-bold">Rust</span>
-            <span class="text-text-muted text-xs uppercase tracking-tighter">Primary Stack</span>
+            <span class="text-text-muted text-xs uppercase tracking-tighter">{t('about.statStack')}</span>
           </div>
         </div>
       </div>
 
       <div>
         <div class="glass-card p-8 entry-rise" style="animation-delay: 180ms">
-          <h3 class="text-xs mb-8 text-text-muted uppercase tracking-[0.2em]">Core Competencies</h3>
+          <h3 class="text-xs mb-8 text-text-muted uppercase tracking-[0.2em]">{t('about.competencies')}</h3>
           <div class="space-y-6">
             {#each specialties as s}
               <div class="group flex items-start gap-5">
@@ -92,7 +90,7 @@
     </div>
 
     <div class="mt-32 entry-scan" style="animation-delay: 420ms">
-      <h3 class="text-center text-[10px] text-text-muted tracking-[0.3em] mb-12 uppercase">Stack Index</h3>
+      <h3 class="text-center text-[10px] text-text-muted tracking-[0.3em] mb-12 uppercase">{t('about.stackIndex')}</h3>
       <div class="flex flex-wrap justify-center gap-4">
         {#each techStack as tech}
           <span

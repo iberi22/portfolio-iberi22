@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { t } from '../i18n/index';
+
   let expandedProject = $state<string | null>('xavier2');
 
   const projects = [
@@ -103,13 +105,28 @@
 
 <section id="projects" class="relative py-32 px-6">
   <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-24 max-w-3xl mx-auto">
+      <div class="glass-card p-8 md:p-12 space-y-6 text-center">
+        <p class="text-text-secondary text-sm leading-relaxed">
+          {t('locale.announcement')}
+        </p>
+        <div class="w-12 h-px bg-accent/30 mx-auto"></div>
+        <p class="text-text-muted text-sm leading-relaxed">
+          {t('locale.mission')}
+        </p>
+        <p class="text-accent text-sm font-bold tracking-wider">
+          {t('locale.accelerate')}
+        </p>
+      </div>
+    </div>
+
     <div class="entry-clip">
-      <span class="text-accent text-sm tracking-widest mb-4 block"># projects</span>
+      <span class="text-accent text-sm tracking-widest mb-4 block">{t('projects.heading')}</span>
       <h2 class="section-title">
-        Building <span class="text-accent">resilient</span> systems
+        {t('projects.title')} <span class="text-accent">{t('projects.titleAccent')}</span> {t('projects.titleSuffix')}
       </h2>
       <p class="text-text-secondary text-lg mt-4 max-w-2xl">
-        From AI memory cores to industrial SaaS - each project pushes boundaries.
+        {t('projects.subtitle')}
       </p>
     </div>
 
@@ -159,7 +176,7 @@
               <div class="details-panel mt-8 pt-8 border-t border-white/5">
                 <div class="grid md:grid-cols-5 gap-8">
                   <div class="md:col-span-2">
-                    <h4 class="text-sm text-text-muted mb-4 uppercase tracking-wider">Tech Stack</h4>
+                    <h4 class="text-sm text-text-muted mb-4 uppercase tracking-wider">{t('projects.techStack')}</h4>
                     <div class="flex flex-wrap gap-2">
                       {#each project.tech as tech}
                         <span class="tech-badge tech-badge-strong">{tech}</span>
@@ -172,11 +189,11 @@
                       class="repo-link"
                     >
                       <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                      Repository
+                      {t('projects.repository')}
                     </a>
                   </div>
                   <div class="md:col-span-3">
-                    <h4 class="text-sm text-text-muted mb-4 uppercase tracking-wider">Timeline & Roadmap</h4>
+                    <h4 class="text-sm text-text-muted mb-4 uppercase tracking-wider">{t('projects.timeline')}</h4>
                     {#each project.timeline as event, ti}
                       <div class="timeline-item">
                         <div class="timeline-marker">

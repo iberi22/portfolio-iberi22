@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { t } from '../i18n/index';
+
   let mouseX = $state(0);
   let mouseY = $state(0);
   let heroRef = $state<HTMLElement | null>(null);
@@ -36,7 +38,7 @@
     <div class="entry-scan mb-8">
       <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/20 bg-accent/5 text-accent text-sm">
         <span class="w-2 h-2 bg-accent rounded-full"></span>
-        Systems Architect & Developer
+        {t('hero.badge')}
       </span>
     </div>
 
@@ -46,13 +48,13 @@
     </h1>
 
     <p class="entry-clip text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 leading-relaxed">
-      Building resilient systems at scale.<br class="hidden md:block" />
-      Rust, AI orchestration, and cloud-native architectures.
+      {t('hero.tagline')}<br class="hidden md:block" />
+      {t('hero.taglineExtra')}
     </p>
 
     <div class="entry-rise flex flex-wrap justify-center gap-6" style="animation-delay: 520ms">
-      <a href="#projects" class="btn-primary">View Projects</a>
-      <a href="#contact" class="btn-secondary">Get in Touch</a>
+      <a href="#projects" class="btn-primary">{t('hero.viewProjects')}</a>
+      <a href="#contact" class="btn-secondary">{t('hero.getInTouch')}</a>
     </div>
   </div>
 
@@ -60,7 +62,7 @@
     href="#about"
     class="scroll-cue absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted hover:text-accent transition-colors"
   >
-    <span class="text-xs tracking-widest">SCROLL</span>
+    <span class="text-xs tracking-widest">{t('hero.scroll')}</span>
     <div class="w-6 h-10 rounded-full border-2 border-current flex items-start justify-center p-1.5">
       <div class="w-1.5 h-3 bg-current rounded-full"></div>
     </div>

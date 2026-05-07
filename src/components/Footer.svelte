@@ -1,9 +1,13 @@
+<script lang="ts">
+  import { t } from '../i18n/index';
+</script>
+
 <footer class="relative py-16 px-6 border-t border-white/5">
   <div class="max-w-6xl mx-auto">
     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
       <div>
         <span class="text-lg font-bold text-accent">iberi22</span>
-        <p class="text-text-muted text-sm mt-1">Systems Architect & Developer</p>
+        <p class="text-text-muted text-sm mt-1">{t('footer.tagline')}</p>
       </div>
 
       <div class="flex items-center gap-6 text-sm text-text-muted">
@@ -22,9 +26,9 @@
       <p class="text-text-muted text-xs">
         <span class="text-accent/40">&copy;</span> {new Date().getFullYear()} <span class="text-accent/70">iberi22</span>
         <span class="text-text-muted mx-2">/</span>
-        Part of <span class="text-text-secondary">SouthWest AI Labs</span>
+        {t('footer.partOf')} <span class="text-text-secondary">SouthWest AI Labs</span>
         <span class="text-text-muted mx-2">/</span>
-        Built with <span class="text-accent/70">Astro</span> + <span class="text-secondary/70">Svelte</span>
+        {t('footer.builtWith')} <span class="text-accent/70">Astro</span> + <span class="text-secondary/70">Svelte</span>
       </p>
     </div>
   </div>

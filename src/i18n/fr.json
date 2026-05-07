@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "about": "À propos",
+    "projects": "Projets",
+    "blog": "Blog",
+    "contact": "Contact",
+    "git": "GIT",
+    "github": "GITHUB"
+  },
+  "hero": {
+    "badge": "Architecte Systèmes et Développeur",
+    "firstName": "Samuel",
+    "lastName": "Belalcazar",
+    "tagline": "Construire des systèmes résilients à grande échelle.",
+    "taglineExtra": "Rust, orchestration IA et architectures cloud-native.",
+    "viewProjects": "Voir les Projets",
+    "getInTouch": "Me Contacter",
+    "scroll": "DÉFILER"
+  },
+  "about": {
+    "heading": "# à propos",
+    "title": "Architecte",
+    "titleAccent": "d'infrastructure",
+    "titleSuffix": "résiliente",
+    "bio": "Je suis Samuel Belalcazar — architecte systèmes et développeur concentré sur la construction d'infrastructures résilientes et distribuées pour les agents IA. Fondateur de SouthWest AI Labs, où je repousse les limites des systèmes mémoire et de la coordination d'agents.",
+    "philosophy": "De l'orchestration d'essaims multi-agents à la création d'apps santé hors-ligne, chaque projet est construit avec la même philosophie :",
+    "philosophyAccent": "architecture propre, zéro compromis.",
+    "statProjects": "Projets Clés",
+    "statStack": "Stack Principal",
+    "competencies": "Compétences Clés",
+    "stackIndex": "Index des Technologies"
+  },
+  "projects": {
+    "heading": "# projets",
+    "title": "Construire des",
+    "titleAccent": "systèmes",
+    "titleSuffix": "résilients",
+    "subtitle": "Des cœurs mémoire IA au SaaS industriel — chaque projet repousse les limites.",
+    "techStack": "Stack Technique",
+    "timeline": "Chronologie et Roadmap",
+    "repository": "Dépôt"
+  },
+  "blog": {
+    "heading": "# blog",
+    "title": "Réflexions",
+    "titleAccent": "et architecture",
+    "subtitle": "Analyses approfondies sur l'architecture des systèmes, l'infrastructure IA et l'ingénierie derrière mes projets.",
+    "draft": "Brouillon",
+    "comingSoon": "PROCHAINEMENT",
+    "pipelineStatus": "Pipeline automatisée active / Statut système : nominal"
+  },
+  "contact": {
+    "heading": "# contact",
+    "title": "Construisons",
+    "titleAccent": "quelque chose",
+    "titleSuffix": "de résilient",
+    "subtitle": "Vous travaillez sur l'infrastructure IA, l'architecture systèmes ou l'automatisation industrielle ? J'adorerais en entendre parler.",
+    "emailPlaceholder": "VOTRE@EMAIL.COM",
+    "messagePlaceholder": "DÉCRIVEZ VOTRE PROJET OU ARCHITECTURE...",
+    "submit": "LANCER LE CONTACT",
+    "email": "EMAIL"
+  },
+  "footer": {
+    "tagline": "Architecte Systèmes et Développeur",
+    "partOf": "Fait partie de",
+    "builtWith": "Construit avec"
+  },
+  "locale": {
+    "label": "Langue",
+    "announcement": "Ce site parle votre langue. La langue n'est pas une barrière pour construire des logiciels en communauté.",
+    "mission": "SouthWest AI Labs est un laboratoire d'idées pour des solutions à intégration communautaire. Notre mission : donner à tous accès aux outils de pointe pour concevoir des systèmes d'information qui améliorent la qualité de vie.",
+    "accelerate": "Nous accélérons les systèmes qui apportent la qualité de vie aux gens."
+  }
+}

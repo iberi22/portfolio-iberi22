@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "about": "关于",
+    "projects": "项目",
+    "blog": "博客",
+    "contact": "联系",
+    "git": "GIT",
+    "github": "GITHUB"
+  },
+  "hero": {
+    "badge": "系统架构师与开发者",
+    "firstName": "Samuel",
+    "lastName": "Belalcazar",
+    "tagline": "构建可扩展的弹性系统。",
+    "taglineExtra": "Rust，AI编排与云原生架构。",
+    "viewProjects": "查看项目",
+    "getInTouch": "取得联系",
+    "scroll": "滚动"
+  },
+  "about": {
+    "heading": "# 关于",
+    "title": "构建",
+    "titleAccent": "弹性",
+    "titleSuffix": "基础设施",
+    "bio": "我是Samuel Belalcazar——专注于为AI代理构建弹性分布式基础设施的系统架构师和开发者。SouthWest AI Labs创始人，致力于突破记忆系统和代理协调的边界。",
+    "philosophy": "从编排多代理集群到打造离线优先的健康应用，每个项目都遵循同一理念：",
+    "philosophyAccent": "干净的架构，零妥协。",
+    "statProjects": "核心项目",
+    "statStack": "主要技术栈",
+    "competencies": "核心能力",
+    "stackIndex": "技术索引"
+  },
+  "projects": {
+    "heading": "# 项目",
+    "title": "构建",
+    "titleAccent": "弹性",
+    "titleSuffix": "系统",
+    "subtitle": "从AI记忆核心到工业SaaS——每个项目都在突破界限。",
+    "techStack": "技术栈",
+    "timeline": "时间线与路线图",
+    "repository": "仓库"
+  },
+  "blog": {
+    "heading": "# 博客",
+    "title": "洞见与",
+    "titleAccent": "架构",
+    "subtitle": "深入探讨系统架构、AI基础设施以及项目背后的工程实践。",
+    "draft": "草稿",
+    "comingSoon": "即将推出",
+    "pipelineStatus": "自动化流水线运行中 / 系统状态：正常"
+  },
+  "contact": {
+    "heading": "# 联系",
+    "title": "让我们一起",
+    "titleAccent": "构建",
+    "titleSuffix": "弹性系统",
+    "subtitle": "正在从事AI基础设施、系统架构或工业自动化？我很期待与你交流。",
+    "emailPlaceholder": "你的@邮箱.COM",
+    "messagePlaceholder": "描述你的项目或架构...",
+    "submit": "发起联系",
+    "email": "邮箱"
+  },
+  "footer": {
+    "tagline": "系统架构师与开发者",
+    "partOf": "隶属于",
+    "builtWith": "构建于"
+  },
+  "locale": {
+    "label": "语言",
+    "announcement": "本网站支持你的语言。语言不是社区化软件开发的障碍。",
+    "mission": "SouthWest AI Labs是一个面向社区整合解决方案的创意实验室。我们的使命：让每个人都能获得尖端工具，设计改善生活质量的信息系统。",
+    "accelerate": "我们加速能够为人们带来生活质量的系统。"
+  }
+}

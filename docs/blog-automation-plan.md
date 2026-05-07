@@ -1,37 +1,62 @@
-# Blog Automation Plan
+# Blog Automation Pipeline — Complete (2026-05-07)
 
-**Status:** Planned  
-**Priority:** Next after i18n
+**Status:** ✅ Deployed  
+**Commit:** `4b727c9` + upcoming fixup
 
-## Problem
-Blog section shows "COMING SOON" placeholders. Real content + automated pipeline needed.
+## What was implemented
 
-## Recommended Approach: GitHub Issues → Astro Content Collection
+### Astro 6 Content Collection
+- `src/content.config.ts` — `glob()` loader for `src/content/blog/` directory
+- Schema: title, excerpt, date, tags, draft, published
+- 3 posts: `xavier2-memory-core.md` (published), `multi-agent-orchestration-gestalt.md` (draft), `offline-first-architecture.md` (draft)
 
-1. **Astro Content Collection**
-   - Create `src/content/config.ts` with blog schema (title, date, tags, draft, body)
-   - Blog posts at `src/content/blog/<slug>.md`
-   - Individual route at `src/pages/blog/[slug].astro`
+### Individual Blog Route
+- `src/pages/blog/[slug].astro` — renders each post with full prose styles
+- `getStaticPaths()` generates pages from content collection
+- Calls `render()` + `getCollection()` from `astro:content`
 
-2. **Pipeline**
-   - Write posts as GitHub Issues with `blog-post` label
-   - GitHub Action: on issue labeled `blog-post` → extract body as markdown
-   - Convert to Astro content entry → commit + deploy
+### BlogSection Update
+- `src/components/BlogSection.svelte` — accepts `posts` prop from Astro page
+- Reads from content collection at build time
+- Links published posts to individual `/blog/{slug}` page
+- Draft posts show with badge, no link
 
-3. **Integration**
-   - `BlogSection.svelte` reads from content collection instead of hardcoded array
-   - Preserve i18n for titles/descriptions (translate per post)
+### GitHub Action
+- `.github/workflows/blog-sync.yml` — triggers on Issue with `blog-post` label
+- Auto-generates `src/content/blog/{slug}.md` from issue body
+- Commits + pushes → triggers deploy
 
-## Files to create
-- `src/content/config.ts`
-- `src/pages/blog/[slug].astro`
-- `.github/workflows/blog-sync.yml`
-- `src/content/blog/` (directory for posts)
+### Pages built (7 total)
+- `/` (home with all sections + blog preview)
+- `/blog` (full blog listing)
+- `/blog/xavier2-memory-core` (individual post)
+- `/blog/multi-agent-orchestration-gestalt` (individual post)
+- `/blog/offline-first-architecture` (individual post)
+- `/projects`
+- `/contact`
 
-## Files to modify
-- `src/components/BlogSection.svelte` (read from content collection)
+## How to add a new blog post
 
-## Why this approach
-- Native Astro content collections = fast, typed, MDX-ready
-- GitHub Issues = easy writing interface (any device, web UI)
-- Auto-deploy = no manual steps
+### Method 1: Write a `.md` file
+Create `src/content/blog/your-post.md` with frontmatter:
+```md
+---
+title: 'Your Title'
+excerpt: 'Brief description.'
+date: '2026-05-07'
+tags: ['Tag1', 'Tag2']
+draft: false
+published: true
+---
+Content here...
+```
+Commit → auto-deploys.
+
+### Method 2: GitHub Issue
+Create an Issue with:
+1. Title as blog post title
+2. Body as blog content
+3. Label: `blog-post`
+4. Additional labels become tags
+
+GitHub Action auto-generates the `.md` file and deploys.

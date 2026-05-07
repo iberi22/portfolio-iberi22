@@ -1,26 +1,7 @@
 <script lang="ts">
   import { t } from '../i18n/index';
 
-  const blogPosts = [
-    {
-      title: 'Building Xavier2: A Memory Core for AI Agents',
-      excerpt: 'How I built a persistent memory system in Rust with vector search and knowledge graphs.',
-      tags: ['Rust', 'AI', 'Systems'],
-      draft: true,
-    },
-    {
-      title: 'Multi-Agent Orchestration with Gestalt',
-      excerpt: 'Designing a CLI orchestrator that coordinates multiple AI agents using SurrealDB.',
-      tags: ['Rust', 'Agents', 'Architecture'],
-      draft: true,
-    },
-    {
-      title: 'Offline-First Architecture for Mobile',
-      excerpt: 'Patterns and trade-offs for building resilient mobile apps with Flutter.',
-      tags: ['Flutter', 'Mobile', 'Architecture'],
-      draft: true,
-    },
-  ];
+  let { posts = [] }: { posts?: Array<{ slug: string; title: string; excerpt: string; date: string; tags: string[]; draft: boolean }> } = $props();
 
   function handleMouseMove(event: MouseEvent) {
     const target = event.currentTarget as HTMLElement;
@@ -43,15 +24,17 @@
     </div>
 
     <div class="blog-layout mt-16">
-      {#each blogPosts as post, i (post.title)}
-        <article
-          class="glass-card p-8 group transition-all duration-500 entry-rise"
+      {#each posts.sort((a, b) => a.draft === b.draft ? 0 : a.draft ? 1 : -1) as post, i (post.slug)}
+        <a
+          href={post.draft ? undefined : `/portfolio-iberi22/blog/${post.slug}/`}
+          class="glass-card p-8 group transition-all duration-500 entry-rise block"
           class:draft-card={post.draft}
+          class:pointer-events-auto={!post.draft}
           style="animation-delay: {i * 130}ms"
           onmousemove={handleMouseMove}
         >
           <div class="flex items-center justify-between mb-6">
-            <span class="text-[10px] text-text-muted tracking-widest">{t('blog.comingSoon')}</span>
+            <span class="text-[10px] text-text-muted tracking-widest">{post.date}</span>
             {#if post.draft}
               <span class="px-2 py-0.5 rounded-full text-[9px] bg-accent-dark/10 text-accent-dark border border-accent-dark/20 uppercase">
                 {t('blog.draft')}
@@ -71,7 +54,13 @@
               <span class="text-[10px] px-2 py-1 rounded bg-white/5 text-text-muted border border-white/5">{tag}</span>
             {/each}
           </div>
-        </article>
+
+          {#if !post.draft}
+            <div class="mt-6 text-accent text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+              Read more →
+            </div>
+          {/if}
+        </a>
       {/each}
     </div>
 
@@ -91,16 +80,17 @@
     align-items: stretch;
   }
 
-  .blog-layout article:first-child {
+  .blog-layout a:first-child {
     grid-row: span 2;
   }
 
-  .blog-layout article:hover {
+  .blog-layout a:hover {
     transform: translateY(-4px);
   }
 
   .draft-card {
     opacity: 0.72;
+    cursor: default;
   }
 
   @media (max-width: 767px) {
@@ -108,7 +98,7 @@
       grid-template-columns: 1fr;
     }
 
-    .blog-layout article:first-child {
+    .blog-layout a:first-child {
       grid-row: auto;
     }
   }

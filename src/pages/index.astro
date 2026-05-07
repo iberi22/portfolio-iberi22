@@ -8,6 +8,16 @@ import ProjectsTimeline from '../components/ProjectsTimeline.svelte';
 import BlogSection from '../components/BlogSection.svelte';
 import ContactSection from '../components/ContactSection.svelte';
 import Footer from '../components/Footer.svelte';
+import { getCollection } from 'astro:content';
+
+const blogPosts = (await getCollection('blog')).map((post) => ({
+  slug: post.id,
+  title: post.data.title,
+  excerpt: post.data.excerpt,
+  date: post.data.date,
+  tags: post.data.tags,
+  draft: post.data.draft,
+}));
 ---
 
 <Layout>
@@ -16,7 +26,7 @@ import Footer from '../components/Footer.svelte';
     <HeroSection client:load />
     <AboutSection client:load />
     <ProjectsTimeline client:load />
-    <BlogSection client:load />
+    <BlogSection client:load posts={blogPosts} />
     <ContactSection client:load />
     <Footer client:load />
   </main>

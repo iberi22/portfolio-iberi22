@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '../i18n/index';
+  import { baseUrl } from '../lib/baseUrl';
 
   let { posts = [] }: { posts?: Array<{ slug: string; title: string; excerpt: string; date: string; tags: string[]; draft: boolean }> } = $props();
 
@@ -26,7 +27,7 @@
     <div class="blog-layout mt-16">
       {#each posts.sort((a, b) => a.draft === b.draft ? 0 : a.draft ? 1 : -1) as post, i (post.slug)}
         <a
-          href={post.draft ? undefined : `/portfolio-iberi22/blog/${post.slug}/`}
+          href={post.draft ? undefined : baseUrl(`blog/${post.slug}/`)}
           class="glass-card p-8 group transition-all duration-500 entry-rise block"
           class:draft-card={post.draft}
           class:pointer-events-auto={!post.draft}

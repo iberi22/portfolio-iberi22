@@ -30,7 +30,7 @@ Connectivity is a privilege, not a guarantee. In industrial environments, mining
 
 ## OrionHealth
 
-This architecture powers [OrionHealth](https://github.com/iberi22/orion-health), an offline-first health tracker built in Flutter with encrypted local storage and a robust sync engine.
+This architecture powers [OrionHealth](https://github.com/iberi22/OrionHealth), an offline-first health tracker built in Flutter with encrypted local storage and a robust sync engine.
 
 ## What's Next
 

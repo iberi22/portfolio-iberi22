@@ -63,7 +63,7 @@
       status: 'development',
       description: 'Offline-first health tracking application built with Flutter. Features encrypted local storage, sync capabilities, and comprehensive health metrics dashboard.',
       tech: ['Flutter', 'Dart', 'SQLite', 'Encryption'],
-      github: 'https://github.com/iberi22/orion-health',
+      github: 'https://github.com/iberi22/OrionHealth',
       color: 'var(--color-secondary)',
       timeline: [
         { date: '2025 Q4', label: 'Flutter init and data models' },
@@ -343,3 +343,4 @@
     50% { opacity: 0.45; }
   }
 </style>
+

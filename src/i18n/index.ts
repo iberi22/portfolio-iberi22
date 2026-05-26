@@ -42,7 +42,7 @@ export function setLocale(locale: Locale) {
   localStorage.setItem('swal-locale', locale);
 }
 
-let current: Locale = 'en';
+let current: Locale = detectLocale();
 
 export function t(key: string, locale?: Locale): string {
   const l = locale ?? current;

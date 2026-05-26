@@ -1,18 +1,15 @@
 <script lang="ts">
-  import { t, getCurrentLocale, setCurrentLocale } from '../i18n/index';
+  import { t } from '../i18n/index';
   import LanguageSwitcher from './LanguageSwitcher.svelte';
   import { onMount } from 'svelte';
 
   let mounted = $state(false);
   let scrolled = $state(false);
   let mobileOpen = $state(false);
-  const currentLocale = getCurrentLocale();
-  setCurrentLocale(currentLocale);
 
   const navItems = [
     { key: 'about', href: '#about' },
     { key: 'projects', href: '#projects' },
-    { key: 'blog', href: '#blog' },
     { key: 'contact', href: '#contact' },
   ];
 
@@ -33,7 +30,7 @@
   class:scrolled={scrolled}
 >
   <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="/" class="text-xl font-bold tracking-tight group">
+    <a href={import.meta.env.BASE_URL} class="text-xl font-bold tracking-tight group">
       <span class="text-accent group-hover:text-accent-light transition-colors">iberi22</span>
       <span class="text-text-muted text-xs ml-2">/architect</span>
     </a>

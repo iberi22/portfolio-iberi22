@@ -3,9 +3,8 @@
 
   const socialLinks = [
     { name: 'GitHub', url: 'https://github.com/iberi22', icon: 'github' },
-    { name: 'LinkedIn', url: 'https://linkedin.com/in/samuel-belalcazar', icon: 'linkedin' },
-    { name: 'Twitter / X', url: 'https://x.com/iberi22', icon: 'twitter' },
-    { name: 'YouTube', url: 'https://youtube.com/@swal', icon: 'youtube' },
+    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/brahyansb', icon: 'linkedin' },
+    { name: 'Twitter / X', url: 'https://x.com/x_donberi', icon: 'twitter' },
   ];
 
   function handleMouseMove(event: MouseEvent) {
@@ -76,7 +75,7 @@
           {link.name}
         </a>
       {/each}
-      <a href="mailto:samuel@swal.ai" class="social-link secondary-link">
+      <a href="mailto:iberi22@gmail.com" class="social-link secondary-link">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
         {t('contact.email')}
       </a>

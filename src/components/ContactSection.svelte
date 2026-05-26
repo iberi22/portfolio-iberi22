@@ -3,7 +3,7 @@
 
   const socialLinks = [
     { name: 'GitHub', url: 'https://github.com/iberi22', icon: 'github' },
-    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/brahyansb', icon: 'linkedin' },
+    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/brahyansbr/', icon: 'linkedin' },
     { name: 'Twitter / X', url: 'https://x.com/x_donberi', icon: 'twitter' },
   ];
 

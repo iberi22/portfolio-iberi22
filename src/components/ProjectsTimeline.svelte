@@ -5,88 +5,105 @@
 
   const projects = [
     {
+      id: 'photon-core',
+      name: 'Photon-Core',
+      tagline: '5D Optical Storage Simulation',
+      version: 'v1.0.0-poc',
+      status: 'active',
+      description: 'High-performance Rust framework simulating 5D optical data storage inside fused silica glass. Models femtosecond-pulse nanograting birefringence, 3D spatial crosstalk, Reed-Solomon error correction, and multi-dimensional steganography. Achieves >470 MB/s encoding throughput. Developed with AI agents and human validation.',
+      tech: ['Rust', 'Physics Sim', 'Reed-Solomon', 'Steganography'],
+      github: 'https://github.com/iberi22/photon-core',
+      color: 'var(--color-accent)',
+      timeline: [
+        { date: '2025 Q4', label: 'Initial mathematical model and photonic voxel definition' },
+        { date: '2026 Q1', label: 'Reed-Solomon ECC integration and spatial crosstalk simulation' },
+        { date: '2026 Q2', label: 'Steganographic data hiding and CLI toolkit release' },
+        { date: '2026 Q3', label: 'Roadmap: Deep learning-based signal reconstruction' },
+      ],
+    },
+    {
       id: 'xavier2',
-      name: 'Xavier2',
-      tagline: 'Memory Core',
+      name: 'Xavier',
+      tagline: 'AI Memory Core',
       version: 'v0.6.0-beta',
       status: 'active',
-      description: 'Persistent memory system for AI agents built in Rust. Features vector storage, semantic search, and knowledge graph capabilities. Running as a Docker service on port 8006.',
-      tech: ['Rust', 'Docker', 'REST API', 'Vector DB'],
+      description: 'Persistent local memory core for AI agents built in Rust. Containerized Docker microservice providing vector storage, semantic search index, and unified knowledge graphs. Co-designed with AI agents under dynamic human supervision.',
+      tech: ['Rust', 'Docker', 'Vector DB', 'Knowledge Graphs'],
       github: 'https://github.com/iberi22/xavier2',
       color: 'var(--color-accent)',
       timeline: [
-        { date: '2025 Q4', label: 'Initial concept and storage layer' },
-        { date: '2026 Q1', label: 'Beta release v0.1 - CRUD operations' },
-        { date: '2026 Q2', label: 'v0.6.0-beta - Search and Docker' },
-        { date: '2026 Q3', label: 'Roadmap: Knowledge graphs' },
+        { date: '2025 Q4', label: 'Initial concept and storage layer design' },
+        { date: '2026 Q1', label: 'Beta release v0.1 - CRUD operations and REST endpoints' },
+        { date: '2026 Q2', label: 'v0.6.0-beta - Vector search indices and Docker containerization' },
+        { date: '2026 Q3', label: 'Roadmap: Graph database integration and context routing' },
       ],
     },
     {
-      id: 'gestalt',
-      name: 'Gestalt',
-      tagline: 'Agent Orchestrator',
+      id: 'gitcore',
+      name: 'GitCore',
+      tagline: 'Multi-Agent Orchestrator Prototype',
       version: 'v0.3.0',
-      status: 'development',
-      description: 'CLI orchestrator for multi-agent AI systems. Uses SurrealDB for persistent state management, role-based agent routing, and inter-agent communication protocols.',
+      status: 'prototype',
+      description: 'Prototype multi-agent orchestration CLI in Rust. Uses SurrealDB for persistent state, role-based task routing, and custom inter-agent protocols. Kept off the public roadmap until it is production-ready.',
       tech: ['Rust', 'SurrealDB', 'CLI', 'Multi-Agent'],
-      github: 'https://github.com/iberi22/gestalt',
+      github: undefined,
       color: 'var(--color-secondary)',
       timeline: [
-        { date: '2026 Q1', label: 'Prototype - single agent routing' },
-        { date: '2026 Q2', label: 'Multi-agent coordination layer' },
-        { date: '2026 Q3', label: 'Roadmap: Swarm intelligence' },
-        { date: '2026 Q4', label: 'Roadmap: Production ready' },
+        { date: '2026 Q1', label: 'Prototype - single-agent task routing and SurrealDB schema' },
+        { date: '2026 Q2', label: 'Multi-agent coordination layer and dynamic CLI execution' },
+        { date: '2026 Q3', label: 'Roadmap: Decentralized swarm intelligence' },
+        { date: '2026 Q4', label: 'Roadmap: Multi-tenant production release' },
       ],
     },
     {
-      id: 'gos',
-      name: 'GOS',
-      tagline: 'Gastronomic Open Standard',
-      version: 'v1.0.0',
-      status: 'beta',
-      description: 'Monorepo PWA for culinary reviews with offline support. Built with a shared design system, featuring restaurant discovery, menu scanning, and community reviews.',
-      tech: ['Flutter', 'PWA', 'TypeScript', 'GraphQL'],
-      github: 'https://github.com/iberi22/gos',
-      color: 'var(--color-accent)',
+      id: 'nvc',
+      name: 'NeuralVoiceCore (NVC)',
+      tagline: 'Offline Voice Assistant',
+      version: 'v0.2.0-beta',
+      status: 'development',
+      description: 'High-performance local voice assistant combining a Rust audio engine and a modern Flutter UI via Flutter Rust Bridge. Performs cross-platform real-time audio capture via cpal and offline Speech-to-Text via Vosk, validated by LLM harnesses.',
+      tech: ['Rust', 'Flutter', 'cpal', 'Vosk STT'],
+      github: 'https://github.com/iberi22/NVC',
+      color: 'var(--color-accent-light)',
       timeline: [
-        { date: '2025 Q3', label: 'Monorepo init and design system' },
-        { date: '2025 Q4', label: 'PWA shell and offline support' },
-        { date: '2026 Q1', label: 'Beta launch with reviews' },
-        { date: '2026 Q3', label: 'Roadmap: AI recommendations' },
+        { date: '2026 Q1', label: 'Core modular Rust architecture and native library integration' },
+        { date: '2026 Q2', label: 'Real-time cpal capture and offline Vosk STT streaming' },
+        { date: '2026 Q3', label: 'Roadmap: Flutter Rust Bridge FFI connection and live UI integration' },
+        { date: '2026 Q4', label: 'Roadmap: Local LLM pipeline (whisper/llama.cpp)' },
       ],
     },
     {
       id: 'orion',
       name: 'OrionHealth',
-      tagline: 'Health Tracking',
+      tagline: 'Offline-First Health Ecosystem',
       version: 'v0.5.0',
       status: 'development',
-      description: 'Offline-first health tracking application built with Flutter. Features encrypted local storage, sync capabilities, and comprehensive health metrics dashboard.',
-      tech: ['Flutter', 'Dart', 'SQLite', 'Encryption'],
+      description: 'Offline-first personal health tracking application built with Flutter and Dart. Features fully encrypted SQLite local storage, automated background synchronization, and a premium metrics dashboard.',
+      tech: ['Flutter', 'SQLite', 'Encryption', 'Sync Engine'],
       github: 'https://github.com/iberi22/OrionHealth',
       color: 'var(--color-secondary)',
       timeline: [
-        { date: '2025 Q4', label: 'Flutter init and data models' },
-        { date: '2026 Q1', label: 'Offline-first with SQLite' },
-        { date: '2026 Q2', label: 'Sync engine and encryption' },
-        { date: '2026 Q3', label: 'Roadmap: Cloud sync GA' },
+        { date: '2025 Q4', label: 'Flutter init, data models, and local schemas' },
+        { date: '2026 Q1', label: 'Offline-first storage with encrypted SQLite database' },
+        { date: '2026 Q2', label: 'Sync engine core and dashboard analytics' },
+        { date: '2026 Q3', label: 'Roadmap: Decentralized cloud sync GA' },
       ],
     },
     {
-      id: 'manteniapp',
-      name: 'ManteniApp',
-      tagline: 'Industrial Maintenance SaaS',
-      version: 'v0.2.0',
-      status: 'development',
-      description: 'SaaS platform for industrial maintenance management. Designed for engineering and mining companies in Chile, featuring work order tracking, preventive maintenance scheduling, and equipment lifecycle management.',
-      tech: ['Python', 'Django', 'PostgreSQL', 'Docker'],
-      github: 'https://github.com/swal/manteniapp',
-      color: 'var(--color-accent-dark)',
+      id: 'gos',
+      name: 'GOS (Gastronomic Open Standard)',
+      tagline: 'Culinary Discovery PWA',
+      version: 'v1.0.0',
+      status: 'beta',
+      description: 'Monorepo PWA standard for culinary exploration and offline-first reviews. Features an integrated design system, restaurant discovery, automated menu scanning, and community reviews built with Flutter & PWA.',
+      tech: ['Flutter', 'PWA', 'TypeScript', 'GraphQL'],
+      github: 'https://github.com/iberi22/gos',
+      color: 'var(--color-accent)',
       timeline: [
-        { date: '2026 Q1', label: 'SaaS architecture design' },
-        { date: '2026 Q2', label: 'Work order module MVP' },
-        { date: '2026 Q3', label: 'Roadmap: PM scheduling' },
-        { date: '2026 Q4', label: 'Roadmap: Multi-tenant' },
+        { date: '2025 Q3', label: 'Monorepo init and design system core' },
+        { date: '2025 Q4', label: 'PWA shell, service workers, and offline support' },
+        { date: '2026 Q1', label: 'Beta launch with community reviews and restaurant scanning' },
+        { date: '2026 Q3', label: 'Roadmap: AI-powered personalized dining recommendations' },
       ],
     },
   ];
@@ -149,7 +166,7 @@
                   {:else if project.status === 'beta'}
                     <span class="status-chip status-beta">Beta</span>
                   {:else}
-                    <span class="status-chip status-dev"><span></span>Dev</span>
+                    <span class="status-chip status-prototype"><span></span>Prototype</span>
                   {/if}
                 </div>
                 <p class="text-accent/70 text-sm mb-3">{project.tagline}</p>
@@ -182,15 +199,17 @@
                         <span class="tech-badge tech-badge-strong">{tech}</span>
                       {/each}
                     </div>
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="repo-link"
-                    >
-                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                      {t('projects.repository')}
-                    </a>
+                    {#if project.github}
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="repo-link"
+                      >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                        {t('projects.repository')}
+                      </a>
+                    {/if}
                   </div>
                   <div class="md:col-span-3">
                     <h4 class="text-sm text-text-muted mb-4 uppercase tracking-wider">{t('projects.timeline')}</h4>
@@ -266,13 +285,15 @@
     color: var(--color-secondary);
   }
 
-  .status-dev {
+  .status-dev,
+  .status-prototype {
     background: rgba(5, 150, 105, 0.1);
     border-color: rgba(5, 150, 105, 0.2);
     color: var(--color-accent-dark);
   }
 
-  .status-dev span {
+  .status-dev span,
+  .status-prototype span {
     background: var(--color-accent-dark);
   }
 
@@ -343,4 +364,3 @@
     50% { opacity: 0.45; }
   }
 </style>
-

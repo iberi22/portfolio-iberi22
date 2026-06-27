@@ -30,8 +30,12 @@
     <div class="mt-16 max-w-lg mx-auto entry-rise" style="animation-delay: 180ms">
       <div class="glass-card p-10" onmousemove={handleMouseMove}>
         <form
-          action="https://formspree.io/f/your-form-id"
-          method="POST"
+          on:submit|preventDefault={(e) => {
+            const formData = new FormData(e.currentTarget);
+            const email = formData.get('email');
+            const message = formData.get('message');
+            window.location.href = `mailto:iberi22@gmail.com?subject=Contacto desde Portfolio&body=${encodeURIComponent(message + '\n\nDe: ' + email)}`;
+          }}
           class="space-y-6"
         >
           <input

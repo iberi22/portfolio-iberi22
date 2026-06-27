@@ -13,7 +13,6 @@
       <div class="flex items-center gap-6 text-sm text-text-muted">
         <a href="#about" class="hover:text-text-secondary transition-colors">About</a>
         <a href="#projects" class="hover:text-text-secondary transition-colors">Projects</a>
-        <a href="#blog" class="hover:text-text-secondary transition-colors">Blog</a>
         <a href="#contact" class="hover:text-text-secondary transition-colors">Contact</a>
       </div>
 

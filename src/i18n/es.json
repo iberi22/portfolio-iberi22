@@ -22,8 +22,8 @@
     "title": "Arquitectura de",
     "titleAccent": "infraestructura",
     "titleSuffix": "resiliente",
-    "bio": "Soy Samuel Belalcazar — arquitecto de sistemas y desarrollador enfocado en construir infraestructura resiliente y distribuida para agentes de IA. Fundador de SouthWest AI Labs, donde empujo los límites de los sistemas de memoria y la coordinación de agentes.",
-    "philosophy": "Desde orquestar enjambres multi-agente hasta crear apps de salud offline-first, cada proyecto se construye con la misma filosofía:",
+    "bio": "Soy Samuel Belalcazar — Arquitecto de Sistemas Deep Tech y Fundador de SouthWest AI Labs (SWAL). Diseño motores de ejecución en Rust, capas de memoria semántica local y sistemas distribuidos orientados a la autonomía digital y gobernanza de datos. Combino mi experiencia como desarrollador Web Senior con lógica avanzada de agentes (GRPO) y Organizaciones Autónomas Descentralizadas (DAOs), asegurando la soberanía del usuario mediante entornos de prueba automatizados.",
+    "philosophy": "Desde simuladores físicos en Rust hasta integraciones FFI nativas en Flutter, cada experimento es llevado a la realidad funcional bajo una filosofía clara:",
     "philosophyAccent": "clean architecture, zero compromise.",
     "statProjects": "Proyectos Clave",
     "statStack": "Stack Principal",
@@ -38,7 +38,63 @@
     "subtitle": "Desde núcleos de memoria para IA hasta SaaS industrial — cada proyecto empuja límites.",
     "techStack": "Stack Tecnológico",
     "timeline": "Cronograma y Roadmap",
-    "repository": "Repositorio"
+    "repository": "Repositorio",
+    "photon-core": {
+      "tagline": "Simulación de Almacenamiento Óptico 5D",
+      "description": "Framework de simulación de física óptica de alto rendimiento en Rust para almacenamiento volumétrico de datos 5D en cristales de sílice fundida. Modela birrefringencia por láser de femtosegundo, crosstalk espacial 3D, corrección de errores Reed-Solomon y esteganografía multidimensional. Alcanza un rendimiento de codificación >470 MB/s. Desarrollado con agentes de IA y validación humana.",
+      "t0": "Modelo matemático inicial y definición de voxel fotónico",
+      "t1": "Integración de ECC Reed-Solomon y simulación de crosstalk espacial 3D",
+      "t2": "Ocultación de datos esteganográficos y lanzamiento del kit de herramientas CLI",
+      "t3": "Hoja de ruta: Reconstrucción de señales basada en deep learning"
+    },
+    "xavier2": {
+      "tagline": "Núcleo de Memoria para IA",
+      "description": "Núcleo de memoria persistente local para agentes de IA implementado en Rust. Microservicio encapsulado en Docker que proporciona almacenamiento vectorial, índice de búsqueda semántica y grafos de conocimiento unificados. Co-diseñado con agentes de IA bajo supervisión humana dinámica.",
+      "t0": "Concepto inicial y diseño de la capa de almacenamiento",
+      "t1": "Lanzamiento beta v0.1 - Operaciones CRUD y endpoints REST",
+      "t2": "v0.6.0-beta - Vector search indices y contenedorización Docker",
+      "t3": "Hoja de ruta: Integración de bases de datos de grafos y enrutamiento de contexto"
+    },
+    "gestalt": {
+      "tagline": "Orquestador de Agentes",
+      "description": "Orquestador de enjambres autónomos y enrutamiento inteligente de agentes multi-rol por línea de comandos (CLI) en Rust. Usa SurrealDB para persistencia de estados, enrutamiento de tareas basado en roles y protocolos personalizados de comunicación inter-agente. Co-diseñado y testeado a través de sandboxes automatizados.",
+      "t0": "Prototipo - Enrutamiento de tareas con agente único y esquema SurrealDB",
+      "t1": "Capa de coordinación multi-agente y ejecución dinámica desde CLI",
+      "t2": "Hoja de ruta: Inteligencia de enjambre descentralizada",
+      "t3": "Hoja de ruta: Lanzamiento de producción multi-tenant"
+    },
+    "nvc": {
+      "tagline": "Asistente de Voz Offline",
+      "description": "Asistente de voz local de alto rendimiento combinando un motor de audio en Rust y una interfaz moderna en Flutter mediante Flutter Rust Bridge. Realiza captura de audio multiplataforma en tiempo real mediante cpal y reconocimiento de voz (Speech-to-Text) offline mediante Vosk, validado por arneses de LLM.",
+      "t0": "Arquitectura modular del núcleo Rust e integración de bibliotecas nativas",
+      "t1": "Captura de audio en tiempo real cpal y streaming de transcripción Vosk",
+      "t2": "Hoja de ruta: Conexión FFI Flutter Rust Bridge e integración de interfaz en vivo",
+      "t3": "Hoja de ruta: Canalización local de LLM (whisper/llama.cpp)"
+    },
+    "orion": {
+      "tagline": "Ecosistema de Salud Offline-First",
+      "description": "Aplicación de seguimiento de salud personal sin conexión a internet construida con Flutter y Dart. Almacenamiento local SQLite encriptado, motor de sincronización de datos en segundo plano y panel interactivo de analíticas.",
+      "t0": "Inicio en Flutter, modelos de datos y esquemas locales",
+      "t1": "Almacenamiento offline-first con base de datos SQLite encriptada",
+      "t2": "Núcleo del motor de sincronización y analíticas en panel de control",
+      "t3": "Hoja de ruta: Sincronización descentralizada en la nube GA"
+    },
+    "manteniapp": {
+      "tagline": "SaaS de Mantenimiento Industrial",
+      "description": "SaaS de gestión de mantenimiento industrial diseñado para empresas mineras y de ingeniería en Chile. Desarrollado con Django, Python y PostgreSQL, con módulos de órdenes de trabajo multi-tenant y planificación preventiva.",
+      "t0": "Diseño de arquitectura SaaS multi-tenant y esquema de base de datos",
+      "t1": "Módulo de órdenes de trabajo y ciclo de vida de mantenimiento preventivo MVP",
+      "t2": "Hoja de ruta: Algoritmo automatizado de programación preventiva y métricas",
+      "t3": "Hoja de ruta: Incorporación de grandes clientes corporativos chilenos"
+    },
+    "gos": {
+      "tagline": "Descubrimiento Culinario PWA",
+      "description": "Estándar PWA monorepo para exploración culinaria y reseñas offline-first. Cuenta con un sistema de diseño integrado, descubrimiento de restaurantes, escaneo de menús automatizado y reseñas de la comunidad construido con Flutter & PWA.",
+      "t0": "Inicio del monorepo y núcleo del sistema de diseño unificado",
+      "t1": "PWA shell, service workers y almacenamiento local offline",
+      "t2": "Lanzamiento beta con reseñas colaborativas y escaneo de menús",
+      "t3": "Hoja de ruta: Recomendaciones gastronómicas personalizadas por IA"
+    }
   },
   "blog": {
     "heading": "# blog",

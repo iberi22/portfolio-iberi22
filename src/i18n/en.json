@@ -22,8 +22,8 @@
     "title": "Architecting",
     "titleAccent": "resilient",
     "titleSuffix": "infrastructure",
-    "bio": "I'm Samuel Belalcazar — a systems architect and developer focused on building resilient, distributed infrastructure for AI agents. Founder of SouthWest AI Labs, where I push the boundaries of memory systems and agent coordination.",
-    "philosophy": "From orchestrating multi-agent swarms to crafting offline-first health apps, every project is built with the same philosophy:",
+    "bio": "I'm Samuel Belalcazar — Deep Tech Systems Architect and Founder of SouthWest AI Labs (SWAL). I design Rust execution engines, local semantic memory layers, and distributed systems oriented toward digital autonomy and data governance. I bridge my experience as a Senior Web Engineer with advanced agentic logic (GRPO) and Decentralized Autonomous Organizations (DAOs), ensuring user sovereignty through automated testing harnesses.",
+    "philosophy": "From physical simulators in Rust to native FFI integrations in Flutter, each experiment is brought into functional reality under a clear philosophy:",
     "philosophyAccent": "clean architecture, zero compromise.",
     "statProjects": "Core Projects",
     "statStack": "Primary Stack",
@@ -38,7 +38,63 @@
     "subtitle": "From AI memory cores to industrial SaaS — each project pushes boundaries.",
     "techStack": "Tech Stack",
     "timeline": "Timeline & Roadmap",
-    "repository": "Repository"
+    "repository": "Repository",
+    "photon-core": {
+      "tagline": "5D Optical Storage Simulation",
+      "description": "High-performance Rust framework simulating 5D optical data storage inside fused silica glass. Models femtosecond-pulse nanograting birefringence, 3D spatial crosstalk, Reed-Solomon error correction, and multi-dimensional steganography. Achieves >470 MB/s encoding throughput. Developed with AI agents and human validation.",
+      "t0": "Initial mathematical model and photonic voxel definition",
+      "t1": "Reed-Solomon ECC integration and spatial crosstalk simulation",
+      "t2": "Steganographic data hiding and CLI toolkit release",
+      "t3": "Roadmap: Deep learning-based signal reconstruction"
+    },
+    "xavier2": {
+      "tagline": "AI Memory Core",
+      "description": "Persistent local memory core for AI agents built in Rust. Containerized Docker microservice providing vector storage, semantic search index, and unified knowledge graphs. Co-designed with AI agents under dynamic human supervision.",
+      "t0": "Initial concept and storage layer design",
+      "t1": "Beta release v0.1 - CRUD operations and REST endpoints",
+      "t2": "v0.6.0-beta - Vector search indices and Docker containerization",
+      "t3": "Roadmap: Graph database integration and context routing"
+    },
+    "gestalt": {
+      "tagline": "Agent Orchestrator",
+      "description": "Autonomous multi-agent orchestration CLI in Rust. Uses SurrealDB for persistent state, role-based task routing, and custom inter-agent protocols. Co-designed and tested through automated sandboxes.",
+      "t0": "Prototype - single-agent task routing and SurrealDB schema",
+      "t1": "Multi-agent coordination layer and dynamic CLI execution",
+      "t2": "Roadmap: Decentralized swarm intelligence",
+      "t3": "Roadmap: Multi-tenant production release"
+    },
+    "nvc": {
+      "tagline": "Offline Voice Assistant",
+      "description": "High-performance local voice assistant combining a Rust audio engine and a modern Flutter UI via Flutter Rust Bridge. Performs cross-platform real-time audio capture via cpal and offline Speech-to-Text via Vosk, validated by LLM harnesses.",
+      "t0": "Core modular Rust architecture and native library integration",
+      "t1": "Real-time cpal capture and offline Vosk STT streaming",
+      "t2": "Roadmap: Flutter Rust Bridge FFI connection and live UI integration",
+      "t3": "Roadmap: Local LLM pipeline (whisper/llama.cpp)"
+    },
+    "orion": {
+      "tagline": "Offline-First Health Ecosystem",
+      "description": "Offline-first personal health tracking application built with Flutter and Dart. Features fully encrypted SQLite local storage, automated background synchronization, and a premium metrics dashboard.",
+      "t0": "Flutter init, data models, and local schemas",
+      "t1": "Offline-first storage with encrypted SQLite database",
+      "t2": "Sync engine core and dashboard analytics",
+      "t3": "Roadmap: Decentralized cloud sync GA"
+    },
+    "manteniapp": {
+      "tagline": "Industrial Maintenance SaaS",
+      "description": "SaaS platform for industrial maintenance management catering to engineering and mining companies in Chile. Built with Django and PostgreSQL, featuring multi-tenant work order tracking and preventive maintenance scheduling.",
+      "t0": "Multi-tenant SaaS architecture design and database schema",
+      "t1": "Work order tracking and preventative lifecycle MVP",
+      "t2": "Roadmap: Automated scheduling algorithm and metrics",
+      "t3": "Roadmap: Commercial Chilean enterprise onboarding"
+    },
+    "gos": {
+      "tagline": "Culinary Discovery PWA",
+      "description": "Monorepo PWA standard for culinary exploration and offline-first reviews. Features an integrated design system, restaurant discovery, automated menu scanning, and community reviews built with Flutter & PWA.",
+      "t0": "Monorepo init and design system core",
+      "t1": "PWA shell, service workers, and offline support",
+      "t2": "Beta launch with community reviews and restaurant scanning",
+      "t3": "Roadmap: AI-powered personalized dining recommendations"
+    }
   },
   "blog": {
     "heading": "# blog",

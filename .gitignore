@@ -29,3 +29,7 @@ cache/
 
 .vercel
 .env*.local
+
+# Agent artifacts (local, do not commit)
+.openclaw/
+.chronicle/

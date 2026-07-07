@@ -26,3 +26,6 @@ npm-debug.log*
 # Caches
 .astro/
 cache/
+
+.vercel
+.env*.local

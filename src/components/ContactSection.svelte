@@ -30,8 +30,10 @@
     <div class="mt-16 max-w-lg mx-auto entry-rise" style="animation-delay: 180ms">
       <div class="glass-card p-10" onmousemove={handleMouseMove}>
         <form
-          on:submit|preventDefault={(e) => {
-            const formData = new FormData(e.currentTarget);
+          onsubmit={(e) => {
+            e.preventDefault();
+            const form = e.currentTarget as HTMLFormElement;
+            const formData = new FormData(form);
             const email = formData.get('email');
             const message = formData.get('message');
             window.location.href = `mailto:iberi22@gmail.com?subject=Contacto desde Portfolio&body=${encodeURIComponent(message + '\n\nDe: ' + email)}`;

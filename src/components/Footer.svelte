@@ -14,6 +14,7 @@
         <a href="#about" class="hover:text-text-secondary transition-colors">About</a>
         <a href="#projects" class="hover:text-text-secondary transition-colors">Projects</a>
         <a href="#contact" class="hover:text-text-secondary transition-colors">Contact</a>
+        <a href="/agenda" class="text-accent hover:text-accent-light transition-colors">Book a session</a>
       </div>
 
       <a href="https://github.com/iberi22" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">

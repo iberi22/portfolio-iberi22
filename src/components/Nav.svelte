@@ -1,6 +1,7 @@
 <script lang="ts">
   import { t } from '../i18n/index';
   import LanguageSwitcher from './LanguageSwitcher.svelte';
+  import { baseUrl } from '../lib/baseUrl';
   import { onMount } from 'svelte';
 
   let mounted = $state(false);
@@ -11,6 +12,7 @@
     { key: 'about', href: '#about' },
     { key: 'projects', href: '#projects' },
     { key: 'contact', href: '#contact' },
+    { key: 'agenda', href: baseUrl('agenda') },
   ];
 
   function handleScroll() {

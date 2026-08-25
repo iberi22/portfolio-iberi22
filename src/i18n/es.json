@@ -9,8 +9,8 @@
     "agenda": "Agenda"
   },
   "hero": {
-    "badge": "Arquitecto de Sistemas y Desarrollador",
-    "firstName": "Brahyam",
+    "badge": "Ingeniero Full-Stack y Especialista en Orquestación de IA",
+    "firstName": "Brahyan",
     "lastName": "Belalcázar",
     "tagline": "Construyendo sistemas resilientes a escala.",
     "taglineExtra": "Rust, orquestación de IA y arquitecturas cloud-native.",
@@ -23,7 +23,7 @@
     "title": "Arquitectura de",
     "titleAccent": "infraestructura",
     "titleSuffix": "resiliente",
-    "bio": "Soy Brahyam Belalcázar — Arquitecto de Sistemas Deep Tech y Fundador de SouthWest AI Labs (SWAL). Diseño motores de ejecución en Rust, capas de memoria semántica local y sistemas distribuidos orientados a la autonomía digital y gobernanza de datos. Combino mi experiencia como desarrollador Web Senior con lógica avanzada de agentes (GRPO) y Organizaciones Autónomas Descentralizadas (DAOs), asegurando la soberanía del usuario mediante entornos de prueba automatizados.",
+    "bio": "Soy Brahyan Belalcázar — Ingeniero Full-Stack y Especialista en Orquestación de IA, fundador de SouthWest AI Labs (SWAL). Entrego software de producción de extremo a extremo: plataformas web, apps móviles y la infraestructura de agentes IA que acelera su desarrollo — mediante una tubería de ingeniería orquestada por IA bajo protocolos estrictos de arquitectura, revisión de código y testing.",
     "philosophy": "Desde simuladores físicos en Rust hasta integraciones FFI nativas en Flutter, cada experimento es llevado a la realidad funcional bajo una filosofía clara:",
     "philosophyAccent": "clean architecture, zero compromise.",
     "statProjects": "Proyectos Clave",

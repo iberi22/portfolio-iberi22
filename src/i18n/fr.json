@@ -9,8 +9,8 @@
     "agenda": "Rendez-vous"
   },
   "hero": {
-    "badge": "Architecte Systèmes et Développeur",
-    "firstName": "Brahyam",
+    "badge": "Ingénieur Full-Stack & Spécialiste de l'orchestration IA",
+    "firstName": "Brahyan",
     "lastName": "Belalcázar",
     "tagline": "Construire des systèmes résilients à grande échelle.",
     "taglineExtra": "Rust, orchestration IA et architectures cloud-native.",
@@ -23,7 +23,7 @@
     "title": "Architecte",
     "titleAccent": "d'infrastructure",
     "titleSuffix": "résiliente",
-    "bio": "Je suis Brahyam Belalcázar — architecte systèmes et développeur concentré sur la construction d'infrastructures résilientes et distribuées pour les agents IA. Fondateur de SouthWest AI Labs, où je repousse les limites des systèmes mémoire et de la coordination d'agents.",
+    "bio": "Je suis Brahyan Belalcázar — architecte systèmes et développeur concentré sur la construction d'infrastructures résilientes et distribuées pour les agents IA. Fondateur de SouthWest AI Labs, où je repousse les limites des systèmes mémoire et de la coordination d'agents.",
     "philosophy": "De l'orchestration d'essaims multi-agents à la création d'apps santé hors-ligne, chaque projet est construit avec la même philosophie :",
     "philosophyAccent": "architecture propre, zéro compromis.",
     "statProjects": "Projets Clés",

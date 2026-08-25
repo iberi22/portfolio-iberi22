@@ -43,7 +43,7 @@
     </div>
 
     <h1 class="hero-title mb-6">
-      <span class="kinetic-word text-accent">Brahyam</span><br />
+      <span class="kinetic-word text-accent">Brahyan</span><br />
       <span class="kinetic-word text-text-primary word-delay">Belalcázar</span>
     </h1>
 

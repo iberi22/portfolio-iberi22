@@ -36,7 +36,7 @@
     "title": "Construyendo",
     "titleAccent": "sistemas",
     "titleSuffix": "resilientes",
-    "subtitle": "Desde SaaS industrial entregado a clientes reales hasta núcleos de memoria para IA — cada proyecto cierra el ciclo con simulaciones e iteración asistida por modelos de lenguaje.",
+    "subtitle": "Desde sistemas para minería e industria hasta núcleos de memoria para IA — cada proyecto cierra el ciclo con simulaciones e iteración asistida por modelos de lenguaje.",
     "techStack": "Stack Tecnológico",
     "timeline": "Cronograma y Roadmap",
     "repository": "Repositorio",
@@ -79,14 +79,6 @@
       "t1": "Almacenamiento offline-first con base de datos SQLite encriptada",
       "t2": "Núcleo del motor de sincronización y analíticas en panel de control",
       "t3": "Hoja de ruta: Sincronización descentralizada en la nube GA"
-    },
-    "manteniapp": {
-      "tagline": "SaaS de Mantenimiento Industrial",
-      "description": "SaaS de gestión de mantenimiento industrial diseñado para empresas mineras y de ingeniería en Chile. Desarrollado con Django, Python y PostgreSQL, con módulos de órdenes de trabajo multi-tenant y planificación preventiva.",
-      "t0": "Diseño de arquitectura SaaS multi-tenant y esquema de base de datos",
-      "t1": "Módulo de órdenes de trabajo y ciclo de vida de mantenimiento preventivo MVP",
-      "t2": "Hoja de ruta: Algoritmo automatizado de programación preventiva y métricas",
-      "t3": "Hoja de ruta: Incorporación de grandes clientes corporativos chilenos"
     },
     "gos": {
       "tagline": "Descubrimiento Culinario PWA",

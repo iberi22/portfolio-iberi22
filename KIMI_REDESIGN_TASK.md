@@ -100,7 +100,7 @@ After changes, verify:
 
 ## Notes
 
-- Do NOT replace the project data (Samuel Belalcazar, Xavier2, Gestalt, GOS, OrionHealth, ManteniApp)
+- Do NOT replace the project data (Samuel Belalcazar, Xavier2, Gestalt, GOS, OrionHealth)
 - Do NOT change the `base: '/portfolio-iberi22'` in astro.config.mjs
 - Keep Svelte components but migrate Svelte 4→5 syntax if updating to Svelte 5
 - If Tailwind v4 breaks your config, use `@tailwindcss/vite` plugin approach

@@ -31,7 +31,6 @@ const ACTIVE_REPOS = [
   { name: 'gestalt',           dir: 'E:\\scripts-python\\gestalt',           track: true },
   { name: 'GOS',               dir: 'E:\\scripts-python\\gastronomic-open-standard-GOS', track: true },
   { name: 'orionhealth',       dir: 'E:\\scripts-python\\orionhealth',       track: true },
-  { name: 'manteniapp',        dir: 'E:\\scripts-python\\manteniapp',        track: true },
   { name: 'worldexams',        dir: 'E:\\scripts-python\\worldexams',        track: true },
   { name: 'cortex',            dir: 'E:\\scripts-python\\cortex',            track: false },
   { name: 'clawd',             dir: 'C:\\Users\\belal\\clawd',               track: true },

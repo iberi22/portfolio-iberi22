@@ -36,7 +36,7 @@
     "title": "Building",
     "titleAccent": "resilient",
     "titleSuffix": "systems",
-    "subtitle": "From industrial SaaS delivered to real clients to AI memory cores — every project closes the loop with simulations and LLM-assisted iteration.",
+    "subtitle": "From mining and industrial systems to AI memory cores — every project closes the loop with simulations and LLM-assisted iteration.",
     "techStack": "Tech Stack",
     "timeline": "Timeline & Roadmap",
     "repository": "Repository",
@@ -79,14 +79,6 @@
       "t1": "Offline-first storage with encrypted SQLite database",
       "t2": "Sync engine core and dashboard analytics",
       "t3": "Roadmap: Decentralized cloud sync GA"
-    },
-    "manteniapp": {
-      "tagline": "Industrial Maintenance SaaS",
-      "description": "SaaS platform for industrial maintenance management catering to engineering and mining companies in Chile. Built with Django and PostgreSQL, featuring multi-tenant work order tracking and preventive maintenance scheduling.",
-      "t0": "Multi-tenant SaaS architecture design and database schema",
-      "t1": "Work order tracking and preventative lifecycle MVP",
-      "t2": "Roadmap: Automated scheduling algorithm and metrics",
-      "t3": "Roadmap: Commercial Chilean enterprise onboarding"
     },
     "gos": {
       "tagline": "Culinary Discovery PWA",

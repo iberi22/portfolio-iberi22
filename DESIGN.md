@@ -59,7 +59,6 @@ Projects to preserve:
 2. Gestalt — Rust agent orchestrator, v0.3.0, development
 3. GOS — Flutter PWA culinary standard, v1.0.0, beta
 4. OrionHealth — Flutter health tracker, v0.5.0, development
-5. ManteniApp — Python/Django industrial maintenance SaaS, v0.2.0, development
 
 ### Verification
 ```bash

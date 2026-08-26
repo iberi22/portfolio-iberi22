@@ -43,8 +43,8 @@
     </div>
 
     <h1 class="hero-title mb-6">
-      <span class="kinetic-word text-accent">Brahyan</span><br />
-      <span class="kinetic-word text-text-primary word-delay">Belalcázar</span>
+      <span class="kinetic-word text-accent">{t('hero.firstName')}</span><br />
+      <span class="kinetic-word text-text-primary word-delay">{t('hero.lastName')}</span>
     </h1>
 
     <p class="entry-clip text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 leading-relaxed">

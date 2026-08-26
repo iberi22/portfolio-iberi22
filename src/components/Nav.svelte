@@ -28,7 +28,7 @@
 </script>
 
 <nav
-  class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 nav-glass"
   class:scrolled={scrolled}
 >
   <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -97,11 +97,21 @@
 </nav>
 
 <style>
+  /* Fondo glass permanente: difumina el contenido al pasar por debajo
+     sin taparlo del todo. Al scrollear se refuerza la legibilidad. */
+  nav.nav-glass {
+    background: rgba(18, 18, 18, 0.55);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
   nav.scrolled {
-    background: rgba(18, 18, 18, 0.8);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(18, 18, 18, 0.88);
+    backdrop-filter: blur(28px) saturate(1.6);
+    -webkit-backdrop-filter: blur(28px) saturate(1.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 
   .nav-link {

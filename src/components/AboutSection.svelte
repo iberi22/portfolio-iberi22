@@ -18,23 +18,23 @@
 
   const specialties = [
     {
-      title: 'Systems Architecture',
-      desc: 'Designing distributed systems with Rust and cloud-native patterns',
+      title: 'AI-Accelerated Development',
+      desc: 'Coding agents + human review at every step: simulation, implementation, tests, and deploy in tight loops',
       code: '0x01'
     },
     {
-      title: 'AI Orchestration',
-      desc: 'Building multi-agent systems with Gestalt and SurrealDB',
+      title: 'Full-Stack Engineering',
+      desc: 'A decade shipping web platforms, published mobile apps, and industrial systems',
       code: '0x02'
     },
     {
-      title: 'Memory Systems',
-      desc: 'Persistent knowledge graphs with Xavier2 vector storage',
+      title: 'LLM-Powered Simulation',
+      desc: 'Advanced scenarios modeled with language models to validate architecture before writing code',
       code: '0x03'
     },
     {
-      title: 'Full-Stack Development',
-      desc: 'End-to-end applications from embedded to PWA',
+      title: 'Offline-First & Systems',
+      desc: 'PWA/mobile apps, Rust services, and distributed design — from embedded to cloud',
       code: '0x04'
     },
   ];

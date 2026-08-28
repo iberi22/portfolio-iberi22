@@ -216,6 +216,57 @@
       </div>
     </div>
 
+    <!-- Data-Driven Decision & Scenario Simulation Methodology -->
+    <div class="glass-card p-8 md:p-10 mt-12 border-accent/20 bg-bg-surface-dark/80 entry-rise" style="animation-delay: 540ms">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="px-2.5 py-1 rounded text-[10px] font-mono font-bold uppercase bg-accent/10 text-accent border border-accent/30">
+          Metodología Basada en Datos
+        </span>
+        <span class="text-xs font-mono text-text-muted tracking-wider">SWAL Simulation Framework</span>
+      </div>
+
+      <h3 class="text-xl md:text-2xl font-bold text-text-primary mb-3">
+        {t('agenda.methodologyTitle')}
+      </h3>
+      <p class="text-text-secondary text-sm md:text-base leading-relaxed mb-8 max-w-3xl">
+        {t('agenda.methodologySub')}
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 rounded-xl border border-white/10 bg-black/40 flex flex-col justify-between">
+          <div>
+            <span class="text-accent text-xs font-mono font-bold block mb-2">01 / RECOLECCIÓN</span>
+            <h4 class="text-text-primary text-sm font-bold mb-2">{t('agenda.m1t')}</h4>
+            <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m1d')}</p>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-xl border border-accent/30 bg-accent/5 flex flex-col justify-between">
+          <div>
+            <span class="text-accent text-xs font-mono font-bold block mb-2">02 / SIMULACIÓN</span>
+            <h4 class="text-text-primary text-sm font-bold mb-2">{t('agenda.m2t')}</h4>
+            <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m2d')}</p>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-xl border border-white/10 bg-black/40 flex flex-col justify-between">
+          <div>
+            <span class="text-accent text-xs font-mono font-bold block mb-2">03 / GENERACIÓN</span>
+            <h4 class="text-text-primary text-sm font-bold mb-2">{t('agenda.m3t')}</h4>
+            <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m3d')}</p>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-xl border border-white/10 bg-black/40 flex flex-col justify-between">
+          <div>
+            <span class="text-accent text-xs font-mono font-bold block mb-2">04 / VALIDACIÓN</span>
+            <h4 class="text-text-primary text-sm font-bold mb-2">{t('agenda.m4t')}</h4>
+            <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m4d')}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Booking & Payment Form -->
     <div class="mt-14 max-w-3xl mx-auto entry-rise" style="animation-delay: 570ms">
       <div class="glass-card p-8 md:p-12 border-accent/30 bg-bg-surface-dark/95 shadow-2xl relative overflow-hidden">

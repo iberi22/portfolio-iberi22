@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '../i18n/index';
+  import { baseUrl } from '../lib/baseUrl';
 </script>
 
 <footer class="relative py-16 px-6 border-t border-white/5">
@@ -11,10 +12,10 @@
       </div>
 
       <div class="flex items-center gap-6 text-sm text-text-muted">
-        <a href="#about" class="hover:text-text-secondary transition-colors">About</a>
-        <a href="#projects" class="hover:text-text-secondary transition-colors">Projects</a>
-        <a href="#contact" class="hover:text-text-secondary transition-colors">Contact</a>
-        <a href="/agenda" class="text-accent hover:text-accent-light transition-colors">Book a session</a>
+        <a href="#about" class="hover:text-text-secondary transition-colors">{t('nav.about')}</a>
+        <a href="#projects" class="hover:text-text-secondary transition-colors">{t('nav.projects')}</a>
+        <a href="#contact" class="hover:text-text-secondary transition-colors">{t('nav.contact')}</a>
+        <a href={baseUrl('agenda')} class="text-accent hover:text-accent-light transition-colors">{t('nav.agenda')}</a>
       </div>
 
       <a href="https://github.com/iberi22" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">

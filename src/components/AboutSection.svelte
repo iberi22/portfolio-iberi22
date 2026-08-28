@@ -1,61 +1,45 @@
 <script lang="ts">
   import { t } from '../i18n/index';
 
-  const stackCategories = [
+  const baseStackCategories = [
     {
-      category: 'Lenguajes & Runtimes',
+      catKey: 'cat1',
       items: ['PHP (Senior / Core)', 'TypeScript', 'JavaScript (Node.js)', 'Python', 'Rust', 'Shell / Bash', 'Dart', 'SQL']
     },
     {
-      category: 'Web, CMS & Frameworks',
+      catKey: 'cat2',
       items: ['WordPress (Custom Plugins & Themes)', 'React 19', 'Svelte 5', 'Astro 6', 'Flutter', 'Tailwind CSS 4', 'REST APIs / Webhooks']
     },
     {
-      category: 'Bases de Datos & Búsqueda Vectorial',
+      catKey: 'cat3',
       items: ['PostgreSQL', 'MySQL / MariaDB', 'SQLite', 'pgvector', 'SQLite-vec', 'SurrealDB', 'Redis', 'HNSW Cosine Search']
     },
     {
-      category: 'Arneses de IA & Orquestación Agéntica',
+      catKey: 'cat4',
       items: ['Hermes Gateway', 'GitCore Engine', 'Gestalt Orchestrator', 'Jules', 'Claude Code', 'OpenCode', 'Custom Skills Authoring', 'Multi-Provider LLM Routing']
     },
     {
-      category: 'Infraestructura, Servidores & DevSecOps',
+      catKey: 'cat5',
       items: ['VPS Linux (Ubuntu / NixOS)', 'cPanel / WHM', 'Nginx & Apache', 'PHP-FPM Tuning', 'Docker', 'Vulnerability Scanning', 'Antivirus & MCP Review Tools']
     }
   ];
 
-  const specialties = [
-    {
-      title: 'Ingeniería Full-Stack & PHP Avanzado',
-      desc: '10+ años en producción: arquitectura de plugins propietarios para WordPress, temas a medida desde cero, APIs REST, hooks/filtros y arquitecturas Node.js.',
-      code: '0x01'
-    },
-    {
-      title: 'Arneses de IA, Orquestación & Skills',
-      desc: 'Pipelines deterministas con agentes autónomos (Hermes, GitCore, Gestalt, Jules), diseño de skills personalizadas, scripts de QA y ruteo multi-proveedor.',
-      code: '0x02'
-    },
-    {
-      title: 'Sistemas, Rust & Mobile Offline-First',
-      desc: 'Servicios de alto rendimiento en Rust, aplicaciones móviles con Flutter, bases de datos locales encriptadas y runtimes WebAssembly.',
-      code: '0x03'
-    },
-    {
-      title: 'Bases de Datos Relacionales & Vectoriales',
-      desc: 'Diseño de esquemas en PostgreSQL/MySQL y motores de búsqueda semántica local con pgvector, SQLite-vec y memoria episódica HNSW.',
-      code: '0x04'
-    },
-    {
-      title: 'Infraestructura VPS, cPanel & Hosting',
-      desc: 'Aprovisionamiento de servidores dedicados/VPS en Linux y NixOS, administración integral cPanel/WHM, tuning Nginx/PHP-FPM y SSL/DNS.',
-      code: '0x05'
-    },
-    {
-      title: 'Seguridad, Hardening & Herramientas MCP',
-      desc: 'Auditorías de código, escaneo de malware y vulnerabilidades, herramientas propias de antivirus y servidores de inspección bajo el protocolo MCP.',
-      code: '0x06'
-    }
-  ];
+  let stackCategories = $derived(
+    baseStackCategories.map(c => ({
+      category: t(`about.stackCategories.${c.catKey}`),
+      items: c.items
+    }))
+  );
+
+  const specialtyCodes = ['0x01', '0x02', '0x03', '0x04', '0x05', '0x06'];
+
+  let specialties = $derived(
+    specialtyCodes.map(code => ({
+      code,
+      title: t(`about.specialties.${code}.title`),
+      desc: t(`about.specialties.${code}.desc`)
+    }))
+  );
 </script>
 
 <section id="about" class="relative py-32 px-6">
@@ -63,7 +47,7 @@
     <div class="entry-clip">
       <span class="text-accent text-sm tracking-widest mb-4 block">{t('about.heading')}</span>
       <h2 class="section-title">
-        {t('about.title')} <span class="text-accent">{t('about.titleAccent')}</span> {t('about.titleSuffix')}
+        {t('about.title')}<span class="text-accent">{t('about.titleAccent')}</span>{t('about.titleSuffix')}
       </h2>
     </div>
 
@@ -79,12 +63,12 @@
         <div class="entry-scan mt-12 flex gap-4" style="animation-delay: 320ms">
           <div class="flex flex-col">
             <span class="text-accent text-2xl font-bold">10+</span>
-            <span class="text-text-muted text-xs uppercase tracking-tighter">Años en Producción</span>
+            <span class="text-text-muted text-xs uppercase tracking-tighter">{t('about.yearsInProduction')}</span>
           </div>
           <div class="w-px h-10 bg-white/10 mx-4"></div>
           <div class="flex flex-col">
             <span class="text-secondary text-2xl font-bold">Full-Stack</span>
-            <span class="text-text-muted text-xs uppercase tracking-tighter">JS · PHP · Rust · AI</span>
+            <span class="text-text-muted text-xs uppercase tracking-tighter">{t('about.fullStackLabel')}</span>
           </div>
         </div>
       </div>

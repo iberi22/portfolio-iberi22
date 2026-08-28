@@ -60,7 +60,7 @@
 
           {#if !post.draft}
             <div class="mt-6 text-accent text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-              Read more →
+              {t('blog.readMore')}
             </div>
           {/if}
         </a>

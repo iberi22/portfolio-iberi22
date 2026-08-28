@@ -326,7 +326,7 @@
     <!-- SWAL Mission Banner -->
     <div class="text-center mb-20 max-w-3xl mx-auto">
       <a
-        href="https://github.com/southwest-ai-labs"
+        href="https://southwest-ai-labs.github.io"
         target="_blank"
         rel="noopener noreferrer"
         class="glass-card p-8 md:p-10 space-y-5 text-center block transition-all duration-300 hover:border-accent/40 hover:-translate-y-1 group cursor-pointer"

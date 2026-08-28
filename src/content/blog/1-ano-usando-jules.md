@@ -19,9 +19,9 @@ Esta es la retrospectiva técnica de un año completo en las trincheras del desa
 
 ## 1. El Inicio: Filosofía Minimalista y Primeras Herramientas
 
-Cuando comencé a experimentar con agentes en agosto del año pasado, utilizaba Gemini tanto en el móvil como en la PC y empecé a explorar herramientas como **Google Antigravity**. 
+Para agosto del año pasado yo ya venía experimentando activamente con agentes de código en mi entorno local. Sin embargo, **el 17 de agosto de 2025 marcó un punto de inflexión definitivo**: fue la fecha en que activé mi cuenta de Google AI Pro y descubrí por primera vez servicios agénticos en la nube, iniciando mi uso de Gemini en el móvil, en la PC y explorando herramientas como **Google Antigravity**.
 
-Siendo completamente honesto, Antigravity no pretendía ser el IDE más sofisticado ni un reemplazo completo de entornos maduros; sin embargo, **cumple con creces el estándar fundamental de ejecutar agentes de codificación de manera directa**. Mi postura técnica siempre ha sido minimalista:
+Aquel momento representó **mi primera incursión en agentes asíncronos distribuidos**. Siendo completamente honesto, Antigravity no pretendía ser el IDE más sofisticado ni un reemplazo completo de entornos maduros; sin embargo, **cumple con creces el estándar fundamental de ejecutar agentes de codificación de manera directa**. Mi postura técnica siempre ha sido minimalista:
 
 > **Principio de Fricción Mínima:** *Entre menos herramientas, extensiones y configuraciones intermedias acumules, más productivo eres. Menos tiempo perdido debatiendo qué editor usar y más tiempo enfocado en resolver el problema.*
 

@@ -6,7 +6,24 @@
     "contact": "Contacto",
     "git": "GIT",
     "github": "GITHUB",
-    "agenda": "Agenda"
+    "agenda": "Agenda",
+    "simulator": "Simulador"
+  },
+  "simulator": {
+    "badge": "100% SERVERLESS · PRIVACIDAD LOCAL-FIRST · SWAL SIMULATION FRAMEWORK",
+    "title": "Simulador de Recursos y Escenarios Agénticos",
+    "subtitle": "Calcula las 5 mejores arquitecturas agénticas optimizadas según tu hardware, proveedores cloud, límites de cuota y presupuesto mensual. Genera Master Prompts, plantillas SKILL.md y archivos .env sanitizados sin enviar datos a ningún servidor.",
+    "sectionResources": "1. Motor de Entradas y Recursos Multi-Herramienta",
+    "sectionSimulations": "2. Simulación de Escenarios y Clasificación (Top 5)",
+    "sectionArtifacts": "3. Generador de Custom Skills, Master Prompt & .env",
+    "runSimulation": "Ejecutar Simulación Paramétrica",
+    "exportProfile": "Exportar Perfil (JSON)",
+    "importProfile": "Importar Perfil (JSON)",
+    "resetDefaults": "Restablecer Valores",
+    "copyPrompt": "Copiar Master System Prompt",
+    "copySkill": "Copiar SKILL.md",
+    "copyEnv": "Copiar .env.example",
+    "downloadAll": "Descargar Artefactos"
   },
   "hero": {
     "badge": "Desarrollador Full-Stack Senior · 10+ Años en Producción",

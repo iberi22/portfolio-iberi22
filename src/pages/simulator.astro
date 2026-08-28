@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.svelte';
+import ResourceSimulator from '../components/ResourceSimulator.svelte';
+import Footer from '../components/Footer.svelte';
+
+const description =
+  '100% Serverless, Local-First Agentic Resource & Scenario Simulator. Input hardware, cloud APIs, rate limits, and calculate Top 5 Optimal Configurations with dynamic Master Prompt and SKILL.md generator.';
+---
+
+<Layout title="Resource & Scenario Simulator — iberi22" description={description}>
+  <Nav client:load />
+  <main class="pt-16">
+    <ResourceSimulator client:load />
+  </main>
+  <Footer client:load />
+</Layout>

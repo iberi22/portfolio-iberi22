@@ -6,7 +6,8 @@
     "contact": "联系",
     "git": "GIT",
     "github": "GITHUB",
-    "agenda": "预约"
+    "agenda": "预约",
+    "simulator": "模拟器"
   },
   "hero": {
     "badge": "全栈工程师与AI编排专家",

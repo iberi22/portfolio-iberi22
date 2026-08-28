@@ -11,6 +11,7 @@
   const navItems = [
     { key: 'about', href: '#about' },
     { key: 'projects', href: '#projects' },
+    { key: 'blog', href: baseUrl('blog') },
     { key: 'contact', href: '#contact' },
     { key: 'agenda', href: baseUrl('agenda') },
   ];

@@ -419,7 +419,27 @@ echo "✅ Auditoría completada. Copia estos datos en tu simulador."
 `;
   });
 
-  // 4. SKILL.MD TEMPLATE
+  // 4. WORKSPACE & REPO METRICS SCANNER PROMPT
+  const generatedMetricsPrompt = $derived.by(() => {
+    const p = profile;
+    return `[PROMPT DE EXTRACCIÓN DE MÉTRICAS DE PROYECTOS & CÓDIGO]
+Actúa como un Ingeniero de DevOps & Agente de Auditoría de Repositorios.
+
+MIS OBJETIVOS:
+Necesito extraer las métricas exactas de mis proyectos de software locales ubicados en \`${p.context.srcPath}\` para alimentar el Simulador Agéntico SWAL.
+
+INSTRUCCIONES DE EJECUCIÓN PARA EL AGENTE:
+1. Escribe y ejecuta un script local (Python, Node.js o Bash con tokei/cloc/find) que analice de forma recursiva mis directorios de proyectos.
+2. Extrae las siguientes métricas clave:
+   - Número total de repositorios / proyectos activos.
+   - Total de Líneas de Código (LOC) desglosadas por lenguaje (TypeScript, PHP, Rust, Python, Go, etc.).
+   - Tamaño total en disco (MB) excluyendo node_modules, .git, target, vendor y dist.
+   - Conteo de archivos de configuración (.env, docker-compose, tsconfig, package.json).
+3. Genera un reporte resumido en formato Markdown y un payload JSON sanitizado listo para importar en el Simulador de Recursos SWAL.
+4. Asegúrate de NO leer ni imprimir valores de claves secretas de los archivos .env (solo listar nombres de variables).`;
+  });
+
+  // 5. SKILL.MD TEMPLATE
   const generatedSkillMd = $derived.by(() => {
     const tier = currentSelectedTier;
     const p = profile;
@@ -447,7 +467,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
 `;
   });
 
-  // 5. SANITIZED .ENV.EXAMPLE
+  // 6. SANITIZED .ENV.EXAMPLE
   const generatedEnvExample = $derived.by(() => {
     const p = profile;
     let env = `# .env.example — SWAL Local-First Simulation Framework\n`;
@@ -485,6 +505,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
     const files = [
       { name: 'MASTER_SYSTEM_PROMPT.txt', content: generatedMasterPrompt },
       { name: 'LIVE_WEBSEARCH_PROMPT.txt', content: generatedWebSearchPrompt },
+      { name: 'WORKSPACE_METRICS_PROMPT.txt', content: generatedMetricsPrompt },
       { name: 'swal-audit-env.sh', content: generatedCliAuditScript },
       { name: 'SKILL.md', content: generatedSkillMd },
       { name: '.env.example', content: generatedEnvExample },
@@ -882,31 +903,37 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
     <div class="flex flex-wrap items-center gap-2 border-b border-white/10 pb-2">
       <button
         onclick={() => activeTab = 'sim'}
-        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'sim' ? 'bg-accent text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'sim' ? 'bg-accent text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
         📜 Master Prompt
       </button>
       <button
         onclick={() => activeTab = 'websearch'}
-        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'websearch' ? 'bg-emerald-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'websearch' ? 'bg-emerald-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
         🌐 Prompt Búsqueda Web
       </button>
       <button
+        onclick={() => activeTab = 'metrics'}
+        class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'metrics' ? 'bg-purple-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+      >
+        📊 Escáner de Métricas
+      </button>
+      <button
         onclick={() => activeTab = 'cliaudit'}
-        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'cliaudit' ? 'bg-amber-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'cliaudit' ? 'bg-amber-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
         💻 Script Auto-Escaneo CLI
       </button>
       <button
         onclick={() => activeTab = 'skill'}
-        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'skill' ? 'bg-indigo-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'skill' ? 'bg-indigo-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
         ⚡ Custom SKILL.md
       </button>
       <button
         onclick={() => activeTab = 'env'}
-        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'env' ? 'bg-sky-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'env' ? 'bg-sky-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
         🔒 .env.example
       </button>
@@ -948,7 +975,25 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
       </div>
     {/if}
 
-    <!-- TAB 3: CLI Hardware Auto-Audit Script -->
+    <!-- TAB 3: Metrics Scanner Prompt -->
+    {#if activeTab === 'metrics'}
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <p class="text-xs text-purple-300">
+            📊 Pega este prompt en tu agente local (Antigravity, Claude Code, OpenCode, Hermes) para que cree un script que cuente tus Líneas de Código (LOC), número de proyectos y tamaño total:
+          </p>
+          <button
+            onclick={() => copyToClipboard(generatedMetricsPrompt, 'Prompt Escáner de Métricas')}
+            class="px-3 py-1 text-xs font-semibold rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 hover:bg-purple-500/30 transition-all cursor-pointer"
+          >
+            📋 Copiar Prompt de Métricas
+          </button>
+        </div>
+        <pre class="bg-black/60 border border-purple-500/20 rounded-lg p-4 text-xs font-mono text-purple-300 overflow-x-auto max-h-72 leading-relaxed whitespace-pre-wrap">{generatedMetricsPrompt}</pre>
+      </div>
+    {/if}
+
+    <!-- TAB 4: CLI Hardware Auto-Audit Script -->
     {#if activeTab === 'cliaudit'}
       <div class="space-y-3">
         <div class="flex items-center justify-between">
@@ -966,7 +1011,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
       </div>
     {/if}
 
-    <!-- TAB 4: SKILL.md -->
+    <!-- TAB 5: SKILL.md -->
     {#if activeTab === 'skill'}
       <div class="space-y-3">
         <div class="flex items-center justify-between">

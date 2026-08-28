@@ -15,12 +15,12 @@
       items: ['PostgreSQL', 'MySQL / MariaDB', 'SQLite', 'pgvector', 'SQLite-vec', 'SurrealDB', 'Redis', 'HNSW Cosine Search']
     },
     {
-      category: 'Arneses de IA & Orquestación Agéntica',
-      items: ['Hermes Gateway', 'GitCore Engine', 'Gestalt Orchestrator', 'Jules', 'Claude Code', 'OpenCode', 'Custom Skills Authoring', 'Multi-Provider LLM Routing']
+      category: 'Arneses de IA, Enrutadores & Orquestación',
+      items: ['Hermes Gateway', 'OpenClaw Browser', 'GitCore Engine', 'Gestalt Orchestrator', 'Google Jules', 'OpenRouter', 'Amazon Bedrock', 'Google Vertex AI', 'Smart API Key Management', 'Custom Skills Authoring', 'Claude Code', 'OpenCode']
     },
     {
       category: 'Infraestructura, Servidores & DevSecOps',
-      items: ['VPS Linux (Ubuntu / NixOS)', 'cPanel / WHM', 'Nginx & Apache', 'PHP-FPM Tuning', 'Docker', 'Vulnerability Scanning', 'Antivirus & MCP Review Tools']
+      items: ['VPS Linux (Ubuntu / NixOS)', 'cPanel / WHM', 'Nginx & Apache', 'PHP-FPM Tuning', 'Docker', 'Vulnerability Scanning', 'Antivirus & MCP Security Protocols']
     }
   ];
 
@@ -31,8 +31,8 @@
       code: '0x01'
     },
     {
-      title: 'Arneses de IA, Orquestación & Skills',
-      desc: 'Pipelines deterministas con agentes autónomos (Hermes, GitCore, Gestalt, Jules), diseño de skills personalizadas, scripts de QA y ruteo multi-proveedor.',
+      title: 'Enrutadores de IA, Orquestación & Skills',
+      desc: 'Configuración de enrutadores (OpenRouter, Bedrock, Vertex), gestión inteligente de API keys, protocolos agénticos a medida y capacitación en arneses internos (Hermes, OpenClaw, GitCore, Jules).',
       code: '0x02'
     },
     {
@@ -51,8 +51,8 @@
       code: '0x05'
     },
     {
-      title: 'Seguridad, Hardening & Herramientas MCP',
-      desc: 'Auditorías de código, escaneo de malware y vulnerabilidades, herramientas propias de antivirus y servidores de inspección bajo el protocolo MCP.',
+      title: 'Seguridad, Hardening & Protocolos MCP',
+      desc: 'Auditorías de código, proxies de seguridad para API keys, escaneo de vulnerabilidades, herramientas de antivirus y servidores de inspección bajo el protocolo MCP.',
       code: '0x06'
     }
   ];

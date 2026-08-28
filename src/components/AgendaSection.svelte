@@ -51,6 +51,9 @@
   ];
 
   const tools = [
+    'OpenRouter',
+    'Amazon Bedrock',
+    'Smart API Keys',
     'Hermes Gateway',
     'OpenClaw Browser',
     'GitCore Engine',
@@ -58,6 +61,7 @@
     'Google Jules',
     'Claude Code',
     'Ollama / vLLM Local',
+    'Custom Agent Skills',
     'Xavier Memory'
   ];
 

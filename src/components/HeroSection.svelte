@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '../i18n/index';
+  import SplitFlapText from './SplitFlapText.svelte';
 
   let mouseX = $state(0);
   let mouseY = $state(0);
@@ -37,14 +38,18 @@
   <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
     <div class="entry-scan mb-8">
       <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/20 bg-accent/5 text-accent text-sm">
-        <span class="w-2 h-2 bg-accent rounded-full"></span>
-        {t('hero.badge')}
+        <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+        <SplitFlapText text={t('hero.badge')} duration={1200} />
       </span>
     </div>
 
-    <h1 class="hero-title mb-6">
-      <span class="kinetic-word text-accent">{t('hero.firstName')}</span><br />
-      <span class="kinetic-word text-text-primary word-delay">{t('hero.lastName')}</span>
+    <h1 class="hero-title mb-6 font-mono">
+      <span class="kinetic-word text-accent">
+        <SplitFlapText text={t('hero.firstName')} duration={1500} delay={0} />
+      </span><br />
+      <span class="kinetic-word text-text-primary word-delay">
+        <SplitFlapText text={t('hero.lastName')} duration={1500} delay={150} />
+      </span>
     </h1>
 
     <p class="entry-clip text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 leading-relaxed">

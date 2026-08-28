@@ -53,8 +53,8 @@
     </h1>
 
     <p class="entry-clip text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 leading-relaxed">
-      {t('hero.tagline')}<br class="hidden md:block" />
-      {t('hero.taglineExtra')}
+      <SplitFlapText text={t('hero.tagline')} duration={1800} delay={100} /><br class="hidden md:block" />
+      <SplitFlapText text={t('hero.taglineExtra')} duration={1950} delay={200} />
     </p>
 
     <div class="entry-rise flex flex-wrap justify-center gap-6" style="animation-delay: 520ms">

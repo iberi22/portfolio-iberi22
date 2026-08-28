@@ -4,6 +4,8 @@
 
   let { posts = [] }: { posts?: Array<{ slug: string; title: string; excerpt: string; date: string; tags: string[]; draft: boolean }> } = $props();
 
+  let sortedPosts = $derived([...posts].sort((a, b) => (a.draft === b.draft ? 0 : a.draft ? 1 : -1)));
+
   function handleMouseMove(event: MouseEvent) {
     const target = event.currentTarget as HTMLElement;
     const rect = target.getBoundingClientRect();
@@ -25,7 +27,7 @@
     </div>
 
     <div class="blog-layout mt-16">
-      {#each posts.sort((a, b) => a.draft === b.draft ? 0 : a.draft ? 1 : -1) as post, i (post.slug)}
+      {#each sortedPosts as post, i (post.slug)}
         <a
           href={post.draft ? undefined : baseUrl(`blog/${post.slug}/`)}
           class="glass-card p-8 group transition-all duration-500 entry-rise block"

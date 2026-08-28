@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-
   interface Props {
     text: string;
     duration?: number;
@@ -11,35 +9,36 @@
   let { text = '', duration = 1800, delay = 0, class: className = '' }: Props = $props();
 
   const GLYPHS = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#$%&*+=-/_:;~';
-  let displayText = $state(text);
-  let isFlapping = $state(false);
 
   function getRandomGlyph() {
     return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
   }
 
-  function getScrambledString(target: string): string {
+  function getInitialScramble(target: string): string {
     let s = '';
     for (let i = 0; i < target.length; i++) {
       const c = target[i];
       if (c === ' ' || c === '\n' || c === '\t' || c === '.' || c === ',' || c === '—' || c === '-') {
         s += c;
       } else {
-        s += getRandomGlyph();
+        s += GLYPHS[(i * 7 + 5) % GLYPHS.length];
       }
     }
     return s;
   }
 
+  let displayText = $state(getInitialScramble(text));
+  let isFlapping = $state(true);
+
   function runFlap(targetText: string) {
     if (typeof window === 'undefined' || !targetText) {
       displayText = targetText;
+      isFlapping = false;
       return;
     }
 
     isFlapping = true;
-    // Immediately scramble on start so there is zero delay or flash of readable text
-    displayText = getScrambledString(targetText);
+    displayText = getInitialScramble(targetText);
 
     const len = targetText.length;
     const startTimestamp = performance.now();
@@ -48,8 +47,8 @@
 
     function frame(now: number) {
       const elapsed = now - startTimestamp;
-      
-      // Throttle character flipping to ~35ms for authentic mechanical click feel
+
+      // Flip every ~35ms for mechanical train station tick sound/motion feel
       if (now - lastTick > 35 || elapsed >= duration) {
         lastTick = now;
 
@@ -65,7 +64,6 @@
             continue;
           }
 
-          // Progressive lock-in threshold (train station cascade)
           const lockProgress = (i + 1) / len;
 
           if (elapsed >= delay && progress >= lockProgress) {

@@ -35,7 +35,7 @@
     style:--drift-y={`${mouseY * -22}px`}
   ></div>
 
-  <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+  <div class="hero-reveal-container relative z-10 text-center px-6 max-w-5xl mx-auto">
     <div class="entry-scan mb-8">
       <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/20 bg-accent/5 text-accent text-sm">
         <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
@@ -75,6 +75,21 @@
 </section>
 
 <style>
+  .hero-reveal-container {
+    animation: heroFadeReveal 450ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes heroFadeReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .hero-title {
     font-size: clamp(2.5rem, 8vw, 6rem);
     font-weight: 700;
@@ -138,8 +153,8 @@
   }
 
   @keyframes cueIn {
-    from { opacity: 0; filter: blur(8px); }
-    to { opacity: 1; filter: blur(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes scrollTick {

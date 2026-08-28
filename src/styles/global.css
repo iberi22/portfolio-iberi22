@@ -205,11 +205,10 @@
   }
 
   .entry-scan {
-    animation: scanIn 900ms cubic-bezier(.16, 1, .3, 1) both;
+    animation: scanIn 600ms cubic-bezier(.16, 1, .3, 1) both;
     @starting-style {
       opacity: 0;
-      filter: blur(6px);
-      letter-spacing: 0.18em;
+      transform: translateY(12px);
     }
   }
 
@@ -236,8 +235,8 @@
 }
 
 @keyframes scanIn {
-  from { opacity: 0; filter: blur(6px); letter-spacing: 0.18em; }
-  to { opacity: 1; filter: blur(0); letter-spacing: 0; }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes kineticType {

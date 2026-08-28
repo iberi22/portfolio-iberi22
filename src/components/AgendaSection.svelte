@@ -17,18 +17,57 @@
     { k: 'agenda.fmtFol', v: 'agenda.fmtFolV' },
   ];
 
+  const tracks = [
+    {
+      badge: 'EXPRESS · $20 USD',
+      title: 'agenda.track1Title',
+      desc: 'agenda.track1Desc',
+      icon: '📊',
+      accent: true,
+      price: '$20 USD'
+    },
+    {
+      badge: 'EQUIPOS & DEVS',
+      title: 'agenda.track2Title',
+      desc: 'agenda.track2Desc',
+      icon: '🎓',
+      accent: false,
+      price: 'Custom'
+    },
+    {
+      badge: 'SETUP & CLI TOOLS',
+      title: 'agenda.track3Title',
+      desc: 'agenda.track3Desc',
+      icon: '🛠️',
+      accent: false,
+      price: 'Hands-on'
+    }
+  ];
+
   const pillars = [
     { icon: '📊', t: 'agenda.p1t', d: 'agenda.p1d' },
-    { icon: '🤖', t: 'agenda.p2t', d: 'agenda.p2d' },
+    { icon: '🎓', t: 'agenda.p2t', d: 'agenda.p2d' },
     { icon: '⚡', t: 'agenda.p3t', d: 'agenda.p3d' },
+  ];
+
+  const tools = [
+    'Hermes Gateway',
+    'OpenClaw Browser',
+    'GitCore Engine',
+    'Gestalt Swarm',
+    'Google Jules',
+    'Claude Code',
+    'Ollama / vLLM Local',
+    'Xavier Memory'
   ];
 
   const slots = ['agenda.slot1', 'agenda.slot2', 'agenda.slot3'];
 
   let sent = $state(false);
   let isPaying = $state(false);
+  let selectedService = $state('diagnostic');
 
-  // Default Stripe Payment Link (can be configured or customized via env)
+  // Default Stripe Payment Link
   const stripePaymentLink = 'https://buy.stripe.com/test_diagnostic_20usd';
 
   function handleSubmit(event: Event) {
@@ -38,29 +77,28 @@
     const name = data.get('name');
     const email = data.get('email');
     const profile = data.get('profile');
+    const service = data.get('service');
     const infra = data.get('infra');
     const topic = data.get('topic');
     const message = data.get('message');
 
-    const subject = encodeURIComponent(`Solicitud Diagnóstico Técnico ($20 USD) — ${name}`);
+    const isDiag = service?.toString().includes('20');
+    const subject = encodeURIComponent(`Solicitud Técnica: ${service} — ${name}`);
     const body = encodeURIComponent(
-      `SOLICITUD DE DIAGNÓSTICO TÉCNICO & RECURSOS ($20 USD)\n` +
+      `SOLICITUD DE ASESORÍA / CAPACITACIÓN / ARNÉS AGÉNTICO\n` +
       `====================================================\n\n` +
       `Cliente: ${name}\n` +
       `Correo: ${email}\n` +
       `Perfil: ${profile}\n` +
-      `Infraestructura/Proveedores: ${infra}\n` +
-      `Área de Enfoque: ${topic}\n\n` +
-      `Detalles del Caso / Arquitectura:\n${message}\n\n` +
+      `Servicio Seleccionado: ${service}\n` +
+      `Infraestructura/Proveedores Actuales: ${infra}\n` +
+      `Área de Enfoque Principal: ${topic}\n\n` +
+      `Detalles del Caso / Objetivos de Capacitación o Setup:\n${message}\n\n` +
       `---\n` +
-      `Entregables acordados:\n` +
-      `- Informe evaluado por Brahyans Belalcázar + Consejo de Agentes\n` +
-      `- Paquete de Skills y Scripts de automatización\n` +
-      `- Sesión técnica 1 a 1 de 60 minutos\n` +
-      `Pago: $20 USD gestionado vía Stripe`
+      `Arnés y CLI Tools de Interés: Hermes, OpenClaw, GitCore, Gestalt, Jules, Ollama/vLLM\n` +
+      (isDiag ? `Pago Base: $20 USD gestionado vía Stripe` : `Modalidad: Plan coordinado con cliente`)
     );
 
-    // Open mailto to register structured order
     window.location.href = `mailto:iberi22@gmail.com?subject=${subject}&body=${body}`;
     sent = true;
   }
@@ -86,32 +124,52 @@
         {t('agenda.subtitle')}
       </p>
 
-      <!-- Pricing Callout Badge -->
-      <div class="mt-8 inline-block">
-        <div class="glass-card px-8 py-4 border-accent/40 bg-accent/5 backdrop-blur-md rounded-2xl flex flex-wrap items-center justify-center gap-4">
-          <span class="text-3xl md:text-4xl font-extrabold text-accent font-mono">{t('agenda.priceTag')}</span>
-          <div class="h-8 w-px bg-white/10 hidden sm:block"></div>
-          <span class="text-sm md:text-base text-text-primary font-medium max-w-md text-left">
-            {t('agenda.priceSub')}
+      <!-- Tools Marquee / Badge Strip -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto">
+        {#each tools as tool}
+          <span class="px-3 py-1 rounded-full text-[11px] font-mono bg-bg-surface-dark border border-white/10 text-text-muted hover:border-accent/40 hover:text-accent transition-colors">
+            {tool}
           </span>
-        </div>
+        {/each}
       </div>
     </div>
 
-    <!-- Pillars / Deliverables -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-      {#each pillars as p, i}
-        <div class="glass-card p-8 entry-rise flex flex-col justify-between border border-white/10 hover:border-accent/40 transition-all duration-300 group" style={`animation-delay: ${100 + i * 90}ms`}>
+    <!-- 3 Service Tracks -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+      {#each tracks as track, i}
+        <div class="glass-card p-8 entry-rise flex flex-col justify-between border transition-all duration-300 group {track.accent ? 'border-accent/40 bg-accent/5 hover:border-accent' : 'border-white/10 hover:border-accent/40'}" style={`animation-delay: ${100 + i * 90}ms`}>
           <div>
-            <div class="text-4xl mb-5 group-hover:scale-110 transition-transform">{p.icon}</div>
-            <h3 class="text-lg font-bold text-text-primary mb-3 group-hover:text-accent transition-colors">{t(p.t)}</h3>
-            <p class="text-text-secondary text-sm leading-relaxed">{t(p.d)}</p>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-mono font-bold tracking-widest px-2.5 py-1 rounded {track.accent ? 'bg-accent text-black' : 'bg-white/10 text-text-muted'}">
+                {track.badge}
+              </span>
+              <span class="text-2xl group-hover:scale-110 transition-transform">{track.icon}</span>
+            </div>
+            <h3 class="text-lg font-bold text-text-primary mb-3 group-hover:text-accent transition-colors">{t(track.title)}</h3>
+            <p class="text-text-secondary text-sm leading-relaxed mb-6">{t(track.desc)}</p>
+          </div>
+          <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono">
+            <span class="text-text-muted">Inversión:</span>
+            <span class="font-bold text-text-primary {track.accent ? 'text-accent text-sm' : ''}">{track.price}</span>
           </div>
         </div>
       {/each}
     </div>
 
-    <!-- Format + Key Diagnostic Areas -->
+    <!-- Pillars Breakdown -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+      {#each pillars as p, i}
+        <div class="glass-card p-8 entry-rise flex flex-col justify-between border border-white/10 hover:border-accent/30 transition-all" style={`animation-delay: ${280 + i * 80}ms`}>
+          <div>
+            <div class="text-3xl mb-4">{p.icon}</div>
+            <h3 class="text-base font-bold text-text-primary mb-2">{t(p.t)}</h3>
+            <p class="text-text-secondary text-xs leading-relaxed">{t(p.d)}</p>
+          </div>
+        </div>
+      {/each}
+    </div>
+
+    <!-- Format + Key Scope Areas -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
       <div class="glass-card p-8 entry-rise" style="animation-delay: 350ms">
         <h3 class="text-accent text-sm tracking-widest uppercase mb-6 font-mono font-bold flex items-center gap-2">
@@ -196,6 +254,16 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
+                <label for="agenda-service" class="block text-xs font-mono text-text-muted mb-2 uppercase tracking-wider">{t('agenda.formService')}</label>
+                <select id="agenda-service" name="service" required bind:value={selectedService} class="field w-full appearance-none cursor-pointer">
+                  <option value="diagnostic" class="bg-[#121212]">{t('agenda.formService1')}</option>
+                  <option value="training" class="bg-[#121212]">{t('agenda.formService2')}</option>
+                  <option value="harness" class="bg-[#121212]">{t('agenda.formService3')}</option>
+                  <option value="architecture" class="bg-[#121212]">{t('agenda.formService4')}</option>
+                </select>
+              </div>
+
+              <div>
                 <label for="agenda-profile" class="block text-xs font-mono text-text-muted mb-2 uppercase tracking-wider">{t('agenda.formProfile')}</label>
                 <select id="agenda-profile" name="profile" required class="field w-full appearance-none cursor-pointer">
                   <option value={t('agenda.formProfile1')} class="bg-[#121212]">{t('agenda.formProfile1')}</option>
@@ -204,7 +272,9 @@
                   <option value={t('agenda.formProfile4')} class="bg-[#121212]">{t('agenda.formProfile4')}</option>
                 </select>
               </div>
+            </div>
 
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label for="agenda-topic" class="block text-xs font-mono text-text-muted mb-2 uppercase tracking-wider">{t('agenda.topTitle')}</label>
                 <select id="agenda-topic" name="topic" required class="field w-full appearance-none cursor-pointer">
@@ -213,18 +283,18 @@
                   {/each}
                 </select>
               </div>
-            </div>
 
-            <div>
-              <label for="agenda-infra" class="block text-xs font-mono text-text-muted mb-2 uppercase tracking-wider">{t('agenda.formInfra')}</label>
-              <input
-                id="agenda-infra"
-                type="text"
-                name="infra"
-                required
-                placeholder={t('agenda.formInfraPh')}
-                class="field w-full"
-              />
+              <div>
+                <label for="agenda-infra" class="block text-xs font-mono text-text-muted mb-2 uppercase tracking-wider">{t('agenda.formInfra')}</label>
+                <input
+                  id="agenda-infra"
+                  type="text"
+                  name="infra"
+                  required
+                  placeholder={t('agenda.formInfraPh')}
+                  class="field w-full"
+                />
+              </div>
             </div>
 
             <div>
@@ -234,7 +304,7 @@
                 name="message"
                 rows="4"
                 required
-                placeholder="Describe los lenguajes, frameworks, repositorios o procesos que deseas auditar y optimizar..."
+                placeholder="Describe tus necesidades de capacitación, frameworks, repositorios o herramientas CLI que deseas configurar (Hermes, OpenClaw, GitCore, etc.)..."
                 class="field w-full resize-none"
               ></textarea>
             </div>
@@ -244,14 +314,14 @@
                 type="submit"
                 class="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-xl bg-accent text-black font-mono font-bold text-sm tracking-wider uppercase hover:bg-accent-light transition-all duration-300 shadow-xl shadow-accent/20 cursor-pointer"
               >
-                <span>{t('agenda.formSubmit')}</span>
+                <span>{selectedService === 'diagnostic' ? t('agenda.formSubmit') : t('agenda.formSubmitAlt')}</span>
                 <span class="text-base font-extrabold font-sans">→</span>
               </button>
 
               <div class="flex items-center justify-center gap-6 pt-2">
                 <span class="flex items-center gap-1.5 text-xs text-text-muted font-mono">
                   <svg class="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                  Pago Seguro con Stripe
+                  Stripe Checkout / Confirmación Directa
                 </span>
                 <span class="flex items-center gap-1.5 text-xs text-text-muted font-mono">
                   <svg class="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>

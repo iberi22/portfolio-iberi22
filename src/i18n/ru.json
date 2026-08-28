@@ -6,7 +6,8 @@
     "contact": "Контакты",
     "git": "GIT",
     "github": "GITHUB",
-    "agenda": "Запись"
+    "agenda": "Запись",
+    "simulator": "Simulator"
   },
   "hero": {
     "badge": "Full-Stack инженер и специалист по оркестрации ИИ",

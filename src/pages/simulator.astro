@@ -5,12 +5,12 @@ import ResourceSimulator from '../components/ResourceSimulator.svelte';
 import Footer from '../components/Footer.svelte';
 
 const description =
-  'Herramienta gratuita 100% serverless para simular las 5 mejores configuraciones de arquitectura agéntica (Costo vs. Velocidad) y generar prompts maestros y custom skills adaptados a tu hardware.';
+  '100% Serverless, Local-First Agentic Resource & Scenario Simulator. Input hardware, cloud APIs, rate limits, and calculate Top 5 Optimal Configurations with dynamic Master Prompt and SKILL.md generator.';
 ---
 
-<Layout title="Simulador de Recursos & Generador de Skills (Gratis) — iberi22" description={description}>
+<Layout title="Resource & Scenario Simulator — iberi22" description={description}>
   <Nav client:load />
-  <main class="pt-32 pb-24 px-6 max-w-6xl mx-auto">
+  <main class="pt-16">
     <ResourceSimulator client:load />
   </main>
   <Footer client:load />

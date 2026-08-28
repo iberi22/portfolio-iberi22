@@ -2,442 +2,795 @@
   import { onMount } from 'svelte';
   import { t } from '../i18n/index';
 
-  interface Provider {
-    id: string;
-    name: string;
-    tier: 'cloud' | 'local' | 'router';
-    costPer1MInput: number;
-    costPer1MOutput: number;
-    speedScore: number; // 1-10
-    qualityScore: number; // 1-10
-    active: boolean;
+  interface ProviderState {
+    openai: boolean;
+    anthropic: boolean;
+    gemini: boolean;
+    openrouter: boolean;
+    bedrock: boolean;
+    localModels: boolean;
   }
 
-  let providers = $state<Provider[]>([
-    { id: 'gemini', name: 'Google Gemini (Flash/Pro)', tier: 'cloud', costPer1MInput: 0.15, costPer1MOutput: 0.60, speedScore: 9.5, qualityScore: 9.2, active: true },
-    { id: 'claude', name: 'Anthropic Claude (Sonnet 3.7 / Haiku)', tier: 'cloud', costPer1MInput: 3.00, costPer1MOutput: 15.00, speedScore: 8.8, qualityScore: 9.8, active: true },
-    { id: 'openai', name: 'OpenAI (GPT-4o / Mini / o3)', tier: 'cloud', costPer1MInput: 2.50, costPer1MOutput: 10.00, speedScore: 8.5, qualityScore: 9.3, active: false },
-    { id: 'openrouter', name: 'OpenRouter (Multi-Provider Router)', tier: 'router', costPer1MInput: 0.50, costPer1MOutput: 1.50, speedScore: 9.0, qualityScore: 9.4, active: true },
-    { id: 'bedrock', name: 'Amazon Bedrock (Enterprise)', tier: 'router', costPer1MInput: 1.20, costPer1MOutput: 4.00, speedScore: 9.1, qualityScore: 9.5, active: false },
-    { id: 'ollama', name: 'Ollama / vLLM (Local Hardware)', tier: 'local', costPer1MInput: 0.00, costPer1MOutput: 0.00, speedScore: 7.5, qualityScore: 8.2, active: true },
-  ]);
+  interface HardwareState {
+    type: 'gpu_high' | 'mac_studio' | 'cpu_only' | 'vps_linux' | 'cloud_ec2';
+    ramGb: number;
+    gpuVramGb: number;
+  }
 
-  let hardware = $state<'mac' | 'gpu_linux' | 'vps' | 'cpu_only'>('mac');
-  let dailyPrompts = $state(50);
-  let teamSize = $state(1);
-  let focusGoal = $state<'balanced' | 'cost' | 'speed' | 'privacy'>('balanced');
-  let repoPath = $state('~/proyectos/mi-sistema');
-  let activeTab = $state<'sim' | 'prompt' | 'skill' | 'env'>('sim');
+  interface WorkloadState {
+    dailyPrompts: number;
+    repoSizeMb: number;
+    rateLimitRpm: number;
+    budgetLimitUsd: number;
+  }
 
-  let copied = $state(false);
+  interface ContextState {
+    srcPath: string;
+    testPath: string;
+    docsUrl: string;
+    envKeys: string;
+    selectedCli: 'hermes' | 'openclaw' | 'gitcore' | 'jules';
+  }
 
-  // Load from localStorage on mount
+  interface UserProfile {
+    version: string;
+    providers: ProviderState;
+    hardware: HardwareState;
+    workload: WorkloadState;
+    context: ContextState;
+  }
+
+  const defaultProfile: UserProfile = {
+    version: '1.0.0',
+    providers: {
+      openai: true,
+      anthropic: true,
+      gemini: true,
+      openrouter: true,
+      bedrock: false,
+      localModels: true,
+    },
+    hardware: {
+      type: 'mac_studio',
+      ramGb: 64,
+      gpuVramGb: 24,
+    },
+    workload: {
+      dailyPrompts: 350,
+      repoSizeMb: 120,
+      rateLimitRpm: 60,
+      budgetLimitUsd: 150,
+    },
+    context: {
+      srcPath: './src',
+      testPath: './tests',
+      docsUrl: 'https://github.com/iberi22/portfolio-iberi22',
+      envKeys: 'OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY',
+      selectedCli: 'jules',
+    },
+  };
+
+  let profile = $state<UserProfile>(JSON.parse(JSON.stringify(defaultProfile)));
+  let selectedTierIndex = $state<number>(0);
+  let copyFeedback = $state<string | null>(null);
+  let fileInputRef = $state<HTMLInputElement | null>(null);
+
+  const STORAGE_KEY = 'swal_sim_profiles';
+
   onMount(() => {
     try {
-      const saved = localStorage.getItem('swal_sim_profile_v1');
+      const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        const data = JSON.parse(saved);
-        if (data.hardware) hardware = data.hardware;
-        if (data.dailyPrompts) dailyPrompts = data.dailyPrompts;
-        if (data.teamSize) teamSize = data.teamSize;
-        if (data.focusGoal) focusGoal = data.focusGoal;
-        if (data.repoPath) repoPath = data.repoPath;
-        if (data.providers) {
-          providers.forEach(p => {
-            const found = data.providers.find((dp: any) => dp.id === p.id);
-            if (found) p.active = found.active;
-          });
-        }
+        const parsed = JSON.parse(saved);
+        profile = { ...defaultProfile, ...parsed };
       }
     } catch (e) {
-      console.warn('Could not read from localStorage', e);
+      console.error('Failed to load profile from localStorage', e);
     }
   });
 
   function saveProfile() {
     try {
-      const data = { hardware, dailyPrompts, teamSize, focusGoal, repoPath, providers };
-      localStorage.setItem('swal_sim_profile_v1', JSON.stringify(data));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
     } catch (e) {
-      console.warn('Could not save to localStorage', e);
+      console.error('Failed to save profile to localStorage', e);
     }
   }
 
-  function toggleProvider(id: string) {
-    const p = providers.find(x => x.id === id);
-    if (p) {
-      p.active = !p.active;
-      saveProfile();
-    }
+  function resetProfile() {
+    profile = JSON.parse(JSON.stringify(defaultProfile));
+    saveProfile();
   }
 
-  // Simulation Algorithm: Top 5 Scenarios
-  let simulationResults = $derived.by(() => {
-    const activeList = providers.filter(p => p.active);
-    const hasLocal = activeList.some(p => p.id === 'ollama');
-    const hasRouter = activeList.some(p => p.id === 'openrouter' || p.id === 'bedrock');
-    const hasFastCloud = activeList.some(p => p.id === 'gemini');
-    const hasHighQuality = activeList.some(p => p.id === 'claude' || p.id === 'openai');
+  function exportProfileJson() {
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(profile, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute('download', `swal_sim_profile_${Date.now()}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  }
 
-    const totalMonthlyTokens = dailyPrompts * 30 * 4000; // ~4k tokens avg per prompt cycle
+  function triggerImport() {
+    fileInputRef?.click();
+  }
 
-    // Base estimated monthly cost calculation
-    const avgInputCost = activeList.length > 0 ? (activeList.reduce((acc, p) => acc + p.costPer1MInput, 0) / activeList.length) : 0.5;
-    const avgOutputCost = activeList.length > 0 ? (activeList.reduce((acc, p) => acc + p.costPer1MOutput, 0) / activeList.length) : 1.5;
-    const baseCloudCost = (totalMonthlyTokens / 1_000_000) * (avgInputCost * 0.7 + avgOutputCost * 0.3);
-
-    return [
-      {
-        rank: '#1',
-        name: 'Tier 1: Ultra-Cost Optimizer (Local + Router Triage)',
-        desc: 'Usa Ollama local para tareas de planificación y pruebas unitarias, delegando solo código crítico a modelos ligeros vía OpenRouter.',
-        monthlyCostUSD: hasLocal ? Math.round(baseCloudCost * 0.15) : Math.round(baseCloudCost * 0.4),
-        speedRating: '8.2 / 10',
-        velocityMultiplier: '3.5x',
-        privacyLevel: hasLocal ? 'Alta (Local First)' : 'Media',
-        recommendedStack: ['Ollama (Qwen 2.5 / DeepSeek R1 14B)', 'OpenRouter Flash Routing', 'GitCore local engine'],
-        recommendedFor: 'Desarrolladores autónomos y proyectos con presupuesto ajustado.'
-      },
-      {
-        rank: '#2',
-        name: 'Tier 2: Maximum Velocity (Cloud Wave Parallelism)',
-        desc: 'Orquestación de hasta 15 micro-tareas paralelas con Google Jules + Gemini Flash para entrega continua ultra-rápida.',
-        monthlyCostUSD: Math.round(baseCloudCost * 0.85),
-        speedRating: '9.8 / 10',
-        velocityMultiplier: '7.5x',
-        privacyLevel: 'Estándar Cloud',
-        recommendedStack: ['Google Jules Swarm', 'Gemini 2.5 Flash/Pro', 'Hermes Gateway', 'Automated Test Suites'],
-        recommendedFor: 'Startups y equipos que priorizan velocidad extrema de entrega sobre costo de tokens.'
-      },
-      {
-        rank: '#3',
-        name: 'Tier 3: Balanced Hybrid (Smart Router + Multi-Model)',
-        desc: 'El equilibrio óptimo: enrutamiento inteligente por tipo de tarea (Flash para búsqueda y linting, Claude Sonnet para arquitectura y refactor).',
-        monthlyCostUSD: Math.round(baseCloudCost * 0.55),
-        speedRating: '9.2 / 10',
-        velocityMultiplier: '5.5x',
-        privacyLevel: 'Híbrida',
-        recommendedStack: ['Hermes Multi-Provider Routing', 'OpenRouter API', 'Claude Sonnet 3.7', 'Ollama Local Fallback'],
-        recommendedFor: 'Proyectos profesionales que buscan máxima calidad sin incurrir en sobrecostes.'
-      },
-      {
-        rank: '#4',
-        name: 'Tier 4: Sovereign Local-First (100% On-Premise)',
-        desc: 'Privacidad absoluta con cero fugas de código a la nube. Runtimes locales con aceleración GPU o Apple Silicon y base de datos vectorial local.',
-        monthlyCostUSD: 0,
-        speedRating: hardware === 'mac' || hardware === 'gpu_linux' ? '8.5 / 10' : '6.0 / 10',
-        velocityMultiplier: '3.0x',
-        privacyLevel: '100% Soberana (Air-Gapped)',
-        recommendedStack: ['vLLM / Ollama', 'Xavier Memory (SQLite-vec local)', 'GitCore local', 'OpenClaw Headless'],
-        recommendedFor: 'Industrias reguladas, proyectos con NDA estricto y código confidencial.'
-      },
-      {
-        rank: '#5',
-        name: 'Tier 5: Enterprise Bedrock & Governance Swarm',
-        desc: 'Infraestructura empresarial con Amazon Bedrock, gestión estricta de credenciales, auditoría formal de seguridad y suites CI/CD.',
-        monthlyCostUSD: Math.round(baseCloudCost * 1.3),
-        speedRating: '9.4 / 10',
-        velocityMultiplier: '6.0x',
-        privacyLevel: 'Enterprise Compliance (SOC2)',
-        recommendedStack: ['Amazon Bedrock Router', 'GitCore Enterprise', 'MCP Security Proxies', 'Consenso Multi-Agente'],
-        recommendedFor: 'Empresas consolidadas con altos requerimientos de gobernanza y trazabilidad.'
+  function handleImportFile(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target.files || target.files.length === 0) return;
+    const file = target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const imported = JSON.parse(content);
+        if (imported && typeof imported === 'object') {
+          profile = { ...defaultProfile, ...imported };
+          saveProfile();
+          showFeedback('Profile imported successfully!');
+        }
+      } catch (err) {
+        alert('Invalid JSON file format.');
       }
+    };
+    reader.readAsText(file);
+  }
+
+  function showFeedback(msg: string) {
+    copyFeedback = msg;
+    setTimeout(() => {
+      if (copyFeedback === msg) copyFeedback = null;
+    }, 3000);
+  }
+
+  // --- Algorithmic Simulation & Scoring Engine ---
+  const simulationResults = $derived.by(() => {
+    const p = profile;
+    const totalDailyTokens = p.workload.dailyPrompts * 1200; // estimated tokens per prompt cycle
+    const monthlyTokensM = (totalDailyTokens * 30) / 1000000;
+
+    // Tiers Definition
+    const tiers = [
+      {
+        id: 'tier1',
+        title: '💰 Tier 1: Ultra-Cost Optimizer',
+        tagline: 'Ollama local planning & unit tests + OpenRouter/DeepSeek fallback for core logic',
+        description: 'Maximizes zero-cost local inference for repetitive context parsing, using cheap high-efficiency models for synthesis.',
+        costEstUsd: Math.min(p.workload.budgetLimitUsd, Math.round(monthlyTokensM * 0.45)),
+        estLatencyMs: 850,
+        concurrencyLimit: 4,
+        antiDriftScore: 88,
+        e2eVerificationRate: 92,
+        costEfficiencyScore: 98,
+        devVelocityScore: 72,
+        resilienceScore: 86,
+        primaryRouting: 'Local Ollama (Qwen2.5/Llama3) → OpenRouter (DeepSeek-V3)',
+        recommendedCli: 'openclaw',
+      },
+      {
+        id: 'tier2',
+        title: '⚡ Tier 2: Maximum Velocity (Wave Parallelism)',
+        tagline: 'High-concurrency cloud agent swarms with Google Jules (15 parallel tasks) + Gemini Pro/Flash',
+        description: 'Optimized for rapid feature delivery via parallelized task waves, sub-second API execution, and high rate-limit throughput.',
+        costEstUsd: Math.round(monthlyTokensM * 2.8),
+        estLatencyMs: 220,
+        concurrencyLimit: 15,
+        antiDriftScore: 91,
+        e2eVerificationRate: 95,
+        costEfficiencyScore: 74,
+        devVelocityScore: 99,
+        resilienceScore: 90,
+        primaryRouting: 'Google Jules 15-Wave Parallel Task Engine → Gemini Flash 1.5 / Gemini Pro',
+        recommendedCli: 'jules',
+      },
+      {
+        id: 'tier3',
+        title: '⚖️ Tier 3: Balanced Hybrid Orchestrator',
+        tagline: 'Cloud orchestrator (Hermes / Claude) + local workers for deterministic test runs and linting',
+        description: 'Best-of-both-worlds approach combining high-reasoning cloud leads with local isolated execution environments.',
+        costEstUsd: Math.round(monthlyTokensM * 1.5),
+        estLatencyMs: 420,
+        concurrencyLimit: 8,
+        antiDriftScore: 96,
+        e2eVerificationRate: 98,
+        costEfficiencyScore: 88,
+        devVelocityScore: 89,
+        resilienceScore: 95,
+        primaryRouting: 'Claude 3.5 Sonnet / Hermes Gateway Orchestrator → Local Docker Verification Sandbox',
+        recommendedCli: 'hermes',
+      },
+      {
+        id: 'tier4',
+        title: '🛡️ Tier 4: Sovereign Local-First & Privacy',
+        tagline: '100% on-premise execution with zero cloud API leaks, local vector DB (Xavier/SQLite-vec), and strict sandboxing',
+        description: 'Guarantees zero outbound data leakage. Operates purely on local GPU hardware with deterministic memory cores.',
+        costEstUsd: 0,
+        estLatencyMs: 1100,
+        concurrencyLimit: 3,
+        antiDriftScore: 94,
+        e2eVerificationRate: 96,
+        costEfficiencyScore: 95,
+        devVelocityScore: 68,
+        resilienceScore: 98,
+        primaryRouting: 'Local vLLM / Ollama → Xavier2 Memory Core + SQLite-vec Sandbox',
+        recommendedCli: 'gitcore',
+      },
+      {
+        id: 'tier5',
+        title: '🏢 Tier 5: Enterprise High-Throughput',
+        tagline: 'Multi-account Bedrock/Vertex routing with GitCore CI/CD state engine and formal acceptance gating',
+        description: 'Designed for enterprise pipelines with compliance requirements, multi-region key failover, and strict PR acceptance gating.',
+        costEstUsd: Math.round(monthlyTokensM * 3.4),
+        estLatencyMs: 310,
+        concurrencyLimit: 20,
+        antiDriftScore: 99,
+        e2eVerificationRate: 99,
+        costEfficiencyScore: 68,
+        devVelocityScore: 94,
+        resilienceScore: 99,
+        primaryRouting: 'Amazon Bedrock / GCP Vertex AI → GitCore State Engine → CI/CD Gated Pipelines',
+        recommendedCli: 'gitcore',
+      },
     ];
+
+    // Compute composite overall score
+    const scoredTiers = tiers.map((tier) => {
+      // Weighting: Cost (35%), Velocity (35%), Resilience & Quality (30%)
+      const budgetPenalty = tier.costEstUsd > p.workload.budgetLimitUsd ? 15 : 0;
+      const overallScore = Math.round(
+        tier.costEfficiencyScore * 0.35 +
+        tier.devVelocityScore * 0.35 +
+        tier.resilienceScore * 0.30 -
+        budgetPenalty
+      );
+      return { ...tier, overallScore: Math.max(10, overallScore) };
+    });
+
+    // Sort descending by overall score
+    return scoredTiers.sort((a, b) => b.overallScore - a.overallScore);
   });
 
-  // Generated Master Prompt
-  let generatedMasterPrompt = $derived.by(() => {
-    const activeNames = providers.filter(p => p.active).map(p => p.name).join(', ');
-    return `<agent_system_protocol>
-# ROL & IDENTIDAD
-Eres un Agente de Ingeniería de Software Autónomo de nivel Staff/Senior, configurado para operar en el repositorio ubicado en \`${repoPath}\`.
-Tu objetivo es ejecutar cambios con máxima predictibilidad, cero deuda técnica y verificación determinista.
+  const currentSelectedTier = $derived(simulationResults[selectedTierIndex] || simulationResults[0]);
 
-# RECURSOS & PROVEEDORES DISPONIBLES
-- Proveedores Activos: ${activeNames || 'Local / Multi-Provider'}
-- Entorno de Hardware: ${hardware.toUpperCase()}
-- Política de Tokens: Optimización continua (Micro-fragmentación de archivos, lecturas de rango precisas).
+  // Generators for Prompt, Skill, and .env
+  const generatedMasterPrompt = $derived.by(() => {
+    const tier = currentSelectedTier;
+    const p = profile;
+    return `================================================================================
+SWAL MASTER AGENT SYSTEM PROMPT [ARCHIVAL GRADE]
+Generated for Architecture: ${tier.title}
+Target Repository: ${p.context.srcPath} | Test Suite: ${p.context.testPath}
+================================================================================
 
-# PROTOCOLO DE EJECUCIÓN OBLIGATORIO
-1. ANÁLISIS PREVIO: Leer primero los archivos de contexto y reglas del repositorio antes de escribir código.
-2. AISLAMIENTO: Trabajar en islas de archivos disjuntos (1 Issue → 1 Rama → 1 PR).
-3. DETERMINISMO: Cada cambio debe compilar con cero errores y pasar la suite de pruebas automatizadas.
-4. SEGURIDAD: Nunca escribir ni committear credenciales, API keys ni secretos (.env).
+1. CORE SYSTEM DIRECTIVE & OPERATIONAL RULES:
+- You are an autonomous software engineering agent operating under the SWAL deterministic execution framework.
+- Preferred Routing: ${tier.primaryRouting}
+- Active CLI Harness: ${p.context.selectedCli.toUpperCase()}
+- Strictly limit token usage by avoiding redundant code snippets. Only emit surgical diffs or disjoint file updates.
+- Workload Profile: ~${p.workload.dailyPrompts} prompts/day, Repository footprint ~${p.workload.repoSizeMb}MB.
 
-# REGLA DE RETROALIMENTACIÓN
-Al finalizar cada tarea, reportar el diff exacto, comandos de verificación ejecutados y el resultado de la suite de tests.
-</agent_system_protocol>`;
+2. BOUNDARIES & TOKEN CONSERVATION:
+- Do NOT rewrite existing unmodified functions. Use precise file references.
+- Documentation Link: ${p.context.docsUrl}
+- Environment Variable Guardrails: Mandatory validation of keys (${p.context.envKeys}) prior to execution.
+
+3. QUALITY & RESILIENCE CONSTRAINTS:
+- Minimum Target E2E Test Pass Rate: ${tier.e2eVerificationRate}%
+- Anti-Drift Threshold: ${tier.antiDriftScore}% code stability score.
+- Concurrency limit: ${tier.concurrencyLimit} parallel execution waves.
+
+4. EXECUTION PROTOCOL:
+  Step 1: Read requirements and local codebase context.
+  Step 2: Propose execution plan with precise verification steps.
+  Step 3: Execute modifications local-first with mandatory automated verification.
+  Step 4: Formally close issue only when all verification gates pass.`;
   });
 
-  // Generated SKILL.md
-  let generatedSkillMd = $derived.by(() => {
-    return `---
-name: custom-agentic-pipeline
-description: Protocolo y habilidades de desarrollo determinista optimizado para ${hardware.toUpperCase()} con ruteo de modelos (${providers.filter(p => p.active).map(p => p.id).join(', ')}).
----
+  const generatedSkillMd = $derived.by(() => {
+    const tier = currentSelectedTier;
+    const p = profile;
+    return `# SKILL.md — Custom Agent Skill Template
 
-# CUSTOM AGENTIC SKILL — ${hardware.toUpperCase()} PIPELINE
+## Name: swal-resource-orchestrator-${p.context.selectedCli}
+Description: Custom skill for executing agentic pipelines under the ${tier.title} configuration.
 
-## 1. Guía de Ruteo de Modelos
-- **Tareas Simples / Lints / Lectura de Archivos**: Usar modelos Flash / Ligeros o Local Ollama.
-- **Arquitectura / Refactor Complejo / Razonamiento**: Usar modelos Pro / Claude Sonnet vía OpenRouter.
+### System Configuration
+- **Selected CLI**: ${p.context.selectedCli.toUpperCase()}
+- **Concurrency Wave Limit**: ${tier.concurrencyLimit}
+- **Primary Model Pipeline**: ${tier.primaryRouting}
+- **Local Sandbox Path**: ${p.context.srcPath}
+- **Test Sandbox Path**: ${p.context.testPath}
 
-## 2. Guardrails de Ejecución
-- **Ruta de Trabajo**: \`${repoPath}\`
-- **Comando de Verificación**: \`pnpm run build\` / \`pytest\` / \`cargo check\`
-- **Control de Cambios**: Micro-commits atómicos con mensajes convencionales (\`feat:\`, \`fix:\`, \`chore:\`).
+### Instructions for Agent:
+1. **Pre-flight Inspection**: Verify local environment variables from sanitized configuration.
+2. **Context Indexing**: Inspect repository (${p.workload.repoSizeMb} MB) without overwhelming prompt context windows.
+3. **Task Wave Execution**: Run parallel sub-tasks adhering to a max rate limit of ${p.workload.rateLimitRpm} RPM.
+4. **Deterministic Validation**: Execute tests in \`${p.context.testPath}\` and confirm 0 failure regression before submission.
+5. **Telemetry & Privacy**: Ensure zero sensitive credentials or code payloads leave local-first boundary.`;
+  });
 
-## 3. Manejo de Secretos
-- Las API keys se leen exclusivamente desde variables de entorno seguras.
-- Usar proxies efímeros para evitar fugas en logs de agentes.
+  const generatedEnvExample = $derived.by(() => {
+    const p = profile;
+    const keysArray = p.context.envKeys.split(',').map((k) => k.trim()).filter(Boolean);
+    let envContent = `# Sanitized .env.example — SWAL Simulation Framework
+# Generated local-first (0% server storage)
+
+SWAL_SIMULATOR_VERSION=${p.version}
+SWAL_SELECTED_CLI=${p.context.selectedCli}
+SWAL_RATE_LIMIT_RPM=${p.workload.rateLimitRpm}
+SWAL_MONTHLY_BUDGET_USD=${p.workload.budgetLimitUsd}
+
+# Provider Endpoints & Guardrails
 `;
+
+    if (p.providers.openai) envContent += `OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.providers.anthropic) envContent += `ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.providers.gemini) envContent += `GEMINI_API_KEY=AIzaSyXxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.providers.openrouter) envContent += `OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.providers.bedrock) {
+      envContent += `AWS_ACCESS_KEY_ID=AKIAXXXXXXXXXXXXXXXX\nAWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxx\nAWS_REGION=us-east-1\n`;
+    }
+    if (p.providers.localModels) {
+      envContent += `OLLAMA_HOST=http://localhost:11434\nVLLM_ENDPOINT=http://localhost:8000/v1\n`;
+    }
+
+    keysArray.forEach((key) => {
+      if (!envContent.includes(key)) {
+        envContent += `${key}=placeholder_value_here\n`;
+      }
+    });
+
+    return envContent;
   });
 
-  // Generated .env.example
-  let generatedEnvExample = $derived.by(() => {
-    let env = `# .env.example — Configuración Generada por el Simulador SWAL\n`;
-    env += `REPO_ROOT_PATH=${repoPath}\n`;
-    env += `HARDWARE_PROFILE=${hardware}\n\n`;
-    if (providers.find(p => p.id === 'openrouter')?.active) env += `OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxx\n`;
-    if (providers.find(p => p.id === 'gemini')?.active) env += `GEMINI_API_KEY=AIzaSyxxxxxxxxxxxx\n`;
-    if (providers.find(p => p.id === 'claude')?.active) env += `ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxx\n`;
-    if (providers.find(p => p.id === 'openai')?.active) env += `OPENAI_API_KEY=sk-proj-xxxxxxxxxxxx\n`;
-    if (providers.find(p => p.id === 'bedrock')?.active) env += `AWS_BEDROCK_REGION=us-east-1\nAWS_ACCESS_KEY_ID=AKIAxxxxxxxxxxxx\nAWS_SECRET_ACCESS_KEY=xxxxxxxxxxxx\n`;
-    if (providers.find(p => p.id === 'ollama')?.active) env += `OLLAMA_BASE_URL=http://localhost:11434\nOLLAMA_MODEL=qwen2.5-coder:14b\n`;
-    env += `\n# Guardrails\nMAX_TOKENS_PER_CYCLE=16000\nAGENT_PARALLEL_CONCURRENCY=5\n`;
-    return env;
-  });
+  function copyToClipboard(text: string, label: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      showFeedback(`${label} copied to clipboard!`);
+    }).catch((err) => {
+      console.error('Failed to copy', err);
+    });
+  }
 
-  function copyToClipboard(text: string) {
-    navigator.clipboard.writeText(text);
-    copied = true;
-    setTimeout(() => { copied = false; }, 2000);
+  function downloadAllArtifacts() {
+    const zipData = [
+      { name: 'MASTER_SYSTEM_PROMPT.txt', content: generatedMasterPrompt },
+      { name: 'SKILL.md', content: generatedSkillMd },
+      { name: '.env.example', content: generatedEnvExample },
+    ];
+
+    zipData.forEach((file) => {
+      const blob = new Blob([file.content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    showFeedback('Artifact files downloaded!');
   }
 </script>
 
-<div class="glass-card p-6 md:p-10 border-accent/30 bg-bg-surface-dark/95 shadow-2xl relative overflow-hidden">
-  <div class="absolute -right-20 -top-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
-
-  <!-- Free Badge & Heading -->
-  <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6 mb-8">
-    <div>
-      <div class="flex items-center gap-2.5">
-        <span class="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase bg-accent text-black shadow-lg shadow-accent/20">
-          HERRAMIENTA GRATIS · APORTE SENIOR
-        </span>
-        <span class="text-xs font-mono text-text-muted">100% Client-Side · Sin Servidor</span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-text-primary mt-3">
-        Simulador de Recursos & Generador de Skills / Prompts
-      </h2>
-      <p class="text-text-secondary text-sm mt-1 max-w-2xl">
-        Configura tu entorno de trabajo ingresando tus proveedores y hardware. El motor simulará las 5 mejores configuraciones y generará prompts profesionales y skills listos para inyectar en tus agentes.
-      </p>
+<div class="max-w-6xl mx-auto px-6 py-12 space-y-12">
+  <!-- Header Banner -->
+  <div class="space-y-4 text-center md:text-left border-b border-white/10 pb-8">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono font-semibold">
+      <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+      {t('simulator.badge')}
     </div>
+    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+      {t('simulator.title')}
+    </h1>
+    <p class="text-text-muted max-w-3xl text-sm md:text-base leading-relaxed">
+      {t('simulator.subtitle')}
+    </p>
 
-    <div class="flex items-center gap-2">
+    <!-- Toolbar: Save / Reset / Export / Import -->
+    <div class="flex flex-wrap items-center gap-3 pt-4">
       <button
-        onclick={() => saveProfile()}
-        class="px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-xs font-mono text-text-secondary hover:text-accent hover:border-accent/40 transition-all cursor-pointer"
+        onclick={saveProfile}
+        class="px-4 py-2 text-xs font-bold rounded-md bg-accent text-black hover:bg-accent-light transition-all shadow-md"
       >
-        💾 Guardar Perfil Local
+        💾 Save Profile
       </button>
+      <button
+        onclick={exportProfileJson}
+        class="px-4 py-2 text-xs font-semibold rounded-md bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all"
+      >
+        📥 {t('simulator.exportProfile')}
+      </button>
+      <button
+        onclick={triggerImport}
+        class="px-4 py-2 text-xs font-semibold rounded-md bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all"
+      >
+        📤 {t('simulator.importProfile')}
+      </button>
+      <input
+        type="file"
+        accept=".json"
+        bind:this={fileInputRef}
+        onchange={handleImportFile}
+        class="hidden"
+      />
+      <button
+        onclick={resetProfile}
+        class="px-4 py-2 text-xs font-semibold rounded-md bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all"
+      >
+        🔄 {t('simulator.resetDefaults')}
+      </button>
+
+      {#if copyFeedback}
+        <span class="text-xs text-accent font-mono animate-fade-in ml-auto">
+          ✓ {copyFeedback}
+        </span>
+      {/if}
     </div>
   </div>
 
-  <!-- Interactive Input Form -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-    <!-- 1. AI Providers Selection -->
-    <div class="glass-card p-5 border-white/10">
-      <h3 class="text-xs font-mono font-bold text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-        <span>01.</span> Proveedores & Modelos
-      </h3>
-      <div class="space-y-2.5">
-        {#each providers as p}
-          <button
-            type="button"
-            onclick={() => toggleProvider(p.id)}
-            class="w-full flex items-center justify-between p-2.5 rounded-lg border text-left transition-all cursor-pointer {p.active ? 'border-accent/50 bg-accent/10 text-text-primary' : 'border-white/5 bg-black/30 text-text-muted hover:border-white/20'}"
-          >
-            <div class="flex items-center gap-2.5">
-              <span class="w-3.5 h-3.5 rounded border flex items-center justify-center {p.active ? 'border-accent bg-accent text-black text-[10px] font-bold' : 'border-white/30'}">
-                {p.active ? '✓' : ''}
-              </span>
-              <span class="text-xs font-medium">{p.name}</span>
-            </div>
-            <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded {p.tier === 'local' ? 'bg-emerald-500/20 text-emerald-300' : p.tier === 'router' ? 'bg-indigo-500/20 text-indigo-300' : 'bg-blue-500/20 text-blue-300'}">
-              {p.tier}
-            </span>
-          </button>
-        {/each}
-      </div>
+  <!-- SECTION 1: Input Engine -->
+  <div class="bg-bg-surface-dark border border-white/10 rounded-xl p-6 md:p-8 space-y-8 shadow-xl">
+    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <h2 class="text-xl font-bold text-accent flex items-center gap-2">
+        <span>⚙️</span> {t('simulator.sectionResources')}
+      </h2>
+      <span class="text-xs font-mono text-text-muted">Local-First Storage Active</span>
     </div>
 
-    <!-- 2. Hardware & Capacity -->
-    <div class="glass-card p-5 border-white/10">
-      <h3 class="text-xs font-mono font-bold text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-        <span>02.</span> Hardware & Entorno
-      </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Providers Checkboxes -->
       <div class="space-y-4">
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">1. AI Providers & APIs</h3>
+        <div class="space-y-2">
+          <label class="flex items-center gap-3 text-sm cursor-pointer text-white/90 hover:text-white">
+            <input type="checkbox" bind:checked={profile.providers.openai} onchange={saveProfile} class="accent-accent w-4 h-4" />
+            OpenAI API (GPT-4o, o3-mini)
+          </label>
+          <label class="flex items-center gap-3 text-sm cursor-pointer text-white/90 hover:text-white">
+            <input type="checkbox" bind:checked={profile.providers.anthropic} onchange={saveProfile} class="accent-accent w-4 h-4" />
+            Anthropic (Claude 3.5 Sonnet)
+          </label>
+          <label class="flex items-center gap-3 text-sm cursor-pointer text-white/90 hover:text-white">
+            <input type="checkbox" bind:checked={profile.providers.gemini} onchange={saveProfile} class="accent-accent w-4 h-4" />
+            Google Gemini (1.5 Flash / Pro)
+          </label>
+          <label class="flex items-center gap-3 text-sm cursor-pointer text-white/90 hover:text-white">
+            <input type="checkbox" bind:checked={profile.providers.openrouter} onchange={saveProfile} class="accent-accent w-4 h-4" />
+            OpenRouter (DeepSeek / Meta)
+          </label>
+          <label class="flex items-center gap-3 text-sm cursor-pointer text-white/90 hover:text-white">
+            <input type="checkbox" bind:checked={profile.providers.bedrock} onchange={saveProfile} class="accent-accent w-4 h-4" />
+            Amazon Bedrock / GCP Vertex
+          </label>
+          <label class="flex items-center gap-3 text-sm cursor-pointer text-white/90 hover:text-white">
+            <input type="checkbox" bind:checked={profile.providers.localModels} onchange={saveProfile} class="accent-accent w-4 h-4" />
+            Local LLMs (Ollama / vLLM)
+          </label>
+        </div>
+      </div>
+
+      <!-- Hardware Profile Selectors -->
+      <div class="space-y-4">
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">2. Available Hardware</h3>
         <div>
-          <label class="block text-[11px] font-mono text-text-muted mb-1.5 uppercase">Hardware Principal</label>
-          <select bind:value={hardware} onchange={saveProfile} class="field w-full text-xs cursor-pointer">
-            <option value="mac">Apple Silicon (M1/M2/M3/M4 Mac Studio/Pro)</option>
-            <option value="gpu_linux">Linux Workstation / Server (NVIDIA RTX / CUDA)</option>
-            <option value="vps">Linux VPS / Servidor Cloud (Ubuntu / Debian / NixOS)</option>
-            <option value="cpu_only">CPU-Only / Laptop estándar</option>
+          <label class="block text-xs text-text-muted mb-1">Compute Infrastructure</label>
+          <select
+            bind:value={profile.hardware.type}
+            onchange={saveProfile}
+            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-2 text-sm text-white focus:border-accent focus:outline-none"
+          >
+            <option value="mac_studio">Apple Silicon Mac Studio (M-Series)</option>
+            <option value="gpu_high">Local Workstation GPU (RTX 4090 / 3090)</option>
+            <option value="cpu_only">Standard PC / Laptop (CPU-only)</option>
+            <option value="vps_linux">VPS Linux (Debian / NixOS)</option>
+            <option value="cloud_ec2">Cloud Compute (AWS EC2 / GCP)</option>
           </select>
         </div>
 
+        <div class="grid grid-cols-2 gap-4 pt-1">
+          <div>
+            <label class="block text-xs text-text-muted mb-1">System RAM (GB)</label>
+            <input
+              type="number"
+              bind:value={profile.hardware.ramGb}
+              onchange={saveProfile}
+              min="8"
+              max="512"
+              class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-1.5 text-sm text-white focus:border-accent focus:outline-none"
+            />
+          </div>
+          <div>
+            <label class="block text-xs text-text-muted mb-1">GPU VRAM (GB)</label>
+            <input
+              type="number"
+              bind:value={profile.hardware.gpuVramGb}
+              onchange={saveProfile}
+              min="0"
+              max="192"
+              class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-1.5 text-sm text-white focus:border-accent focus:outline-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Workload Sliders -->
+      <div class="space-y-4">
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">3. Workload & Limits</h3>
+
         <div>
-          <label class="block text-[11px] font-mono text-text-muted mb-1.5 uppercase">Ruta / Workspace Path</label>
-          <input type="text" bind:value={repoPath} oninput={saveProfile} placeholder="~/proyectos/mi-app" class="field w-full text-xs font-mono" />
+          <div class="flex justify-between text-xs text-text-muted mb-1">
+            <span>Daily Prompt Load:</span>
+            <span class="text-accent font-mono font-bold">{profile.workload.dailyPrompts} prompts/day</span>
+          </div>
+          <input
+            type="range"
+            min="20"
+            max="2000"
+            step="10"
+            bind:value={profile.workload.dailyPrompts}
+            onchange={saveProfile}
+            class="w-full accent-accent bg-white/10 h-1.5 rounded-lg appearance-none cursor-pointer"
+          />
         </div>
 
         <div>
-          <label class="block text-[11px] font-mono text-text-muted mb-1.5 uppercase">Prompts / Tareas Diarias: <span class="text-accent font-bold">{dailyPrompts}</span></label>
-          <input type="range" min="10" max="300" step="10" bind:value={dailyPrompts} oninput={saveProfile} class="w-full accent-accent cursor-pointer" />
+          <div class="flex justify-between text-xs text-text-muted mb-1">
+            <span>Repo Size:</span>
+            <span class="text-accent font-mono font-bold">{profile.workload.repoSizeMb} MB</span>
+          </div>
+          <input
+            type="range"
+            min="10"
+            max="2000"
+            step="10"
+            bind:value={profile.workload.repoSizeMb}
+            onchange={saveProfile}
+            class="w-full accent-accent bg-white/10 h-1.5 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs text-text-muted mb-1">
+            <span>Monthly Budget Cap:</span>
+            <span class="text-accent font-mono font-bold">${profile.workload.budgetLimitUsd} USD</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="1000"
+            step="10"
+            bind:value={profile.workload.budgetLimitUsd}
+            onchange={saveProfile}
+            class="w-full accent-accent bg-white/10 h-1.5 rounded-lg appearance-none cursor-pointer"
+          />
         </div>
       </div>
     </div>
 
-    <!-- 3. Objective & Optimization Goal -->
-    <div class="glass-card p-5 border-white/10">
-      <h3 class="text-xs font-mono font-bold text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-        <span>03.</span> Enfoque de Optimización
-      </h3>
-      <div class="space-y-3">
-        <label class="flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-black/30 cursor-pointer hover:border-accent/30 transition-all">
-          <input type="radio" name="goal" value="balanced" bind:group={focusGoal} onchange={saveProfile} class="accent-accent" />
-          <div>
-            <span class="text-xs font-bold text-text-primary block">Híbrido Balanceado (Recomendado)</span>
-            <span class="text-[10px] text-text-muted">Optimiza costo y velocidad simultáneamente.</span>
-          </div>
-        </label>
-
-        <label class="flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-black/30 cursor-pointer hover:border-accent/30 transition-all">
-          <input type="radio" name="goal" value="cost" bind:group={focusGoal} onchange={saveProfile} class="accent-accent" />
-          <div>
-            <span class="text-xs font-bold text-text-primary block">Mínimo Costo (Local First)</span>
-            <span class="text-[10px] text-text-muted">Máxima carga a modelos locales y routers baratos.</span>
-          </div>
-        </label>
-
-        <label class="flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-black/30 cursor-pointer hover:border-accent/30 transition-all">
-          <input type="radio" name="goal" value="speed" bind:group={focusGoal} onchange={saveProfile} class="accent-accent" />
-          <div>
-            <span class="text-xs font-bold text-text-primary block">Máxima Velocidad (Swarm Concurrency)</span>
-            <span class="text-[10px] text-text-muted">Oleadas masivas de agentes paralelos.</span>
-          </div>
-        </label>
+    <!-- Repository & Pipeline Context -->
+    <div class="border-t border-white/10 pt-6 space-y-4">
+      <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">4. Pipeline & Context Inputs</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-xs text-text-muted mb-1">Source Path</label>
+          <input
+            type="text"
+            bind:value={profile.context.srcPath}
+            onchange={saveProfile}
+            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-1.5 text-xs text-white font-mono focus:border-accent focus:outline-none"
+          />
+        </div>
+        <div>
+          <label class="block text-xs text-text-muted mb-1">Test Path</label>
+          <input
+            type="text"
+            bind:value={profile.context.testPath}
+            onchange={saveProfile}
+            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-1.5 text-xs text-white font-mono focus:border-accent focus:outline-none"
+          />
+        </div>
+        <div>
+          <label class="block text-xs text-text-muted mb-1">Documentation URL</label>
+          <input
+            type="text"
+            bind:value={profile.context.docsUrl}
+            onchange={saveProfile}
+            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-1.5 text-xs text-white font-mono focus:border-accent focus:outline-none"
+          />
+        </div>
+        <div>
+          <label class="block text-xs text-text-muted mb-1">Target CLI Harness</label>
+          <select
+            bind:value={profile.context.selectedCli}
+            onchange={saveProfile}
+            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-1.5 text-xs text-white font-mono focus:border-accent focus:outline-none"
+          >
+            <option value="jules">Google Jules CLI</option>
+            <option value="hermes">Hermes Agent Gateway</option>
+            <option value="openclaw">OpenClaw CLI</option>
+            <option value="gitcore">GitCore CLI Engine</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Navigation Tabs for Outputs -->
-  <div class="flex flex-wrap items-center justify-between border-b border-white/10 mb-6 gap-2">
-    <div class="flex items-center gap-2">
-      <button
-        onclick={() => activeTab = 'sim'}
-        class="px-4 py-2.5 text-xs font-mono font-bold tracking-wider uppercase border-b-2 transition-all cursor-pointer {activeTab === 'sim' ? 'border-accent text-accent' : 'border-transparent text-text-muted hover:text-text-primary'}"
-      >
-        📊 Top 5 Simulaciones
-      </button>
-      <button
-        onclick={() => activeTab = 'prompt'}
-        class="px-4 py-2.5 text-xs font-mono font-bold tracking-wider uppercase border-b-2 transition-all cursor-pointer {activeTab === 'prompt' ? 'border-accent text-accent' : 'border-transparent text-text-muted hover:text-text-primary'}"
-      >
-        🤖 Prompt Maestro
-      </button>
-      <button
-        onclick={() => activeTab = 'skill'}
-        class="px-4 py-2.5 text-xs font-mono font-bold tracking-wider uppercase border-b-2 transition-all cursor-pointer {activeTab === 'skill' ? 'border-accent text-accent' : 'border-transparent text-text-muted hover:text-text-primary'}"
-      >
-        🛠️ Custom SKILL.md
-      </button>
-      <button
-        onclick={() => activeTab = 'env'}
-        class="px-4 py-2.5 text-xs font-mono font-bold tracking-wider uppercase border-b-2 transition-all cursor-pointer {activeTab === 'env' ? 'border-accent text-accent' : 'border-transparent text-text-muted hover:text-text-primary'}"
-      >
-        🔒 .env.example
-      </button>
+  <!-- SECTION 2: Top 5 Configuration Ranking Engine -->
+  <div class="space-y-6">
+    <div class="flex items-center justify-between">
+      <h2 class="text-xl font-bold text-accent flex items-center gap-2">
+        <span>📊</span> {t('simulator.sectionSimulations')}
+      </h2>
+      <span class="text-xs font-mono text-text-muted">Ranked by SWAL Parametric Scoring</span>
     </div>
 
-    {#if activeTab !== 'sim'}
-      <button
-        onclick={() => copyToClipboard(activeTab === 'prompt' ? generatedMasterPrompt : activeTab === 'skill' ? generatedSkillMd : generatedEnvExample)}
-        class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/30 text-accent text-xs font-mono font-bold hover:bg-accent hover:text-black transition-all cursor-pointer"
-      >
-        <span>{copied ? '✓ Copiado!' : '📋 Copiar al Portapapeles'}</span>
-      </button>
-    {/if}
-  </div>
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+      {#each simulationResults as result, idx}
+        <button
+          onclick={() => (selectedTierIndex = idx)}
+          class="text-left bg-bg-surface-dark border rounded-xl p-5 transition-all space-y-3 relative overflow-hidden group cursor-pointer {selectedTierIndex === idx ? 'border-accent bg-accent/5' : 'border-white/10'}"
+        >
+          {#if idx === 0}
+            <div class="absolute top-0 right-0 bg-accent text-black font-extrabold text-[10px] px-2 py-0.5 rounded-bl">
+              TOP 1 RECOMMENDATION
+            </div>
+          {/if}
 
-  <!-- TAB 1: Top 5 Scenarios Simulation -->
-  {#if activeTab === 'sim'}
-    <div class="space-y-4">
-      {#each simulationResults as sim}
-        <div class="p-5 rounded-xl border border-white/10 bg-black/40 hover:border-accent/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div class="max-w-2xl">
-            <div class="flex items-center gap-3 mb-1.5">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-accent/20 text-accent border border-accent/30">
-                {sim.rank}
-              </span>
-              <h4 class="text-base font-bold text-text-primary">{sim.name}</h4>
-            </div>
-            <p class="text-text-secondary text-xs leading-relaxed mb-3">{sim.desc}</p>
-            
-            <div class="flex flex-wrap items-center gap-2">
-              {#each sim.recommendedStack as item}
-                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[10px] font-mono text-text-muted">
-                  {item}
-                </span>
-              {/each}
-            </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono text-text-muted">Rank #{idx + 1}</span>
+            <span class="text-lg font-extrabold font-mono text-accent">{result.overallScore}<span class="text-xs text-text-muted">/100</span></span>
           </div>
 
-          <div class="flex md:flex-col items-end justify-between border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-6 min-w-[170px] text-right">
-            <div>
-              <span class="text-[10px] font-mono text-text-muted block uppercase">Costo Estimado</span>
-              <span class="text-lg font-bold text-accent font-mono">${sim.monthlyCostUSD} USD<span class="text-xs text-text-muted font-sans font-normal">/mes</span></span>
+          <h3 class="font-bold text-sm text-white line-clamp-2">{result.title}</h3>
+          <p class="text-xs text-text-muted line-clamp-3">{result.tagline}</p>
+
+          <div class="space-y-1.5 pt-2 border-t border-white/10 text-[11px]">
+            <div class="flex justify-between">
+              <span class="text-text-muted">Est. Cost:</span>
+              <span class="font-mono text-white font-semibold">${result.costEstUsd}/mo</span>
             </div>
-            <div class="mt-2">
-              <span class="text-[10px] font-mono text-text-muted block uppercase">Velocidad / Multiplicador</span>
-              <span class="text-xs font-bold text-emerald-400 font-mono">{sim.velocityMultiplier} ({sim.speedRating})</span>
+            <div class="flex justify-between">
+              <span class="text-text-muted">Parallelism:</span>
+              <span class="font-mono text-white">{result.concurrencyLimit} tasks</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-text-muted">Anti-Drift:</span>
+              <span class="font-mono text-accent">{result.antiDriftScore}%</span>
             </div>
           </div>
-        </div>
+        </button>
       {/each}
     </div>
-  {/if}
 
-  <!-- TAB 2: Generated Master Prompt -->
-  {#if activeTab === 'prompt'}
-    <div class="space-y-4">
-      <p class="text-xs text-text-muted font-mono">
-        💡 Este prompt maestro está afinado para tus proveedores y rutas. Inyéctalo como system prompt en Claude Code, Antigravity, OpenCode, Cursor o tus agentes CLI:
-      </p>
-      <pre class="p-5 rounded-xl bg-black/60 border border-white/10 text-xs font-mono text-emerald-300 overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-[420px]">{generatedMasterPrompt}</pre>
-    </div>
-  {/if}
+    <!-- Selected Architecture Details & Charts -->
+    <div class="bg-bg-surface-dark border border-accent/30 rounded-xl p-6 md:p-8 space-y-6 shadow-2xl">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+        <div>
+          <span class="text-xs font-mono text-accent uppercase tracking-widest font-semibold">Active Selection Matrix</span>
+          <h3 class="text-2xl font-bold text-white mt-1">{currentSelectedTier.title}</h3>
+          <p class="text-sm text-text-muted mt-1">{currentSelectedTier.description}</p>
+        </div>
+        <div class="flex items-center gap-4 bg-black/40 border border-white/10 rounded-lg p-3">
+          <div class="text-center px-2">
+            <span class="text-[10px] text-text-muted uppercase block">Latency</span>
+            <span class="text-sm font-bold font-mono text-white">{currentSelectedTier.estLatencyMs} ms</span>
+          </div>
+          <div class="h-8 w-px bg-white/10"></div>
+          <div class="text-center px-2">
+            <span class="text-[10px] text-text-muted uppercase block">E2E Verification</span>
+            <span class="text-sm font-bold font-mono text-accent">{currentSelectedTier.e2eVerificationRate}%</span>
+          </div>
+          <div class="h-8 w-px bg-white/10"></div>
+          <div class="text-center px-2">
+            <span class="text-[10px] text-text-muted uppercase block">Composite</span>
+            <span class="text-sm font-bold font-mono text-accent">{currentSelectedTier.overallScore}/100</span>
+          </div>
+        </div>
+      </div>
 
-  <!-- TAB 3: Generated SKILL.md -->
-  {#if activeTab === 'skill'}
-    <div class="space-y-4">
-      <p class="text-xs text-text-muted font-mono">
-        💡 Guarda este archivo como <code class="text-accent">SKILL.md</code> en la carpeta de skills de tu arnés o agente (Hermes, Antigravity, OpenClaw, GitCore):
-      </p>
-      <pre class="p-5 rounded-xl bg-black/60 border border-white/10 text-xs font-mono text-indigo-300 overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-[420px]">{generatedSkillMd}</pre>
-    </div>
-  {/if}
+      <!-- Comparative Progress Meters -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs">
+            <span class="text-text-muted">Cost Efficiency</span>
+            <span class="font-mono text-white font-bold">{currentSelectedTier.costEfficiencyScore}%</span>
+          </div>
+          <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+            <div class="bg-emerald-400 h-full transition-all duration-500" style="width: {currentSelectedTier.costEfficiencyScore}%"></div>
+          </div>
+        </div>
 
-  <!-- TAB 4: Generated .env.example -->
-  {#if activeTab === 'env'}
-    <div class="space-y-4">
-      <p class="text-xs text-text-muted font-mono">
-        💡 Plantilla de variables de entorno con endpoints y guardrails configurados:
-      </p>
-      <pre class="p-5 rounded-xl bg-black/60 border border-white/10 text-xs font-mono text-amber-300 overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-[420px]">{generatedEnvExample}</pre>
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs">
+            <span class="text-text-muted">Development Velocity</span>
+            <span class="font-mono text-white font-bold">{currentSelectedTier.devVelocityScore}%</span>
+          </div>
+          <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+            <div class="bg-accent h-full transition-all duration-500" style="width: {currentSelectedTier.devVelocityScore}%"></div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs">
+            <span class="text-text-muted">Quality & Resilience</span>
+            <span class="font-mono text-white font-bold">{currentSelectedTier.resilienceScore}%</span>
+          </div>
+          <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+            <div class="bg-indigo-400 h-full transition-all duration-500" style="width: {currentSelectedTier.resilienceScore}%"></div>
+          </div>
+        </div>
+      </div>
     </div>
-  {/if}
+  </div>
+
+  <!-- SECTION 3: Custom Skill, Master System Prompt & .env Generator -->
+  <div class="bg-bg-surface-dark border border-white/10 rounded-xl p-6 md:p-8 space-y-8 shadow-xl">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
+      <div>
+        <h2 class="text-xl font-bold text-accent flex items-center gap-2">
+          <span>🛠️</span> {t('simulator.sectionArtifacts')}
+        </h2>
+        <p class="text-xs text-text-muted mt-1">Generated dynamically for the selected architecture and local context</p>
+      </div>
+      <button
+        onclick={downloadAllArtifacts}
+        class="px-5 py-2 text-xs font-bold rounded-md bg-accent text-black hover:bg-accent-light transition-all shadow-lg flex items-center gap-2 self-start md:self-auto"
+      >
+        <span>📦</span> {t('simulator.downloadAll')}
+      </button>
+    </div>
+
+    <div class="space-y-8">
+      <!-- Master Agent System Prompt -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <span>📜</span> Master System Prompt
+          </h3>
+          <button
+            onclick={() => copyToClipboard(generatedMasterPrompt, 'Master System Prompt')}
+            class="px-3 py-1 text-xs font-semibold rounded bg-white/5 border border-white/15 text-white hover:bg-white/15 transition-all"
+          >
+            📋 {t('simulator.copyPrompt')}
+          </button>
+        </div>
+        <pre class="bg-black/60 border border-white/10 rounded-lg p-4 text-xs font-mono text-accent-light overflow-x-auto max-h-56 leading-relaxed whitespace-pre-wrap">{generatedMasterPrompt}</pre>
+      </div>
+
+      <!-- SKILL.md Template -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <span>⚡</span> Agent Skill Template (SKILL.md)
+          </h3>
+          <button
+            onclick={() => copyToClipboard(generatedSkillMd, 'SKILL.md')}
+            class="px-3 py-1 text-xs font-semibold rounded bg-white/5 border border-white/15 text-white hover:bg-white/15 transition-all"
+          >
+            📋 {t('simulator.copySkill')}
+          </button>
+        </div>
+        <pre class="bg-black/60 border border-white/10 rounded-lg p-4 text-xs font-mono text-emerald-300 overflow-x-auto max-h-56 leading-relaxed whitespace-pre-wrap">{generatedSkillMd}</pre>
+      </div>
+
+      <!-- Sanitized .env.example -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <span>🔒</span> Sanitized Environment Blueprint (.env.example)
+          </h3>
+          <button
+            onclick={() => copyToClipboard(generatedEnvExample, '.env.example')}
+            class="px-3 py-1 text-xs font-semibold rounded bg-white/5 border border-white/15 text-white hover:bg-white/15 transition-all"
+          >
+            📋 {t('simulator.copyEnv')}
+          </button>
+        </div>
+        <pre class="bg-black/60 border border-white/10 rounded-lg p-4 text-xs font-mono text-sky-300 overflow-x-auto max-h-56 leading-relaxed whitespace-pre-wrap">{generatedEnvExample}</pre>
+      </div>
+    </div>
+  </div>
 </div>

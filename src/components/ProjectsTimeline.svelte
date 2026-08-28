@@ -123,7 +123,12 @@
 <section id="projects" class="relative py-32 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-24 max-w-3xl mx-auto">
-      <div class="glass-card p-8 md:p-12 space-y-6 text-center">
+      <a
+        href="https://github.com/southwest-ai-labs"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="glass-card p-8 md:p-12 space-y-6 text-center block transition-all duration-300 hover:border-accent/40 hover:-translate-y-1 group cursor-pointer"
+      >
         <p class="text-text-secondary text-sm leading-relaxed">
           {t('locale.announcement')}
         </p>
@@ -131,10 +136,11 @@
         <p class="text-text-muted text-sm leading-relaxed">
           {t('locale.mission')}
         </p>
-        <p class="text-accent text-sm font-bold tracking-wider">
-          {t('locale.accelerate')}
-        </p>
-      </div>
+        <div class="flex items-center justify-center gap-2 text-accent text-sm font-bold tracking-wider group-hover:underline">
+          <span>{t('locale.accelerate')}</span>
+          <span class="text-xs">↗</span>
+        </div>
+      </a>
     </div>
 
     <div class="entry-clip">

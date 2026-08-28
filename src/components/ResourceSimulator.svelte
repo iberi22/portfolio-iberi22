@@ -4,10 +4,11 @@
 
   interface ProviderItem {
     id: string;
-    name: string;
+    family: string;
+    description: string;
     category: 'cloud' | 'router' | 'specialized' | 'local' | 'free';
-    costInput: number; // USD per 1M tokens
-    costOutput: number; // USD per 1M tokens
+    costInputAvg: number; // USD per 1M tokens
+    costOutputAvg: number; // USD per 1M tokens
     speedScore: number; // 1-10
     qualityScore: number; // 1-10
     freeTierAvailable: boolean;
@@ -20,13 +21,13 @@
     gpuVramGb: number;
   }
 
-  interface WorkloadState {
+  interface DiagnosticState {
+    workloadType: 'fullstack' | 'frontend' | 'backend' | 'systems' | 'data_ml';
+    contextDepth: 'short' | 'medium' | 'deep';
+    concurrencyStyle: 'single' | 'wave_5' | 'wave_15';
     dailyPrompts: number;
-    repoSizeMb: number;
-    rateLimitRpm: number;
     budgetLimitUsd: number;
     currentMonthlySpendUsd: number;
-    subscriptions: string[];
     useFreeTiers: boolean;
   }
 
@@ -35,64 +36,64 @@
     testPath: string;
     docsUrl: string;
     envKeys: string;
-    selectedCli: 'hermes' | 'openclaw' | 'gitcore' | 'jules';
+    selectedCli: 'hermes' | 'openclaw' | 'gitcore' | 'jules' | 'claude_code' | 'opencode';
   }
 
   interface UserProfile {
     version: string;
     providers: Record<string, boolean>;
     hardware: HardwareState;
-    workload: WorkloadState;
+    diagnostic: DiagnosticState;
     context: ContextState;
   }
 
-  // Top 20+ Industry AI Providers & Routers
+  // Top 20 Generic Model Families (Zero-Obsolescence)
   const initialProvidersList: ProviderItem[] = [
-    { id: 'gemini', name: 'Google Gemini (2.5 Flash / Pro)', category: 'cloud', costInput: 0.15, costOutput: 0.60, speedScore: 9.6, qualityScore: 9.3, freeTierAvailable: true, active: true },
-    { id: 'claude', name: 'Anthropic Claude (3.7 Sonnet / Haiku)', category: 'cloud', costInput: 3.00, costOutput: 15.00, speedScore: 8.9, qualityScore: 9.8, freeTierAvailable: false, active: true },
-    { id: 'openai', name: 'OpenAI (GPT-4o / o3-mini / GPT-4.5)', category: 'cloud', costInput: 2.50, costOutput: 10.00, speedScore: 8.7, qualityScore: 9.4, freeTierAvailable: false, active: true },
-    { id: 'openrouter', name: 'OpenRouter (Multi-Model Meta-Router)', category: 'router', costInput: 0.40, costOutput: 1.20, speedScore: 9.2, qualityScore: 9.5, freeTierAvailable: true, active: true },
-    { id: 'deepseek', name: 'DeepSeek API (V3 / R1 Direct)', category: 'cloud', costInput: 0.14, costOutput: 0.28, speedScore: 8.5, qualityScore: 9.2, freeTierAvailable: false, active: true },
-    { id: 'groq', name: 'Groq (LPU Ultra-Fast Inference)', category: 'specialized', costInput: 0.08, costOutput: 0.20, speedScore: 9.9, qualityScore: 8.8, freeTierAvailable: true, active: true },
-    { id: 'bedrock', name: 'Amazon Bedrock (AWS Enterprise)', category: 'cloud', costInput: 1.50, costOutput: 6.00, speedScore: 9.1, qualityScore: 9.5, freeTierAvailable: false, active: false },
-    { id: 'vertex', name: 'Google Cloud Vertex AI', category: 'cloud', costInput: 1.20, costOutput: 5.00, speedScore: 9.3, qualityScore: 9.4, freeTierAvailable: false, active: false },
-    { id: 'mistral', name: 'Mistral AI (Codestral / Large)', category: 'cloud', costInput: 0.30, costOutput: 0.90, speedScore: 9.0, qualityScore: 9.0, freeTierAvailable: true, active: false },
-    { id: 'together', name: 'Together AI (Open Source GPU Cloud)', category: 'specialized', costInput: 0.20, costOutput: 0.60, speedScore: 9.1, qualityScore: 8.9, freeTierAvailable: false, active: false },
-    { id: 'fireworks', name: 'Fireworks AI (Fast Speculative Decoding)', category: 'specialized', costInput: 0.20, costOutput: 0.50, speedScore: 9.4, qualityScore: 8.9, freeTierAvailable: false, active: false },
-    { id: 'perplexity', name: 'Perplexity AI (Sonar / Live Search)', category: 'specialized', costInput: 1.00, costOutput: 5.00, speedScore: 8.8, qualityScore: 9.1, freeTierAvailable: false, active: false },
-    { id: 'cohere', name: 'Cohere (Command R+ / Embeddings)', category: 'specialized', costInput: 0.40, costOutput: 1.50, speedScore: 8.6, qualityScore: 8.8, freeTierAvailable: false, active: false },
-    { id: 'xai', name: 'xAI Grok (Grok-2 / Grok-3)', category: 'cloud', costInput: 2.00, costOutput: 10.00, speedScore: 8.7, qualityScore: 9.1, freeTierAvailable: false, active: false },
-    { id: 'cerebras', name: 'Cerebras (WSE Wafer-Scale Fast Inference)', category: 'specialized', costInput: 0.10, costOutput: 0.30, speedScore: 9.9, qualityScore: 8.7, freeTierAvailable: true, active: false },
-    { id: 'cloudflare', name: 'Cloudflare Workers AI (Serverless Edge)', category: 'router', costInput: 0.15, costOutput: 0.45, speedScore: 9.0, qualityScore: 8.5, freeTierAvailable: true, active: false },
-    { id: 'github_models', name: 'GitHub Models / Azure OpenAI', category: 'cloud', costInput: 1.80, costOutput: 7.00, speedScore: 8.8, qualityScore: 9.2, freeTierAvailable: true, active: false },
-    { id: 'ollama', name: 'Ollama Local (Llama 3.3 / Qwen 2.5 / R1)', category: 'local', costInput: 0.00, costOutput: 0.00, speedScore: 7.8, qualityScore: 8.6, freeTierAvailable: true, active: true },
-    { id: 'vllm', name: 'vLLM Local GPU Server (High-Throughput)', category: 'local', costInput: 0.00, costOutput: 0.00, speedScore: 8.9, qualityScore: 8.8, freeTierAvailable: true, active: false },
-    { id: 'free_routers', name: 'Free-Tier Endpoints (Google AI Studio / Groq Free / OpenRouter Free)', category: 'free', costInput: 0.00, costOutput: 0.00, speedScore: 7.2, qualityScore: 8.3, freeTierAvailable: true, active: false },
+    { id: 'gemini_family', family: 'Google Gemini Family (Flash / Pro Lines)', description: 'Modelos multimodales de alta velocidad y ventanas de contexto masivas', category: 'cloud', costInputAvg: 0.15, costOutputAvg: 0.60, speedScore: 9.6, qualityScore: 9.3, freeTierAvailable: true, active: true },
+    { id: 'claude_family', family: 'Anthropic Claude Family (Sonnet / Haiku / Opus)', description: 'Referente en razonamiento arquitectónico, refactor y seguimiento de instrucciones', category: 'cloud', costInputAvg: 3.00, costOutputAvg: 15.00, speedScore: 8.9, qualityScore: 9.8, freeTierAvailable: false, active: true },
+    { id: 'openai_family', family: 'OpenAI Family (GPT / o-series Reasoning)', description: 'Modelos líderes de propósito general y series de razonamiento paso a paso', category: 'cloud', costInputAvg: 2.50, costOutputAvg: 10.00, speedScore: 8.7, qualityScore: 9.4, freeTierAvailable: false, active: true },
+    { id: 'openrouter_meta', family: 'OpenRouter (Multi-Provider Smart Router)', description: 'Enrutador universal con failover automático, balanceo de carga y subastas de precio', category: 'router', costInputAvg: 0.40, costOutputAvg: 1.20, speedScore: 9.2, qualityScore: 9.5, freeTierAvailable: true, active: true },
+    { id: 'deepseek_family', family: 'DeepSeek Family (V-Chat & R-Reasoning Direct)', description: 'Modelos abiertos de altísima capacidad a precios ultra-competitivos de centavos', category: 'cloud', costInputAvg: 0.14, costOutputAvg: 0.28, speedScore: 8.5, qualityScore: 9.2, freeTierAvailable: false, active: true },
+    { id: 'groq_lpu', family: 'Groq LPU (Ultra-Low Latency Inference)', description: 'Procesamiento casi instantáneo para triage, lints y micro-validaciones', category: 'specialized', costInputAvg: 0.08, costOutputAvg: 0.20, speedScore: 9.9, qualityScore: 8.8, freeTierAvailable: true, active: true },
+    { id: 'bedrock_family', family: 'Amazon Bedrock (Enterprise AWS Managed)', description: 'Infraestructura cloud gobernada con cumplimiento SOC2 y modelos multi-proveedor', category: 'cloud', costInputAvg: 1.50, costOutputAvg: 6.00, speedScore: 9.1, qualityScore: 9.5, freeTierAvailable: false, active: false },
+    { id: 'vertex_family', family: 'Google Cloud Vertex AI (Enterprise GCP)', description: 'Plataforma empresarial de Google con cuotas dedicadas y seguridad privada', category: 'cloud', costInputAvg: 1.20, costOutputAvg: 5.00, speedScore: 9.3, qualityScore: 9.4, freeTierAvailable: false, active: false },
+    { id: 'mistral_family', family: 'Mistral AI (Codestral / Large Family)', description: 'Modelos eficientes europeos especializados en código y razonamiento denso', category: 'cloud', costInputAvg: 0.30, costOutputAvg: 0.90, speedScore: 9.0, qualityScore: 9.0, freeTierAvailable: true, active: false },
+    { id: 'together_cloud', family: 'Together AI (Open Models GPU Cloud)', description: 'Inferencia cloud de modelos abiertos con despliegues dedicados', category: 'specialized', costInputAvg: 0.20, costOutputAvg: 0.60, speedScore: 9.1, qualityScore: 8.9, freeTierAvailable: false, active: false },
+    { id: 'fireworks_speed', family: 'Fireworks AI (Fast Speculative Engine)', category: 'specialized', description: 'Inferencia ultra-rápida mediante decodificación especulativa', costInputAvg: 0.20, costOutputAvg: 0.50, speedScore: 9.4, qualityScore: 8.9, freeTierAvailable: false, active: false },
+    { id: 'perplexity_search', family: 'Perplexity AI (Sonar Live Search API)', category: 'specialized', description: 'Modelos conectados a la web en tiempo real con citación de fuentes', costInputAvg: 1.00, costOutputAvg: 5.00, speedScore: 8.8, qualityScore: 9.1, freeTierAvailable: false, active: false },
+    { id: 'cohere_family', family: 'Cohere (Command R+ & Embeddings)', category: 'specialized', description: 'Especialistas en RAG empresarial y recuperación semántica de contexto', costInputAvg: 0.40, costOutputAvg: 1.50, speedScore: 8.6, qualityScore: 8.8, freeTierAvailable: false, active: false },
+    { id: 'xai_family', family: 'xAI Grok Family (Grok Foundation)', category: 'cloud', description: 'Modelos con ventanas de contexto amplias y acceso a datos en vivo', costInputAvg: 2.00, costOutputAvg: 10.00, speedScore: 8.7, qualityScore: 9.1, freeTierAvailable: false, active: false },
+    { id: 'cerebras_wse', family: 'Cerebras (Wafer-Scale Fast Compute)', category: 'specialized', description: 'Velocidad de generación masiva basada en chips a escala de oblea', costInputAvg: 0.10, costOutputAvg: 0.30, speedScore: 9.9, qualityScore: 8.7, freeTierAvailable: true, active: false },
+    { id: 'cloudflare_workers', family: 'Cloudflare Workers AI (Serverless Edge)', category: 'router', description: 'Inferencia serverless distribuida en cientos de ciudades a nivel global', costInputAvg: 0.15, costOutputAvg: 0.45, speedScore: 9.0, qualityScore: 8.5, freeTierAvailable: true, active: false },
+    { id: 'github_models', family: 'GitHub Models / Azure OpenAI', category: 'cloud', description: 'Integración nativa con repositorios GitHub y entornos de desarrollo CI', costInputAvg: 1.80, costOutputAvg: 7.00, speedScore: 8.8, qualityScore: 9.2, freeTierAvailable: true, active: false },
+    { id: 'ollama_local', family: 'Ollama Local (Qwen / Llama / DeepSeek R1)', category: 'local', description: 'Ejecución 100% en tu máquina local sin llamadas externas ni costos', costInputAvg: 0.00, costOutputAvg: 0.00, speedScore: 7.8, qualityScore: 8.6, freeTierAvailable: true, active: true },
+    { id: 'vllm_cluster', family: 'vLLM Local Server (High-Throughput PagedAttention)', category: 'local', description: 'Motor de inferencia local de alto rendimiento con memoria optimizada', costInputAvg: 0.00, costOutputAvg: 0.00, speedScore: 8.9, qualityScore: 8.8, freeTierAvailable: true, active: false },
+    { id: 'free_tier_endpoints', family: 'Free-Tier Endpoints (Google AI Studio / Groq Free / OpenRouter Free)', category: 'free', description: 'Endpoints gratuitos comunitarios sujetos a límites de RPM y colas de espera', costInputAvg: 0.00, costOutputAvg: 0.00, speedScore: 7.2, qualityScore: 8.3, freeTierAvailable: true, active: false },
   ];
 
   const defaultProfile: UserProfile = {
-    version: '1.2.0',
+    version: '2.0.0',
     providers: {
-      gemini: true,
-      claude: true,
-      openai: true,
-      openrouter: true,
-      deepseek: true,
-      groq: true,
-      ollama: true,
+      gemini_family: true,
+      claude_family: true,
+      openai_family: true,
+      openrouter_meta: true,
+      deepseek_family: true,
+      groq_lpu: true,
+      ollama_local: true,
     },
     hardware: {
       type: 'mac_studio',
       ramGb: 64,
       gpuVramGb: 24,
     },
-    workload: {
-      dailyPrompts: 150,
-      repoSizeMb: 120,
-      rateLimitRpm: 60,
-      budgetLimitUsd: 80,
+    diagnostic: {
+      workloadType: 'fullstack',
+      contextDepth: 'medium',
+      concurrencyStyle: 'wave_5',
+      dailyPrompts: 120,
+      budgetLimitUsd: 60,
       currentMonthlySpendUsd: 40,
-      subscriptions: ['ChatGPT Plus ($20)', 'Claude Pro ($20)'],
       useFreeTiers: false,
     },
     context: {
@@ -107,11 +108,11 @@
   let profile = $state<UserProfile>(JSON.parse(JSON.stringify(defaultProfile)));
   let providersList = $state<ProviderItem[]>(JSON.parse(JSON.stringify(initialProvidersList)));
   let selectedTierIndex = $state<number>(0);
-  let activeTab = $state<'sim' | 'prompt' | 'websearch' | 'skill' | 'env'>('sim');
+  let activeTab = $state<'sim' | 'prompt' | 'websearch' | 'cliaudit' | 'skill' | 'env'>('sim');
   let copyFeedback = $state<string | null>(null);
   let fileInputRef = $state<HTMLInputElement | null>(null);
 
-  const STORAGE_KEY = 'swal_sim_profiles_v2';
+  const STORAGE_KEY = 'swal_sim_profiles_v3';
 
   onMount(() => {
     try {
@@ -208,10 +209,10 @@
   const simulationResults = $derived.by(() => {
     const activeProviders = providersList.filter((p) => p.active);
     const hasLocal = activeProviders.some((p) => p.category === 'local');
-    const hasRouter = activeProviders.some((p) => p.category === 'router');
-    const useFree = profile.workload.useFreeTiers;
+    const useFree = profile.diagnostic.useFreeTiers;
 
-    const totalDailyTokens = profile.workload.dailyPrompts * 2500;
+    const multiplierContext = profile.diagnostic.contextDepth === 'deep' ? 4000 : profile.diagnostic.contextDepth === 'medium' ? 2000 : 1000;
+    const totalDailyTokens = profile.diagnostic.dailyPrompts * multiplierContext;
     const monthlyTokensM = (totalDailyTokens * 30) / 1_000_000;
 
     const tiers = [
@@ -228,13 +229,13 @@
         costEfficiencyScore: 98,
         devVelocityScore: 78,
         resilienceScore: 88,
-        primaryRouting: 'Local Ollama (Qwen2.5-Coder) → OpenRouter (DeepSeek-V3 / Groq LPU)',
+        primaryRouting: 'Local Ollama (Qwen / Llama) → OpenRouter (DeepSeek / Groq LPU)',
         recommendedCli: 'openclaw',
       },
       {
         id: 'tier2',
         title: '⚡ Tier 2: Maximum Velocity (Cloud Wave Parallelism)',
-        tagline: 'Oleadas masivas de agentes paralelos con Google Jules (15 micro-tareas) + Gemini 2.5 Flash',
+        tagline: 'Oleadas masivas de agentes paralelos con Google Jules (15 micro-tareas) + Gemini Flash Family',
         description: 'Optimizado para máxima velocidad de entrega de features mediante paralelismo extremo en la nube y pruebas E2E automatizadas.',
         costEstUsd: Math.round(monthlyTokensM * 1.6),
         estLatencyMs: 190,
@@ -244,13 +245,13 @@
         costEfficiencyScore: 80,
         devVelocityScore: 99,
         resilienceScore: 91,
-        primaryRouting: 'Google Jules 15-Wave Parallel Task Engine → Gemini 2.5 Flash / Pro',
+        primaryRouting: 'Google Jules 15-Wave Task Engine → Gemini Family (Flash / Pro)',
         recommendedCli: 'jules',
       },
       {
         id: 'tier3',
         title: '⚖️ Tier 3: Balanced Hybrid Orchestrator',
-        tagline: 'Orquestador Claude 3.7 Sonnet / Hermes + Workers locales para pruebas deterministas',
+        tagline: 'Orquestador Claude Family / Hermes + Workers locales para pruebas deterministas',
         description: 'El estándar de la industria: razonamiento de clase mundial para arquitectura y contratos, con ejecución local determinista sin sobrecostes.',
         costEstUsd: Math.round(monthlyTokensM * 2.1),
         estLatencyMs: 380,
@@ -260,7 +261,7 @@
         costEfficiencyScore: 86,
         devVelocityScore: 90,
         resilienceScore: 96,
-        primaryRouting: 'Claude 3.7 Sonnet / Hermes Multi-Provider Router → Local Test Sandbox',
+        primaryRouting: 'Claude Family (Sonnet) / Hermes Multi-Provider Router → Local Test Sandbox',
         recommendedCli: 'hermes',
       },
       {
@@ -276,7 +277,7 @@
         costEfficiencyScore: 96,
         devVelocityScore: 72,
         resilienceScore: 98,
-        primaryRouting: 'Local vLLM / Ollama (DeepSeek-R1 / Llama 3.3) → Xavier2 SQLite-vec Local',
+        primaryRouting: 'Local vLLM / Ollama (DeepSeek / Llama) → Xavier2 SQLite-vec Local',
         recommendedCli: 'gitcore',
       },
       {
@@ -298,7 +299,7 @@
     ];
 
     const scored = tiers.map((tier) => {
-      const budgetPenalty = tier.costEstUsd > profile.workload.budgetLimitUsd ? 18 : 0;
+      const budgetPenalty = tier.costEstUsd > profile.diagnostic.budgetLimitUsd ? 18 : 0;
       const score = Math.round(
         tier.costEfficiencyScore * 0.35 +
         tier.devVelocityScore * 0.35 +
@@ -313,9 +314,9 @@
 
   const currentSelectedTier = $derived(simulationResults[selectedTierIndex] || simulationResults[0]);
 
-  // Active Providers Summary String
+  // Active Providers Summary String (Generic Families)
   const activeProvidersString = $derived(
-    providersList.filter((p) => p.active).map((p) => p.name).join(', ') || 'Local Ollama / OpenRouter'
+    providersList.filter((p) => p.active).map((p) => p.family).join(', ') || 'Local Ollama / OpenRouter'
   );
 
   // 1. MASTER SYSTEM PROMPT
@@ -325,7 +326,8 @@
     return `================================================================================
 SWAL MASTER AGENT SYSTEM PROMPT [ARCHIVAL GRADE]
 Arquitectura Asignada: ${tier.title}
-Entorno de Ejecución: ${p.hardware.type.toUpperCase()} (${p.hardware.ramGb}GB RAM, ${p.hardware.gpuVramGb}GB VRAM)
+Tipo de Carga: ${p.diagnostic.workloadType.toUpperCase()} | Profundidad de Contexto: ${p.diagnostic.contextDepth.toUpperCase()}
+Entorno de Hardware: ${p.hardware.type.toUpperCase()} (${p.hardware.ramGb}GB RAM, ${p.hardware.gpuVramGb}GB VRAM)
 Workspace: ${p.context.srcPath} | Tests: ${p.context.testPath}
 ================================================================================
 
@@ -334,13 +336,12 @@ Workspace: ${p.context.srcPath} | Tests: ${p.context.testPath}
 - Enrutamiento Primario: ${tier.primaryRouting}
 - Arnés CLI Activo: ${p.context.selectedCli.toUpperCase()}
 - Política de Tokens: Micro-fragmentación de código, lecturas quirúrgicas por rango, cero reescrituras de archivos no modificados.
-- Presupuesto mensual asignado: $${p.workload.budgetLimitUsd} USD (Gasto actual reportado: $${p.workload.currentMonthlySpendUsd} USD).
+- Presupuesto mensual asignado: $${p.diagnostic.budgetLimitUsd} USD (Gasto actual reportado: $${p.diagnostic.currentMonthlySpendUsd} USD).
 
 2. LÍMITES DE PROVEEDORES & RECURSOS:
-- Proveedores Activos: ${activeProvidersString}
+- Familias de Modelos Activas: ${activeProvidersString}
 - Concurrencia de Tareas Paralelas: Máximo ${tier.concurrencyLimit} tareas simultáneas.
-- Rate Limit Máximo: ${p.workload.rateLimitRpm} RPM.
-- Modo Servicios Gratuitos: ${p.workload.useFreeTiers ? 'ACTIVO (Advertencia: ventana de contexto reducida y throttling en horas pico)' : 'INACTIVO (Prioridad a endpoints dedicados de baja latencia)'}.
+- Modo Servicios Gratuitos: ${p.diagnostic.useFreeTiers ? 'ACTIVO (Advertencia: ventana de contexto reducida y throttling en horas pico)' : 'INACTIVO (Prioridad a endpoints dedicados de baja latencia)'}.
 
 3. PROTOCOLO DE SEGURIDAD & AISLAMIENTO (ISLAS DISJUNTAS):
 - Regla 1 Issue → 1 Rama → 1 PR con pruebas automáticas.
@@ -350,7 +351,7 @@ Workspace: ${p.context.srcPath} | Tests: ${p.context.testPath}
 - Verificación E2E obligatoria: Tasa de aprobación mínima del ${tier.e2eVerificationRate}%.`;
   });
 
-  // 2. LIVE WEB-SEARCH AGENT PROMPT (Para Agente con Búsqueda Web en Vivo)
+  // 2. LIVE WEB-SEARCH AGENT PROMPT (Cero Obsolescencia - Consulta al día de hoy)
   const generatedWebSearchPrompt = $derived.by(() => {
     const p = profile;
     const tier = currentSelectedTier;
@@ -358,72 +359,115 @@ Workspace: ${p.context.srcPath} | Tests: ${p.context.testPath}
 Actúa como un Consultor Senior en Infraestructura de IA y Arquitectura Agéntica.
 
 MIS DATOS TÉCNICOS ACTUALES:
-- Hardware Disponible: ${p.hardware.type} con ${p.hardware.ramGb}GB RAM y ${p.hardware.gpuVramGb}GB VRAM.
-- Proveedores / APIs Activas: ${activeProvidersString}
-- Gasto Mensual Actual en IA: $${p.workload.currentMonthlySpendUsd} USD/mes
-- Presupuesto Máximo Objetivo: $${p.workload.budgetLimitUsd} USD/mes
-- Carga de Trabajo: ~${p.workload.dailyPrompts} prompts/día (~${p.workload.dailyPrompts * 75000} tokens/mes)
-- Preferencia de Servicios Gratuitos: ${p.workload.useFreeTiers ? 'Sí, quiero maximizar tiers gratuitos conociendo sus limitaciones de contexto y lentitud.' : 'No, prefiero estabilidad y velocidad de pago por uso.'}
+- Hardware Disponible: ${p.hardware.type} (${p.hardware.ramGb}GB RAM, ${p.hardware.gpuVramGb}GB VRAM).
+- Tipo de Desarrollo: ${p.diagnostic.workloadType} (Profundidad de Contexto: ${p.diagnostic.contextDepth}).
+- Familias de Modelos Activas: ${activeProvidersString}.
+- Gasto Mensual Actual en IA: $${p.diagnostic.currentMonthlySpendUsd} USD/mes.
+- Presupuesto Máximo Objetivo: $${p.diagnostic.budgetLimitUsd} USD/mes.
+- Carga de Trabajo: ~${p.diagnostic.dailyPrompts} prompts/día.
+- Preferencia de Tiers Gratuitos: ${p.diagnostic.useFreeTiers ? 'Sí, quiero maximizar tiers gratuitos conociendo sus limitaciones de contexto y lentitud.' : 'No, prefiero estabilidad y velocidad de pago por uso.'}
 
-INSTRUCCIONES DE BÚSQUEDA EN VIVO:
-1. Realiza búsquedas web actualizadas al día de hoy para verificar:
-   - Precios actuales por 1M de tokens (Input/Output) de Gemini 2.5 Flash, Claude 3.7 Sonnet, DeepSeek V3/R1, Groq LPU y OpenRouter.
-   - Estado de disponibilidad, cuotas gratuitas y rate limits (RPM/RPD) de los servicios activos.
-   - Las mejores técnicas de enrutamiento y failover en OpenRouter para ahorrar hasta un 70% sin perder calidad de código.
-2. Analiza si mi gasto actual ($${p.workload.currentMonthlySpendUsd} USD) puede ser reducido sustituyendo suscripciones fijas por tokens bajo demanda o modelos locales (Ollama Qwen 2.5 / DeepSeek R1).
-3. Evalúa si la arquitectura recomendada (${tier.title}) es la más óptima para mi hardware actual.
-4. Genera una recomendación de actualización para mi archivo SKILL.md y mis variables de entorno con los mejores endpoints descubiertos hoy.`;
+INSTRUCCIONES DE INVESTIGACIÓN EN VIVO (AL DÍA DE HOY):
+1. Investiga en la web los modelos ACTIVOS MÁS RECIENTES para cada familia seleccionada (ej. versiones vigentes de Gemini Flash/Pro, Claude Sonnet, OpenAI GPT/o-series, DeepSeek V/R, Groq LPU y OpenRouter).
+2. Consulta los precios actuales por 1M de tokens (Input / Output) y estado de disponibilidad en tiempo real.
+3. Analiza las técnicas de enrutamiento y subastas de OpenRouter para recortar mi gasto actual ($${p.diagnostic.currentMonthlySpendUsd} USD/mes) sin perder calidad.
+4. Si mi hardware lo permite, evalúa qué pesos abiertos recientes (Qwen / Llama / DeepSeek) puedo correr 100% gratis en Ollama local para tareas de triage y tests.
+5. Recomienda una actualización formal para mi archivo SKILL.md y la configuración de mi arnés CLI (${p.context.selectedCli.toUpperCase()}).`;
   });
 
-  // 3. SKILL.MD TEMPLATE
+  // 3. CLI HARDWARE SCAN SCRIPT (Para ejecutar en Terminal con Agentes Locales)
+  const generatedCliAuditScript = $derived.by(() => {
+    return `#!/usr/bin/env bash
+# ==============================================================================
+# SWAL Local Hardware & AI Runtimes Auditor (100% Local-First)
+# ==============================================================================
+echo "🔍 Escaneando entorno de hardware y runtimes de IA..."
+
+# 1. OS & CPU
+echo "--- CPU & Sistema ---"
+uname -s -r -m
+nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null
+
+# 2. RAM
+echo "--- Memoria RAM ---"
+free -h 2>/dev/null || vm_stat 2>/dev/null
+
+# 3. GPU / VRAM
+echo "--- Aceleradores GPU / VRAM ---"
+if command -v nvidia-smi &> /dev/null; then
+    nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader
+elif [[ "$(uname)" == "Darwin" ]]; then
+    system_profiler SPDisplaysDataType | grep "Chipset Model\\|VRAM"
+else
+    echo "Sin GPU NVIDIA/Apple detectada (Modo CPU)"
+fi
+
+# 4. Local AI Runtimes
+echo "--- Runtimes Locales ---"
+if command -v ollama &> /dev/null; then
+    echo "✓ Ollama instalado. Modelos en disco:"
+    ollama list
+else
+    echo "✗ Ollama no instalado"
+fi
+
+if command -v vllm &> /dev/null; then
+    echo "✓ vLLM instalado"
+fi
+
+echo "✅ Auditoría completada. Copia estos datos en tu simulador."
+`;
+  });
+
+  // 4. SKILL.MD TEMPLATE
   const generatedSkillMd = $derived.by(() => {
     const tier = currentSelectedTier;
     const p = profile;
     return `---
 name: swal-resource-orchestrator-${p.context.selectedCli}
-description: Protocolo y habilidades de desarrollo determinista optimizado para ${p.hardware.type.toUpperCase()} con ${tier.title}.
+description: Protocolo y habilidades de desarrollo determinista para ${p.diagnostic.workloadType.toUpperCase()} en ${p.hardware.type.toUpperCase()}.
 ---
 
 # SKILL: SWAL RESOURCE ORCHESTRATOR (${p.context.selectedCli.toUpperCase()})
 
-## 1. Mapeo y Enrutamiento de Modelos
-- **Tareas Simples / Lints / Lectura de Archivos**: Modelos ligeros (Gemini Flash / DeepSeek V3 / Groq LPU) o Local Ollama.
-- **Arquitectura / Refactor Complejo / Razonamiento**: Claude 3.7 Sonnet / DeepSeek R1 vía OpenRouter.
+## 1. Mapeo y Enrutamiento de Familias de Modelos
+- **Tareas Simples / Lints / Lecturas**: Modelos ligeros (Gemini Flash / DeepSeek / Groq) o Local Ollama.
+- **Arquitectura / Refactor Complejo**: Claude Sonnet / DeepSeek Reasoning vía OpenRouter.
 - **Ruta Primaria Asignada**: \`${tier.primaryRouting}\`
 
 ## 2. Guardrails de Ejecución y Cuotas
-- **Concurrencia Máxima de Tareas**: ${tier.concurrencyLimit} tareas paralelas.
-- **Límite de Frecuencia**: ${p.workload.rateLimitRpm} RPM.
+- **Concurrencia Máxima de Tareas**: ${tier.concurrencyLimit} tareas simultáneas.
+- **Profundidad de Contexto**: ${p.diagnostic.contextDepth.toUpperCase()}
 - **Directorio de Código**: \`${p.context.srcPath}\`
 - **Directorio de Pruebas**: \`${p.context.testPath}\`
 
 ## 3. Protocolo Anti-Drift & Privacidad
 - Validar tests antes de cada commit.
-- Cero subida de archivos de secretos ni tokens al repositorio.
+- Cero subida de credenciales ni secretos (.env).
 `;
   });
 
-  // 4. SANITIZED .ENV.EXAMPLE
+  // 5. SANITIZED .ENV.EXAMPLE
   const generatedEnvExample = $derived.by(() => {
     const p = profile;
     let env = `# .env.example — SWAL Local-First Simulation Framework\n`;
     env += `# 100% Generado en local en tu navegador (0% almacenamiento en servidor)\n\n`;
     env += `SWAL_SIMULATOR_VERSION=${p.version}\n`;
     env += `SWAL_SELECTED_CLI=${p.context.selectedCli}\n`;
-    env += `SWAL_RATE_LIMIT_RPM=${p.workload.rateLimitRpm}\n`;
-    env += `SWAL_MONTHLY_BUDGET_USD=${p.workload.budgetLimitUsd}\n\n`;
+    env += `SWAL_WORKLOAD_TYPE=${p.diagnostic.workloadType}\n`;
+    env += `SWAL_MONTHLY_BUDGET_USD=${p.diagnostic.budgetLimitUsd}\n\n`;
     env += `# --- Proveedores y Credenciales ---\n`;
 
     providersList.filter((x) => x.active).forEach((x) => {
-      if (x.id === 'openrouter') env += `OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'gemini') env += `GEMINI_API_KEY=AIzaSyXxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'claude') env += `ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'openai') env += `OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'deepseek') env += `DEEPSEEK_API_KEY=sk-ds-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'groq') env += `GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'bedrock') env += `AWS_ACCESS_KEY_ID=AKIAXXXXXXXXXXXXXXXX\nAWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxx\nAWS_REGION=us-east-1\n`;
-      if (x.id === 'ollama') env += `OLLAMA_HOST=http://localhost:11434\n`;
-      if (x.id === 'vllm') env += `VLLM_ENDPOINT=http://localhost:8000/v1\n`;
+      if (x.id === 'openrouter_meta') env += `OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+      if (x.id === 'gemini_family') env += `GEMINI_API_KEY=AIzaSyXxxxxxxxxxxxxxxxxxxxxxxx\n`;
+      if (x.id === 'claude_family') env += `ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+      if (x.id === 'openai_family') env += `OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+      if (x.id === 'deepseek_family') env += `DEEPSEEK_API_KEY=sk-ds-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+      if (x.id === 'groq_lpu') env += `GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+      if (x.id === 'bedrock_family') env += `AWS_ACCESS_KEY_ID=AKIAXXXXXXXXXXXXXXXX\nAWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxx\nAWS_REGION=us-east-1\n`;
+      if (x.id === 'ollama_local') env += `OLLAMA_HOST=http://localhost:11434\n`;
+      if (x.id === 'vllm_cluster') env += `VLLM_ENDPOINT=http://localhost:8000/v1\n`;
     });
 
     return env;
@@ -441,6 +485,7 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
     const files = [
       { name: 'MASTER_SYSTEM_PROMPT.txt', content: generatedMasterPrompt },
       { name: 'LIVE_WEBSEARCH_PROMPT.txt', content: generatedWebSearchPrompt },
+      { name: 'swal-audit-env.sh', content: generatedCliAuditScript },
       { name: 'SKILL.md', content: generatedSkillMd },
       { name: '.env.example', content: generatedEnvExample },
     ];
@@ -471,13 +516,16 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
       <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
         🔒 100% Serverless · Privacidad Total en tu Navegador
       </span>
+      <span class="px-3 py-1 rounded-full text-xs font-mono bg-indigo-500/10 border border-indigo-500/30 text-indigo-300">
+        🌐 Familias Genéricas (Sin Obsolescencia)
+      </span>
     </div>
 
     <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
       Simulador de Recursos, Gastos & Generador de Skills
     </h1>
     <p class="text-text-muted max-w-3xl text-sm md:text-base leading-relaxed">
-      Audita tus proveedores, suscripciones mensuales y hardware para simular las 5 mejores configuraciones agénticas y generar prompts maestros y prompts para agentes con búsqueda web en tiempo real.
+      Audita tus familias de modelos, hardware y presupuesto para simular las 5 mejores configuraciones agénticas y generar prompts maestros, scripts de auto-escaneo CLI y prompts para agentes con búsqueda web en vivo.
     </p>
 
     <!-- Toolbar: Save / Reset / Export / Import -->
@@ -522,22 +570,22 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
     </div>
   </div>
 
-  <!-- SECTION 1: Top 20 Providers & Monthly Budget Engine -->
+  <!-- SECTION 1: Providers, Diagnostic Questions & Hardware -->
   <div class="bg-bg-surface-dark border border-white/10 rounded-xl p-6 md:p-8 space-y-8 shadow-xl">
     <div class="flex items-center justify-between border-b border-white/10 pb-4">
       <h2 class="text-xl font-bold text-accent flex items-center gap-2">
-        <span>⚙️</span> 1. Proveedores de IA (Top 20), Hardware & Presupuesto
+        <span>⚙️</span> 1. Diagnóstico de Recursos & Familias de Modelos (Top 20)
       </h2>
       <span class="text-xs font-mono text-emerald-400">0% Llamadas a Servidores Externos</span>
     </div>
 
-    <!-- Top 20 Providers Selector Grid -->
+    <!-- Generic Model Families Selector -->
     <div>
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">
-          Selecciona tus Proveedores y APIs Activas ({providersList.filter(p => p.active).length}/{providersList.length} seleccionados)
+          Selecciona tus Familias de Modelos y APIs ({providersList.filter(p => p.active).length}/{providersList.length} activas)
         </h3>
-        <span class="text-[11px] text-text-muted">Haz clic para activar o desactivar</span>
+        <span class="text-[11px] text-text-muted">Familias genéricas evaluadas en vivo por agentes</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 max-h-72 overflow-y-auto p-1 border border-white/5 rounded-lg bg-black/20">
@@ -547,13 +595,16 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
             onclick={() => toggleProvider(p.id)}
             class="flex items-center justify-between p-2.5 rounded-lg border text-left transition-all cursor-pointer {p.active ? 'border-accent/60 bg-accent/10 text-white' : 'border-white/5 bg-black/40 text-text-muted hover:border-white/20'}"
           >
-            <div class="flex items-center gap-2 truncate">
-              <span class="w-3.5 h-3.5 rounded border flex items-center justify-center {p.active ? 'border-accent bg-accent text-black text-[9px] font-bold' : 'border-white/20'}">
-                {p.active ? '✓' : ''}
-              </span>
-              <span class="text-xs font-medium truncate">{p.name}</span>
+            <div class="truncate mr-2">
+              <div class="flex items-center gap-2">
+                <span class="w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0 {p.active ? 'border-accent bg-accent text-black text-[9px] font-bold' : 'border-white/20'}">
+                  {p.active ? '✓' : ''}
+                </span>
+                <span class="text-xs font-medium truncate">{p.family}</span>
+              </div>
+              <p class="text-[10px] text-text-muted truncate mt-0.5 pl-5">{p.description}</p>
             </div>
-            <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded ml-1 {p.category === 'local' ? 'bg-emerald-500/20 text-emerald-300' : p.category === 'router' ? 'bg-indigo-500/20 text-indigo-300' : p.category === 'free' ? 'bg-amber-500/20 text-amber-300' : 'bg-blue-500/20 text-blue-300'}">
+            <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded shrink-0 {p.category === 'local' ? 'bg-emerald-500/20 text-emerald-300' : p.category === 'router' ? 'bg-indigo-500/20 text-indigo-300' : p.category === 'free' ? 'bg-amber-500/20 text-amber-300' : 'bg-blue-500/20 text-blue-300'}">
               {p.category}
             </span>
           </button>
@@ -561,13 +612,45 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
       </div>
     </div>
 
-    <!-- Hardware & Monthly Spending Details -->
+    <!-- Fine-Grained Diagnostic Questions -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-      <!-- Hardware -->
+      <!-- 1. Diagnostic Questionnaire -->
       <div class="space-y-4">
-        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Hardware & Computo</h3>
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Diagnóstico de Trabajo</h3>
         <div>
-          <label class="block text-xs text-text-muted mb-1">Entorno Principal</label>
+          <label class="block text-xs text-text-muted mb-1">Tipo de Desarrollo Principal</label>
+          <select
+            bind:value={profile.diagnostic.workloadType}
+            onchange={saveProfile}
+            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-2 text-xs text-white focus:border-accent focus:outline-none cursor-pointer"
+          >
+            <option value="fullstack">Full-Stack (Frontend UI + Backend APIs)</option>
+            <option value="frontend">Frontend UI / Componentes & Estilos</option>
+            <option value="backend">Backend & Arquitectura de Bases de Datos</option>
+            <option value="systems">Sistemas & Performance (Rust / C / Shell)</option>
+            <option value="data_ml">Datos, RAG & Machine Learning</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs text-text-muted mb-1">Profundidad de Contexto / Repositorio</label>
+          <select
+            bind:value={profile.diagnostic.contextDepth}
+            onchange={saveProfile}
+            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-2 text-xs text-white focus:border-accent focus:outline-none cursor-pointer"
+          >
+            <option value="short">Corto (&lt;32k tokens - Scripts y módulos pequeños)</option>
+            <option value="medium">Medio (32k - 128k tokens - Repositorios estándar)</option>
+            <option value="deep">Profundo (128k+ tokens - Monorepos y documentación densa)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 2. Hardware & Compute -->
+      <div class="space-y-4">
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Hardware & Entorno</h3>
+        <div>
+          <label class="block text-xs text-text-muted mb-1">Entorno de Computo</label>
           <select
             bind:value={profile.hardware.type}
             onchange={saveProfile}
@@ -593,74 +676,56 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
         </div>
       </div>
 
-      <!-- Monthly Spending & Subscriptions -->
+      <!-- 3. Budget & Free Tier Controls -->
       <div class="space-y-4">
-        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Gastos & Suscripciones Actuales</h3>
-        <div>
-          <label class="block text-xs text-text-muted mb-1">Gasto Actual Estimado ($/mes)</label>
-          <input
-            type="number"
-            bind:value={profile.workload.currentMonthlySpendUsd}
-            onchange={saveProfile}
-            min="0"
-            max="2000"
-            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-2 text-xs text-accent font-bold font-mono focus:border-accent focus:outline-none"
-          />
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Gastos & Prompts Diarios</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] text-text-muted mb-1">Gasto Actual ($/mes)</label>
+            <input type="number" bind:value={profile.diagnostic.currentMonthlySpendUsd} onchange={saveProfile} min="0" max="2000" class="w-full bg-black/40 border border-white/15 rounded px-2.5 py-1.5 text-xs text-accent font-bold font-mono" />
+          </div>
+          <div>
+            <label class="block text-[11px] text-text-muted mb-1">Presupuesto ($/mes)</label>
+            <input type="number" bind:value={profile.diagnostic.budgetLimitUsd} onchange={saveProfile} min="0" max="2000" class="w-full bg-black/40 border border-white/15 rounded px-2.5 py-1.5 text-xs text-emerald-400 font-bold font-mono" />
+          </div>
         </div>
 
-        <div>
-          <label class="block text-xs text-text-muted mb-1">Presupuesto Máximo Objetivo ($/mes)</label>
-          <input
-            type="number"
-            bind:value={profile.workload.budgetLimitUsd}
-            onchange={saveProfile}
-            min="0"
-            max="2000"
-            class="w-full bg-black/40 border border-white/15 rounded-md px-3 py-2 text-xs text-emerald-400 font-bold font-mono focus:border-accent focus:outline-none"
-          />
-        </div>
-      </div>
-
-      <!-- Free Tier Mode & Workload -->
-      <div class="space-y-4">
-        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Carga Diaria & Modo Gratuito</h3>
         <div>
           <div class="flex justify-between text-xs text-text-muted mb-1">
-            <span>Prompts / Tareas por Día:</span>
-            <span class="text-accent font-mono font-bold">{profile.workload.dailyPrompts}</span>
+            <span>Prompts / Tareas Diarias:</span>
+            <span class="text-accent font-mono font-bold">{profile.diagnostic.dailyPrompts}</span>
           </div>
           <input
             type="range"
             min="10"
-            max="800"
+            max="600"
             step="10"
-            bind:value={profile.workload.dailyPrompts}
+            bind:value={profile.diagnostic.dailyPrompts}
             onchange={saveProfile}
             class="w-full accent-accent bg-white/10 h-1.5 rounded-lg appearance-none cursor-pointer"
           />
         </div>
 
-        <!-- Free Tiers Toggle with Trade-off Warning -->
-        <div class="p-3 rounded-lg border border-amber-500/30 bg-amber-500/5 space-y-2">
-          <label class="flex items-center gap-2.5 text-xs text-amber-200 font-medium cursor-pointer">
+        <div class="p-3 rounded-lg border border-amber-500/30 bg-amber-500/5 space-y-1.5">
+          <label class="flex items-center gap-2 text-xs text-amber-200 font-medium cursor-pointer">
             <input
               type="checkbox"
-              bind:checked={profile.workload.useFreeTiers}
+              bind:checked={profile.diagnostic.useFreeTiers}
               onchange={saveProfile}
               class="accent-amber-400 w-4 h-4"
             />
             Habilitar Enfoque 100% Free-Tiers
           </label>
-          {#if profile.workload.useFreeTiers}
+          {#if profile.diagnostic.useFreeTiers}
             <p class="text-[10px] text-amber-300/80 leading-relaxed">
-              ⚠️ <strong>Advertencia de Trade-off:</strong> Los tiers gratuitos están sujetos a ventanas de contexto cortas (8k–32k tokens), límites estrictos de RPM/RPD y tiempos de espera o saturación en horas pico.
+              ⚠️ <strong>Advertencia:</strong> Los tiers gratuitos conllevan ventanas de contexto cortas, límites estrictos de RPM/RPD y colas de espera en horas pico.
             </p>
           {/if}
         </div>
       </div>
     </div>
 
-    <!-- Paths and Harness Selection -->
+    <!-- Workspace Paths & CLI Harness -->
     <div class="border-t border-white/10 pt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
       <div>
         <label class="block text-text-muted mb-1 font-mono">Directorio Código</label>
@@ -677,6 +742,8 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
           <option value="hermes">Hermes Gateway</option>
           <option value="openclaw">OpenClaw Browser</option>
           <option value="gitcore">GitCore Deterministic Engine</option>
+          <option value="claude_code">Claude Code CLI</option>
+          <option value="opencode">OpenCode Go CLI</option>
         </select>
       </div>
       <div>
@@ -794,14 +861,14 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
     </div>
   </div>
 
-  <!-- SECTION 3: Generator Tabs (Master Prompt, Live Search Prompt, SKILL.md, .env) -->
+  <!-- SECTION 3: Generator Tabs (Master Prompt, Live Search Prompt, CLI Audit Script, SKILL.md, .env) -->
   <div class="bg-bg-surface-dark border border-white/10 rounded-xl p-6 md:p-8 space-y-8 shadow-xl">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
       <div>
         <h2 class="text-xl font-bold text-accent flex items-center gap-2">
-          <span>🛠️</span> 3. Generador de Prompts, Skills & Variables (.env)
+          <span>🛠️</span> 3. Generador de Prompts, Scripts CLI & Skills
         </h2>
-        <p class="text-xs text-text-muted mt-1">Generación determinista adaptada a tus proveedores y límites</p>
+        <p class="text-xs text-text-muted mt-1">Artefactos deterministas para web y terminal</p>
       </div>
       <button
         onclick={downloadAllArtifacts}
@@ -815,27 +882,33 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
     <div class="flex flex-wrap items-center gap-2 border-b border-white/10 pb-2">
       <button
         onclick={() => activeTab = 'sim'}
-        class="px-4 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'sim' ? 'bg-accent text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'sim' ? 'bg-accent text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        📜 Master System Prompt
+        📜 Master Prompt
       </button>
       <button
         onclick={() => activeTab = 'websearch'}
-        class="px-4 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'websearch' ? 'bg-emerald-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'websearch' ? 'bg-emerald-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        🌐 Prompt con Búsqueda Web en Vivo
+        🌐 Prompt Búsqueda Web
+      </button>
+      <button
+        onclick={() => activeTab = 'cliaudit'}
+        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'cliaudit' ? 'bg-amber-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+      >
+        💻 Script Auto-Escaneo CLI
       </button>
       <button
         onclick={() => activeTab = 'skill'}
-        class="px-4 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'skill' ? 'bg-indigo-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'skill' ? 'bg-indigo-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
         ⚡ Custom SKILL.md
       </button>
       <button
         onclick={() => activeTab = 'env'}
-        class="px-4 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'env' ? 'bg-sky-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
+        class="px-3.5 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'env' ? 'bg-sky-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        🔒 .env.example Sanitizado
+        🔒 .env.example
       </button>
     </div>
 
@@ -862,7 +935,7 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
       <div class="space-y-3">
         <div class="flex items-center justify-between">
           <p class="text-xs text-emerald-300">
-            💡 Pega este prompt en un agente con <strong>acceso a búsqueda web en vivo</strong> (Gemini con Search, Perplexity, Claude con Search, ChatGPT Search o OpenClaw) para obtener una auditoría de precios y disponibilidad al día de hoy:
+            💡 Pega este prompt en un agente con <strong>búsqueda web en vivo</strong> (Gemini con Search, Perplexity, Claude con Search, ChatGPT Search o OpenClaw) para que investigue los modelos activos al día de hoy:
           </p>
           <button
             onclick={() => copyToClipboard(generatedWebSearchPrompt, 'Prompt con Búsqueda Web')}
@@ -875,7 +948,25 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
       </div>
     {/if}
 
-    <!-- TAB 3: SKILL.md -->
+    <!-- TAB 3: CLI Hardware Auto-Audit Script -->
+    {#if activeTab === 'cliaudit'}
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <p class="text-xs text-amber-300">
+            💻 Ejecuta este script en tu terminal para auto-detectar CPU, RAM, VRAM GPU y modelos locales instalados (Ollama/vLLM):
+          </p>
+          <button
+            onclick={() => copyToClipboard(generatedCliAuditScript, 'Script CLI de Auto-Escaneo')}
+            class="px-3 py-1 text-xs font-semibold rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 transition-all cursor-pointer"
+          >
+            📋 Copiar Script Shell
+          </button>
+        </div>
+        <pre class="bg-black/60 border border-amber-500/20 rounded-lg p-4 text-xs font-mono text-amber-300 overflow-x-auto max-h-72 leading-relaxed whitespace-pre-wrap">{generatedCliAuditScript}</pre>
+      </div>
+    {/if}
+
+    <!-- TAB 4: SKILL.md -->
     {#if activeTab === 'skill'}
       <div class="space-y-3">
         <div class="flex items-center justify-between">
@@ -893,7 +984,7 @@ description: Protocolo y habilidades de desarrollo determinista optimizado para 
       </div>
     {/if}
 
-    <!-- TAB 4: .env.example -->
+    <!-- TAB 5: .env.example -->
     {#if activeTab === 'env'}
       <div class="space-y-3">
         <div class="flex items-center justify-between">

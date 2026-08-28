@@ -1,75 +1,138 @@
 <script lang="ts">
   import { t } from '../i18n/index';
 
+  let selectedCategory = $state<'all' | 'production' | 'opensource'>('all');
   let expandedProject = $state<string | null>('xavier2');
 
-  const projects = [
-    {
-      id: 'photon-core',
-      name: 'Photon-Core',
-      tagline: '5D Optical Storage Simulation',
-      version: 'v1.0.0-poc',
-      status: 'active',
-      description: 'High-performance Rust framework simulating 5D optical data storage inside fused silica glass. Models femtosecond-pulse nanograting birefringence, 3D spatial crosstalk, Reed-Solomon error correction, and multi-dimensional steganography. Achieves >470 MB/s encoding throughput. Developed with AI agents and human validation.',
-      tech: ['Rust', 'Physics Sim', 'Reed-Solomon', 'Steganography'],
-      github: 'https://github.com/iberi22/photon-core',
-      color: 'var(--color-accent)',
-      timeline: [
-        { date: '2025 Q4', label: 'Initial mathematical model and photonic voxel definition' },
-        { date: '2026 Q1', label: 'Reed-Solomon ECC integration and spatial crosstalk simulation' },
-        { date: '2026 Q2', label: 'Steganographic data hiding and CLI toolkit release' },
-        { date: '2026 Q3', label: 'Roadmap: Deep learning-based signal reconstruction' },
-      ],
-    },
+  interface Project {
+    id: string;
+    name: string;
+    tagline: string;
+    version: string;
+    category: 'production' | 'opensource';
+    status: 'live' | 'beta' | 'active' | 'production';
+    companyOrContext: string;
+    period: string;
+    description: string;
+    architecture: string;
+    metrics: string[];
+    tech: string[];
+    github?: string;
+    demoUrl?: string;
+    color: string;
+    timeline: { date: string; label: string }[];
+  }
+
+  const projects: Project[] = [
+    // --- OPEN SOURCE & DEEP TECH ---
     {
       id: 'xavier2',
       name: 'Xavier',
-      tagline: 'AI Memory Core',
+      tagline: 'AI Cognitive Memory Core',
       version: 'v0.6.0-beta',
+      category: 'opensource',
       status: 'active',
-      description: 'Persistent local memory core for AI agents built in Rust. Containerized Docker microservice providing vector storage, semantic search index, and unified knowledge graphs. Co-designed with AI agents under dynamic human supervision.',
-      tech: ['Rust', 'Docker', 'Vector DB', 'Knowledge Graphs'],
-      github: 'https://github.com/iberi22/xavier2',
+      companyOrContext: 'SouthWest AI Labs',
+      period: '2025 - Presente',
+      description: 'Núcleo de memoria cognitiva persistente local para agentes de IA implementado en Rust. Microservicio encapsulado en Docker que proporciona almacenamiento vectorial, índice de búsqueda semántica HNSW y grafos de conocimiento unificados.',
+      architecture: 'Motor nativo en Rust con SQLite-vec y pgvector. Búsqueda vectorial por similitud coseno con embeddings locales sin dependencia de la nube externa. API REST y RPC de alta velocidad.',
+      metrics: ['Latencia de búsqueda <10ms en índices locales', 'Zero cloud lock-in: 100% on-device', 'Integración unificada con Hermes y Gestalt'],
+      tech: ['Rust', 'Docker', 'SQLite-vec', 'pgvector', 'HNSW', 'SurrealDB', 'REST API'],
+      github: 'https://github.com/iberi22/xavier',
       color: 'var(--color-accent)',
       timeline: [
-        { date: '2025 Q4', label: 'Initial concept and storage layer design' },
-        { date: '2026 Q1', label: 'Beta release v0.1 - CRUD operations and REST endpoints' },
-        { date: '2026 Q2', label: 'v0.6.0-beta - Vector search indices and Docker containerization' },
-        { date: '2026 Q3', label: 'Roadmap: Graph database integration and context routing' },
+        { date: '2025 Q4', label: 'Diseño arquitectural y capa de persistencia vectorial en Rust' },
+        { date: '2026 Q1', label: 'Release v0.1 - Operaciones CRUD, embeddings locales y endpoints REST' },
+        { date: '2026 Q2', label: 'v0.6.0-beta - Índices HNSW, Dockerización y memoria episódica' },
+        { date: '2026 Q3', label: 'Roadmap: Integración de grafos semánticos y context routing' },
       ],
     },
     {
       id: 'gitcore',
       name: 'GitCore',
-      tagline: 'Multi-Agent Orchestrator Prototype',
-      version: 'v0.3.0',
-      status: 'prototype',
-      description: 'Prototype multi-agent orchestration CLI in Rust. Uses SurrealDB for persistent state, role-based task routing, and custom inter-agent protocols. Kept off the public roadmap until it is production-ready.',
-      tech: ['Rust', 'SurrealDB', 'CLI', 'Multi-Agent'],
-      github: undefined,
+      tagline: 'Autonomous Multi-Agent Git/GitHub Orchestrator',
+      version: 'v3.8.0',
+      category: 'opensource',
+      status: 'active',
+      companyOrContext: 'SouthWest AI Labs',
+      period: '2026 - Presente',
+      description: 'Harness operacional y orquestador determinista para agentes de codificación autónomos (Jules, Claude Code, OpenCode). Automatiza la creación de issues con especificaciones formales, lotes de micro-fragmentación de hasta 15 tareas paralelas y validación de PRs sin colisiones.',
+      architecture: 'Arquitectura desacoplada en Rust y scripts de automatización CLI. Sistema de islas de archivos disjuntos (disjoint file islands) para prevenir conflictos de merge durante ejecuciones paralelas masivas.',
+      metrics: ['Hasta 15 tareas autónomas en paralelo', '100% trazabilidad con issues canónicos', '0 conflictos en merge secuencial'],
+      tech: ['Rust', 'Agent Orchestration', 'Git/GitHub API', 'Jules Waves', 'Automated QA', 'Shell'],
+      github: 'https://github.com/iberi22/GitCore',
       color: 'var(--color-secondary)',
       timeline: [
-        { date: '2026 Q1', label: 'Prototype - single-agent task routing and SurrealDB schema' },
-        { date: '2026 Q2', label: 'Multi-agent coordination layer and dynamic CLI execution' },
-        { date: '2026 Q3', label: 'Roadmap: Decentralized swarm intelligence' },
-        { date: '2026 Q4', label: 'Roadmap: Multi-tenant production release' },
+        { date: '2026 Q1', label: 'Protocolo inicial de issues y trazabilidad para agentes' },
+        { date: '2026 Q2', label: 'Wave Operations: micro-fragmentación y lotes de 15 micro-tareas' },
+        { date: '2026 Q3', label: 'Integración con Hermes Gateway y auditoría pre-delegación' },
+        { date: '2026 Q4', label: 'Roadmap: Enjambre distribuido P2P multi-repositorio' },
       ],
     },
     {
-      id: 'nvc',
-      name: 'NeuralVoiceCore (NVC)',
-      tagline: 'Offline Voice Assistant',
-      version: 'v0.2.0-beta',
-      status: 'development',
-      description: 'High-performance local voice assistant combining a Rust audio engine and a modern Flutter UI via Flutter Rust Bridge. Performs cross-platform real-time audio capture via cpal and offline Speech-to-Text via Vosk, validated by LLM harnesses.',
-      tech: ['Rust', 'Flutter', 'cpal', 'Vosk STT'],
-      github: 'https://github.com/iberi22/NVC',
+      id: 'gestalt',
+      name: 'Gestalt',
+      tagline: 'Multi-Agent Swarm Orchestrator CLI',
+      version: 'v0.4.0',
+      category: 'opensource',
+      status: 'active',
+      companyOrContext: 'SouthWest AI Labs',
+      period: '2025 - Presente',
+      description: 'Orquestador de enjambres autónomos y enrutamiento inteligente de agentes multi-rol por línea de comandos (CLI) en Rust. Utiliza SurrealDB para persistencia de estados, enrutamiento basado en roles y protocolos personalizados de comunicación inter-agente.',
+      architecture: 'CLI nativa en Rust con integración asíncrona Tokio. Persistencia de grafos y estados en SurrealDB. Sandboxes deterministas para pruebas de código generado por LLMs.',
+      metrics: ['Ejecución de agentes en sandboxes aislados', 'Persistencia reactiva de estados en SurrealDB', 'Enrutamiento dinámico por especialidad'],
+      tech: ['Rust', 'SurrealDB', 'Tokio Async', 'CLI Tools', 'Multi-Agent Protocols'],
+      github: 'https://github.com/iberi22/gestalt',
       color: 'var(--color-accent-light)',
       timeline: [
-        { date: '2026 Q1', label: 'Core modular Rust architecture and native library integration' },
-        { date: '2026 Q2', label: 'Real-time cpal capture and offline Vosk STT streaming' },
-        { date: '2026 Q3', label: 'Roadmap: Flutter Rust Bridge FFI connection and live UI integration' },
-        { date: '2026 Q4', label: 'Roadmap: Local LLM pipeline (whisper/llama.cpp)' },
+        { date: '2025 Q4', label: 'Prototipo y esquema de estado en SurrealDB' },
+        { date: '2026 Q1', label: 'Capa de coordinación multi-agente y ejecución dinámica desde CLI' },
+        { date: '2026 Q2', label: 'Integración de ciclo continuo con memoria Xavier' },
+        { date: '2026 Q3', label: 'Roadmap: Inteligencia de enjambre descentralizada' },
+      ],
+    },
+    {
+      id: 'photon-core',
+      name: 'Photon-Core',
+      tagline: '5D Optical Storage Simulation',
+      version: 'v1.0.0-poc',
+      category: 'opensource',
+      status: 'active',
+      companyOrContext: 'Deep Tech Lab',
+      period: '2025 - 2026',
+      description: 'Framework de simulación de física óptica de alto rendimiento en Rust para almacenamiento volumétrico de datos 5D en cristales de sílice fundida. Modela birrefringencia por láser de femtosegundo, crosstalk espacial 3D, corrección de errores Reed-Solomon y esteganografía multidimensional.',
+      architecture: 'Modelado matemático de voxels fotónicos con paralelismo Rayon en Rust. Codificación Reed-Solomon entrelazada y simulación de degradación térmica/mecánica.',
+      metrics: ['Rendimiento de codificación >470 MB/s', 'Corrección de errores Reed-Solomon con tolerancia >30% crosstalk', 'Publicación académica de soporte'],
+      tech: ['Rust', 'Physics Sim', 'Reed-Solomon ECC', 'Steganography', 'Rayon Parallelism'],
+      github: 'https://github.com/iberi22/photon-core',
+      color: 'var(--color-accent)',
+      timeline: [
+        { date: '2025 Q4', label: 'Modelo matemático inicial y definición de voxel fotónico' },
+        { date: '2026 Q1', label: 'Integración ECC Reed-Solomon y simulación crosstalk 3D' },
+        { date: '2026 Q2', label: 'Ocultación de datos esteganográficos y kit CLI' },
+        { date: '2026 Q3', label: 'Roadmap: Reconstrucción de señal asistida por deep learning' },
+      ],
+    },
+    {
+      id: 'edge-mesh',
+      name: 'edge-mesh',
+      tagline: 'P2P Mesh Network with CRDT & Post-Quantum Crypto',
+      version: 'v0.5.0',
+      category: 'opensource',
+      status: 'beta',
+      companyOrContext: 'SouthWest AI Labs',
+      period: '2025 - Presente',
+      description: 'Librería de red de comunicación entre pares (P2P) con sincronización de estado libre de conflictos (CRDTs) e identidad basada en criptografía post-cuántica ML-DSA-65.',
+      architecture: 'Topología peer-to-peer descentralizada sin servidor central. Tipos de datos replicados libres de conflictos (Yjs/Automerge) para sincronización determinista en condiciones de red hostil.',
+      metrics: ['Cero dependencia de servidores centrales', 'Criptografía resistente a computación cuántica ML-DSA-65', 'Latencia P2P <15ms'],
+      tech: ['Rust', 'TypeScript', 'CRDT', 'P2P Mesh', 'ML-DSA-65 Crypto', 'WebRTC'],
+      github: 'https://github.com/iberi22/edge-mesh',
+      color: 'var(--color-secondary)',
+      timeline: [
+        { date: '2025 Q3', label: 'Diseño de protocolo de descubrimiento P2P' },
+        { date: '2025 Q4', label: 'Implementación de esquemas CRDT y resolución de bifurcaciones' },
+        { date: '2026 Q1', label: 'Adopción de estándar criptográfico post-cuántico ML-DSA-65' },
+        { date: '2026 Q3', label: 'Roadmap: SDK móvil para Android y iOS' },
       ],
     },
     {
@@ -77,36 +140,151 @@
       name: 'OrionHealth',
       tagline: 'Offline-First Health Ecosystem',
       version: 'v0.5.0',
-      status: 'development',
-      description: 'Offline-first personal health tracking application built with Flutter and Dart. Features fully encrypted SQLite local storage, automated background synchronization, and a premium metrics dashboard.',
-      tech: ['Flutter', 'SQLite', 'Encryption', 'Sync Engine'],
+      category: 'opensource',
+      status: 'active',
+      companyOrContext: 'HealthTech',
+      period: '2025 - 2026',
+      description: 'Aplicación de seguimiento de salud personal y métricas clínicas 100% offline-first. Almacenamiento local SQLite encriptado, motor de sincronización en segundo plano y panel analítico interactivo.',
+      architecture: 'Flutter & Dart con base de datos SQLite encriptada on-device (SQLCipher). Sincronización resiliente con reconciliación de datos offline y estándares de privacidad SSI.',
+      metrics: ['100% de datos encriptados on-device', 'Funcionamiento continuo sin conexión', 'Dashboard clínico interactivo'],
+      tech: ['Flutter', 'Dart', 'SQLite / SQLCipher', 'Offline-First', 'Health Metrics'],
       github: 'https://github.com/iberi22/OrionHealth',
-      color: 'var(--color-secondary)',
+      color: 'var(--color-accent-light)',
       timeline: [
-        { date: '2025 Q4', label: 'Flutter init, data models, and local schemas' },
-        { date: '2026 Q1', label: 'Offline-first storage with encrypted SQLite database' },
-        { date: '2026 Q2', label: 'Sync engine core and dashboard analytics' },
-        { date: '2026 Q3', label: 'Roadmap: Decentralized cloud sync GA' },
+        { date: '2025 Q4', label: 'Modelado clínico y arquitectura Flutter offline-first' },
+        { date: '2026 Q1', label: 'Persistencia encriptada con SQLite y esquemas seguros' },
+        { date: '2026 Q2', label: 'Motor de sincronización en background y analíticas' },
+        { date: '2026 Q3', label: 'Roadmap: Sincronización descentralizada P2P' },
       ],
     },
     {
-      id: 'gos',
-      name: 'GOS (Gastronomic Open Standard)',
-      tagline: 'Culinary Discovery PWA',
-      version: 'v1.0.0',
-      status: 'beta',
-      description: 'Monorepo PWA standard for culinary exploration and offline-first reviews. Features an integrated design system, restaurant discovery, automated menu scanning, and community reviews built with Flutter & PWA.',
-      tech: ['Flutter', 'PWA', 'TypeScript', 'GraphQL'],
-      github: 'https://github.com/iberi22/gos',
+      id: 'gara-g',
+      name: 'GARA-G',
+      tagline: 'DePIN Mobility & V2V Mesh Network',
+      version: 'v0.3.0',
+      category: 'opensource',
+      status: 'active',
+      companyOrContext: 'Mobility Tech',
+      period: '2026',
+      description: 'Red DePIN de movilidad y malla vehicular (V2V) con telemetría en tiempo real, copiloto de IA y mercado descentralizado para el sector automotriz.',
+      architecture: 'Backbone en Rust para procesamiento de telemetría automotriz y frontend móvil en Flutter. Protocolo de malla vehicular para alertas de tráfico sin cobertura celular.',
+      metrics: ['Telemetría vehicular de baja latencia', 'Copiloto de diagnóstico automotriz on-device', 'Integración con red Polygon'],
+      tech: ['Rust', 'Flutter', 'P2P V2V', 'Polygon', 'Automotive Telemetry'],
+      github: 'https://github.com/iberi22/gara-g',
       color: 'var(--color-accent)',
       timeline: [
-        { date: '2025 Q3', label: 'Monorepo init and design system core' },
-        { date: '2025 Q4', label: 'PWA shell, service workers, and offline support' },
-        { date: '2026 Q1', label: 'Beta launch with community reviews and restaurant scanning' },
-        { date: '2026 Q3', label: 'Roadmap: AI-powered personalized dining recommendations' },
+        { date: '2026 Q1', label: 'Arquitectura del protocolo de telemetría vehicular' },
+        { date: '2026 Q2', label: 'Integración de copiloto de IA para diagnósticos OBD-II' },
+        { date: '2026 Q3', label: 'Roadmap: Red de malla entre vehículos en ruta' },
+      ],
+    },
+
+    // --- HISTORIA LABORAL EN PRODUCCIÓN (10+ AÑOS) ---
+    {
+      id: 'tripro-mining',
+      name: 'Tripro SPA (Chile)',
+      tagline: 'Industrial IoT, Mining Telemetry & Real-Time Dashboards',
+      version: 'Producción',
+      category: 'production',
+      status: 'production',
+      companyOrContext: 'Servicios Eléctricos Industriales y Minería',
+      period: '2025 - 2026',
+      description: 'Desarrollo de software y plataformas de monitoreo que conectan sensores de maquinaria pesada minera con dashboards web en tiempo real. Construcción de canales de ingesta de datos desde planta a la nube para análisis predictivo y desarrollo de apps web con pasarelas de pago.',
+      architecture: 'Stack moderno con Astro, Next.js, React, PostgreSQL y Tailwind CSS. Pipelines de datos con Python, n8n y Node.js con bots de alerta en Telegram y creación automatizada de issues de soporte.',
+      metrics: ['Monitoreo continuo de sensores en plantas mineras', 'Conversión de telemetría cruda en analítica predictiva', 'Web App CGP San Patricio con pasarela Flow desplegada'],
+      tech: ['PostgreSQL', 'Next.js', 'React', 'Astro', 'Python', 'n8n', 'Node.js', 'Flow Payments', 'Tailwind CSS'],
+      demoUrl: 'https://www.tripro.cl',
+      color: 'var(--color-accent)',
+      timeline: [
+        { date: 'Jun 2025 - Oct 2025', label: 'Sitio Astro + Flow, Web App CGP San Patricio y Bot de soporte multi-sitio n8n/Python' },
+        { date: 'Ene 2026 - May 2026', label: 'Plataforma de telemetría IoT de sensores mineros e IA ligera para optimización energética' },
+      ],
+    },
+    {
+      id: 'smartax-mobile',
+      name: 'Restrepo y Londoño / Smartax',
+      tagline: 'Tax Mobile App on Google Play & Custom WordPress Architecture',
+      version: 'Producción',
+      category: 'production',
+      status: 'production',
+      companyOrContext: 'Firma de Asesoría Fiscal y Jurídica',
+      period: '2021 - 2025',
+      description: 'Diseño, desarrollo y publicación en Google Play Store de la aplicación móvil oficial de la firma. Creación de plugins propietarios en PHP para WordPress, conexión por REST API para sincronizar contenido corporativo y herramientas financieras interactivas.',
+      architecture: 'App móvil desarrollada en React Native y Expo Framework consumiendo endpoints REST de WordPress. Backend en PHP para cálculo tributario parametrizado, calendario fiscal automatizado y generación asíncrona de reportes PDF.',
+      metrics: ['App publicada y aprobada en Google Play Store', 'Generación automatizada de reportes fiscales en PDF', 'Sincronización fluida con WordPress CMS'],
+      tech: ['React Native', 'Expo', 'PHP', 'WordPress Plugins', 'REST APIs', 'PDF Engine', 'JavaScript', 'Google Play'],
+      demoUrl: 'http://smartax.com.co',
+      color: 'var(--color-secondary)',
+      timeline: [
+        { date: 'Oct 2021 - Sep 2022', label: 'Desarrollo web B2B, plugins propietarios en PHP y administración web corporativa' },
+        { date: 'Ene 2025 - May 2025', label: 'Desarrollo de App React Native, calculadora tributaria y publicación en Play Store' },
+      ],
+    },
+    {
+      id: 'siesa-ecommerce',
+      name: 'Siesa Ecommerce (E-Solutions)',
+      tagline: 'Enterprise B2B/B2C E-Commerce & Cloud Infrastructure',
+      version: 'Producción',
+      category: 'production',
+      status: 'production',
+      companyOrContext: 'E-Solutions / Siesa',
+      period: '2019 - 2020',
+      description: 'Desarrollo de funcionalidades escalables para plataformas de comercio electrónico B2B y B2C. Creación desde cero de un módulo de calendario logístico para programación de despachos y administración de infraestructura de servidores Linux (CentOS 7).',
+      architecture: 'Backend en PHP con framework Yii2 y frontend reactivo en Angular. Administración de servidores LAMP vía terminal Linux, automatización de flujos CI/CD con Git, gestión de certificados SSL, VPN y reglas de firewall.',
+      metrics: ['Módulo de calendario logístico en producción', 'Aprovisionamiento de servidores Linux CentOS 7 LAMP', 'Manuales operativos y estandarización técnica'],
+      tech: ['PHP (Yii2)', 'Angular', 'Linux (CentOS 7)', 'LAMP Stack', 'CI/CD Git', 'SSL & VPN', 'MySQL'],
+      color: 'var(--color-accent-light)',
+      timeline: [
+        { date: 'Oct 2019 - Ene 2020', label: 'Desarrollo del módulo de calendario logístico y funcionalidades e-commerce' },
+        { date: 'Feb 2020 - Abr 2020', label: 'Aprovisionamiento de servidores cloud, automatización CI/CD y hardening de seguridad' },
+      ],
+    },
+    {
+      id: 'logicalsoft-siip',
+      name: 'LogicalSoft',
+      tagline: 'SIIP Mobile Android App, Retail Analytics & Electron Desktop',
+      version: 'Producción',
+      category: 'production',
+      status: 'production',
+      companyOrContext: 'ERP, Signage & Retail Analytics',
+      period: '2015 - 2019',
+      description: 'Desarrollo integral de la aplicación móvil híbrida SIIP Móvil publicada en la Play Store con más de 15 vistas operativas (inventarios, logística y accesos QR). Creación de aplicaciones web RIA en PHP/MySQL para evaluación de centros comerciales y app de escritorio Electron con soporte offline.',
+      architecture: 'Backend en PHP y MySQL con frontend JavaScript y almacenamiento local IndexedDB para censos comerciales. Aplicación de escritorio multiplataforma con Electron, Node.js y ReactJS. Gestión cloud en AWS y Google Cloud.',
+      metrics: ['App SIIP Móvil publicada en Play Store', 'Módulos de acceso rápido vía Códigos QR', 'Funcionamiento offline con IndexedDB'],
+      tech: ['PHP', 'JavaScript', 'MySQL', 'ReactJS', 'Electron', 'Android Play Store', 'IndexedDB', 'AWS & GCP'],
+      color: 'var(--color-accent)',
+      timeline: [
+        { date: '2015 - 2017', label: 'Apps web RIA en PHP/MySQL, censo móvil con IndexedDB y desktop Electron' },
+        { date: '2018', label: 'Sprint de modernización y optimización de rendimiento de plataforma legacy' },
+        { date: '2019', label: 'Desarrollo de SIIP Móvil (PHP/JS/WebView) publicado en Play Store' },
+      ],
+    },
+    {
+      id: 'los-tres-editores',
+      name: 'Los Tres Editores SAS',
+      tagline: 'PostgreSQL Procedures, Java EE Architecture & Debian Servers',
+      version: 'Producción',
+      category: 'production',
+      status: 'production',
+      companyOrContext: 'Editorial e Impresión de Gran Escala',
+      period: '2013 - 2015',
+      description: 'Programación avanzada de bases de datos del lado del servidor mediante procedimientos almacenados, funciones y disparadores (triggers) en PostgreSQL. Desarrollo de componentes Java EE con iReport, módulos de reportes dinámicos en PHP (FPDF) y mantenimiento de servidores Linux Debian.',
+      architecture: 'Base de datos relacional PostgreSQL con lógica de negocio encapsulada en stored procedures. Capa de servicios Java EE para generación masiva de reportes corporativos y personalización de plataforma educativa Moodle.',
+      metrics: ['Optimización de consultas y triggers en PostgreSQL', 'Generación automatizada de reportes PDF masivos', 'Administración y estabilidad de servidores Debian'],
+      tech: ['PostgreSQL (Triggers/Functions)', 'Java EE', 'PHP (FPDF)', 'Moodle', 'Linux Debian', 'iReport'],
+      color: 'var(--color-secondary)',
+      timeline: [
+        { date: '2013 - 2014', label: 'Documentación técnica de sistemas heredados y desarrollo de funciones en PostgreSQL' },
+        { date: '2014 - 2015', label: 'Implementación Java EE, reportes con FPDF/iReport y administración de servidores Debian' },
       ],
     },
   ];
+
+  let filteredProjects = $derived(
+    selectedCategory === 'all'
+      ? projects
+      : projects.filter((p) => p.category === selectedCategory)
+  );
 
   function toggleProject(id: string) {
     expandedProject = expandedProject === id ? null : id;
@@ -122,12 +300,13 @@
 
 <section id="projects" class="relative py-32 px-6">
   <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-24 max-w-3xl mx-auto">
+    <!-- SWAL Mission Banner -->
+    <div class="text-center mb-20 max-w-3xl mx-auto">
       <a
         href="https://github.com/southwest-ai-labs"
         target="_blank"
         rel="noopener noreferrer"
-        class="glass-card p-8 md:p-12 space-y-6 text-center block transition-all duration-300 hover:border-accent/40 hover:-translate-y-1 group cursor-pointer"
+        class="glass-card p-8 md:p-10 space-y-5 text-center block transition-all duration-300 hover:border-accent/40 hover:-translate-y-1 group cursor-pointer"
       >
         <p class="text-text-secondary text-sm leading-relaxed">
           {t('locale.announcement')}
@@ -143,6 +322,7 @@
       </a>
     </div>
 
+    <!-- Section Heading -->
     <div class="entry-clip">
       <span class="text-accent text-sm tracking-widest mb-4 block">{t('projects.heading')}</span>
       <h2 class="section-title">
@@ -153,91 +333,172 @@
       </p>
     </div>
 
-    <div class="project-list mt-16">
-      {#each projects as project, i (project.id)}
-        <article class="project-row entry-rise" style="animation-delay: {i * 110}ms">
-          <button
-            onclick={() => toggleProject(project.id)}
+    <!-- Category Filter Tabs -->
+    <div class="flex flex-wrap gap-3 mt-10 mb-12">
+      <button
+        onclick={() => (selectedCategory = 'all')}
+        class="px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer border {selectedCategory === 'all' ? 'bg-accent text-black border-accent shadow-lg shadow-accent/20' : 'bg-bg-surface-dark border-white/10 text-text-muted hover:border-accent/40 hover:text-white'}"
+      >
+        Todos ({projects.length})
+      </button>
+      <button
+        onclick={() => (selectedCategory = 'production')}
+        class="px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer border {selectedCategory === 'production' ? 'bg-accent text-black border-accent shadow-lg shadow-accent/20' : 'bg-bg-surface-dark border-white/10 text-text-muted hover:border-accent/40 hover:text-white'}"
+      >
+        Producción &amp; Industria (10+ Años)
+      </button>
+      <button
+        onclick={() => (selectedCategory = 'opensource')}
+        class="px-5 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer border {selectedCategory === 'opensource' ? 'bg-accent text-black border-accent shadow-lg shadow-accent/20' : 'bg-bg-surface-dark border-white/10 text-text-muted hover:border-accent/40 hover:text-white'}"
+      >
+        Open Source &amp; Deep Tech
+      </button>
+    </div>
+
+    <!-- Projects List -->
+    <div class="project-list">
+      {#each filteredProjects as project, i (project.id)}
+        <article class="project-row entry-rise" style="animation-delay: {i * 70}ms">
+          <div
             onmousemove={handleMouseMove}
-            class="w-full text-left glass-card p-6 md:p-8 transition-all duration-500 cursor-pointer"
-            style:border-color={expandedProject === project.id ? 'var(--color-accent)' : 'rgba(255,255,255,0.05)'}
+            class="w-full text-left glass-card p-6 md:p-8 transition-all duration-500 rounded-xl"
+            style:border-color={expandedProject === project.id ? 'var(--color-accent)' : 'rgba(255,255,255,0.08)'}
           >
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <!-- Card Header -->
+            <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
               <div class="flex-1">
                 <div class="flex items-center gap-3 mb-2 flex-wrap">
                   <h3 class="text-2xl font-bold text-text-primary">{project.name}</h3>
-                  <span class="px-2 py-0.5 rounded text-xs bg-bg-surface border border-white/10 text-text-muted">{project.version}</span>
-                  {#if project.status === 'active'}
-                    <span class="status-chip status-live"><span></span>Live</span>
+                  <span class="px-2.5 py-0.5 rounded text-[11px] font-mono bg-bg-surface border border-white/10 text-text-muted">
+                    {project.period}
+                  </span>
+                  {#if project.status === 'production'}
+                    <span class="status-chip status-live"><span></span>Producción</span>
+                  {:else if project.status === 'active'}
+                    <span class="status-chip status-live"><span></span>Activo</span>
                   {:else if project.status === 'beta'}
                     <span class="status-chip status-beta">Beta</span>
                   {:else}
-                    <span class="status-chip status-prototype"><span></span>Prototype</span>
+                    <span class="status-chip status-prototype"><span></span>Prototipo</span>
                   {/if}
+                  <span class="text-xs font-mono text-accent/80">
+                    // {project.companyOrContext}
+                  </span>
                 </div>
-                <p class="text-accent/70 text-sm mb-3">{project.tagline}</p>
-                <p class="text-text-muted leading-relaxed">{project.description}</p>
+                <p class="text-accent text-sm font-mono mb-3">{project.tagline}</p>
+                <p class="text-text-muted leading-relaxed text-sm md:text-base">{project.description}</p>
               </div>
-              <div class="flex items-center gap-4 shrink-0">
-                <div class="hidden md:flex flex-wrap gap-2">
-                  {#each project.tech.slice(0, 3) as tech}
+
+              <div class="flex flex-col items-end gap-3 shrink-0">
+                <div class="flex flex-wrap gap-1.5 max-w-[280px] justify-end">
+                  {#each project.tech.slice(0, 4) as tech}
                     <span class="tech-badge">{tech}</span>
                   {/each}
+                  {#if project.tech.length > 4}
+                    <span class="tech-badge opacity-75">+{project.tech.length - 4}</span>
+                  {/if}
                 </div>
-                <svg
-                  class="w-5 h-5 text-text-muted shrink-0 transition-all duration-300"
-                  style:transform={`rotate(${expandedProject === project.id ? 180 : 0}deg)`}
-                  style:color={expandedProject === project.id ? 'var(--color-accent)' : 'var(--color-text-muted)'}
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                
+                <button
+                  onclick={() => toggleProject(project.id)}
+                  class="mt-2 inline-flex items-center gap-2 text-xs font-mono font-bold text-accent hover:text-white px-3 py-1.5 rounded-lg border border-accent/30 hover:border-accent bg-accent/5 transition-all duration-200 cursor-pointer"
                 >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
+                  <span>{expandedProject === project.id ? 'Ocultar Detalles' : 'Ver Arquitectura & Métricas'}</span>
+                  <svg
+                    class="w-4 h-4 transition-transform duration-300"
+                    style:transform={`rotate(${expandedProject === project.id ? 180 : 0}deg)`}
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
               </div>
             </div>
 
+            <!-- Expandable Deep Dive Panel -->
             {#if expandedProject === project.id}
-              <div class="details-panel mt-8 pt-8 border-t border-white/5">
-                <div class="grid md:grid-cols-5 gap-8">
-                  <div class="md:col-span-2">
-                    <h4 class="text-sm text-text-muted mb-4 uppercase tracking-wider">{t('projects.techStack')}</h4>
+              <div class="details-panel mt-8 pt-8 border-t border-white/10 space-y-8">
+                <!-- Architecture & Metrics Grid -->
+                <div class="grid md:grid-cols-2 gap-8">
+                  <!-- Architecture Breakdown -->
+                  <div class="space-y-4">
+                    <h4 class="text-xs font-mono text-accent uppercase tracking-wider flex items-center gap-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                      Arquitectura &amp; Decisiones Técnicas
+                    </h4>
+                    <p class="text-text-secondary text-sm leading-relaxed bg-bg-surface-dark/60 p-4 rounded-lg border border-white/5 font-mono">
+                      {project.architecture}
+                    </p>
+
+                    <h4 class="text-xs font-mono text-accent uppercase tracking-wider pt-2 flex items-center gap-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                      Stack Técnico Completo
+                    </h4>
                     <div class="flex flex-wrap gap-2">
                       {#each project.tech as tech}
                         <span class="tech-badge tech-badge-strong">{tech}</span>
                       {/each}
                     </div>
-                    {#if project.github}
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="repo-link"
-                      >
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                        {t('projects.repository')}
-                      </a>
-                    {/if}
                   </div>
-                  <div class="md:col-span-3">
-                    <h4 class="text-sm text-text-muted mb-4 uppercase tracking-wider">{t('projects.timeline')}</h4>
-                    {#each project.timeline as event, ti}
-                      <div class="timeline-item">
-                        <div class="timeline-marker">
-                          <div class="w-3 h-3 rounded-full border-2 shrink-0" style:border-color={project.color}></div>
-                          {#if ti < project.timeline.length - 1}
-                            <div class="w-0.5 flex-1 mt-1 bg-white/10"></div>
-                          {/if}
+
+                  <!-- Key Metrics & Insights -->
+                  <div class="space-y-4">
+                    <h4 class="text-xs font-mono text-secondary uppercase tracking-wider flex items-center gap-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                      Métricas de Rendimiento &amp; Resultados
+                    </h4>
+                    <div class="space-y-2.5">
+                      {#each project.metrics as metric}
+                        <div class="flex items-start gap-2.5 text-sm text-text-secondary bg-bg-surface-dark/40 p-3 rounded border border-white/5">
+                          <span class="text-secondary font-mono text-xs mt-0.5">✓</span>
+                          <span>{metric}</span>
                         </div>
-                        <div>
-                          <span class="text-xs" style:color={project.color}>{event.date}</span>
-                          <p class="text-sm text-text-secondary mt-0.5">{event.label}</p>
-                        </div>
+                      {/each}
+                    </div>
+
+                    <!-- Links & Actions -->
+                    <div class="pt-3 flex flex-wrap gap-3">
+                      {#if project.github}
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="repo-link"
+                        >
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                          <span>Ver Repositorio</span>
+                        </a>
+                      {/if}
+                      {#if project.demoUrl}
+                        <a
+                          href={project.demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="repo-link border-accent/30 text-accent hover:border-accent"
+                        >
+                          <span class="text-xs">↗</span>
+                          <span>Visitar Producción / Web</span>
+                        </a>
+                      {/if}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Timeline & Milestones -->
+                <div class="pt-6 border-t border-white/5">
+                  <h4 class="text-xs font-mono text-text-muted mb-4 uppercase tracking-wider">Cronograma &amp; Hitos Clave</h4>
+                  <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {#each project.timeline as event}
+                      <div class="p-3.5 rounded bg-bg-surface-dark/50 border border-white/5 space-y-1">
+                        <span class="text-xs font-mono font-bold" style:color={project.color}>{event.date}</span>
+                        <p class="text-xs text-text-secondary leading-relaxed">{event.label}</p>
                       </div>
                     {/each}
                   </div>
                 </div>
               </div>
             {/if}
-          </button>
+          </div>
         </article>
       {/each}
     </div>
@@ -247,15 +508,7 @@
 <style>
   .project-list {
     display: grid;
-    gap: 2rem;
-  }
-
-  .project-row:nth-child(even) {
-    margin-left: clamp(0rem, 6vw, 4rem);
-  }
-
-  .project-row:nth-child(3n) {
-    margin-right: clamp(0rem, 4vw, 3rem);
+    gap: 1.5rem;
   }
 
   .status-chip {
@@ -266,6 +519,7 @@
     border-width: 1px;
     padding: 0.125rem 0.5rem;
     font-size: 0.75rem;
+    font-family: monospace;
   }
 
   .status-chip span {
@@ -277,7 +531,7 @@
 
   .status-live {
     background: rgba(16, 185, 129, 0.1);
-    border-color: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.3);
     color: var(--color-accent);
   }
 
@@ -287,20 +541,18 @@
 
   .status-beta {
     background: rgba(6, 182, 212, 0.1);
-    border-color: rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.3);
     color: var(--color-secondary);
   }
 
-  .status-dev,
   .status-prototype {
-    background: rgba(5, 150, 105, 0.1);
-    border-color: rgba(5, 150, 105, 0.2);
-    color: var(--color-accent-dark);
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
   }
 
-  .status-dev span,
   .status-prototype span {
-    background: var(--color-accent-dark);
+    background: #f59e0b;
   }
 
   .tech-badge {
@@ -308,19 +560,19 @@
     align-items: center;
     gap: 0.375rem;
     border-radius: 9999px;
-    border: 1px solid rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.15);
     background: rgba(16, 185, 129, 0.05);
-    padding: 0.25rem 0.75rem;
+    padding: 0.2rem 0.6rem;
     color: var(--color-accent);
     font-size: 10px;
+    font-family: monospace;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     transition: color 200ms ease, border-color 200ms ease;
   }
 
   .tech-badge-strong {
-    border-color: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.1);
     color: var(--color-accent);
   }
 
@@ -328,42 +580,29 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 2rem;
-    border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.625rem 1.25rem;
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0.5rem 1rem;
+    color: var(--color-text-primary);
+    font-size: 0.8rem;
+    font-family: monospace;
     transition: color 200ms ease, border-color 200ms ease, transform 200ms ease;
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .repo-link:hover {
     border-color: var(--color-accent);
-    color: var(--color-text-primary);
-    transform: translateX(2px);
+    color: var(--color-accent);
+    transform: translateY(-1px);
   }
 
   .details-panel {
-    animation: detailsOpen 360ms cubic-bezier(.16, 1, .3, 1) both;
-  }
-
-  .timeline-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding-bottom: 1.5rem;
-  }
-
-  .timeline-marker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: stretch;
+    animation: detailsOpen 300ms cubic-bezier(.16, 1, .3, 1) both;
   }
 
   @keyframes detailsOpen {
-    from { opacity: 0; clip-path: inset(0 0 100% 0); }
-    to { opacity: 1; clip-path: inset(0 0 0 0); }
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes pulse {

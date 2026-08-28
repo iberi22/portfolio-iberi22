@@ -358,6 +358,26 @@
     <!-- Projects List -->
     <div class="project-list">
       {#each filteredProjects as project, i (project.id)}
+        <!-- Section Delimiter for Open Source -->
+        {#if selectedCategory === 'all' && i === 0 && project.category === 'opensource'}
+          <div class="pt-2 pb-4 flex items-center gap-3">
+            <span class="text-xs font-mono font-bold tracking-widest text-accent uppercase">
+              // 01. Núcleos Deep Tech &amp; Ecosistema Open Source
+            </span>
+            <div class="flex-1 h-px bg-accent/20"></div>
+          </div>
+        {/if}
+
+        <!-- Section Delimiter for Labor Experience -->
+        {#if selectedCategory === 'all' && project.category === 'production' && (i === 0 || filteredProjects[i - 1].category !== 'production')}
+          <div class="pt-10 pb-4 flex items-center gap-3">
+            <span class="text-xs font-mono font-bold tracking-widest text-secondary uppercase">
+              // 02. Experiencias Laborales &amp; Software en Producción (10+ Años)
+            </span>
+            <div class="flex-1 h-px bg-secondary/30"></div>
+          </div>
+        {/if}
+
         <article class="project-row entry-rise" style="animation-delay: {i * 70}ms">
           <div
             onmousemove={handleMouseMove}
@@ -384,6 +404,20 @@
                   <span class="text-xs font-mono text-accent/80">
                     // {project.companyOrContext}
                   </span>
+
+                  <!-- Direct Web Link Pill -->
+                  {#if project.demoUrl}
+                    <a
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-mono text-accent bg-accent/10 border border-accent/30 hover:bg-accent/20 transition-colors"
+                      onclick={(e) => e.stopPropagation()}
+                    >
+                      <span>{project.demoUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
+                      <span class="text-[10px]">↗</span>
+                    </a>
+                  {/if}
                 </div>
                 <p class="text-accent text-sm font-mono mb-3">{project.tagline}</p>
                 <p class="text-text-muted leading-relaxed text-sm md:text-base">{project.description}</p>

@@ -16,6 +16,7 @@
     description: string;
     architecture: string;
     metrics: string[];
+    researchLinks?: { title: string; source: string; url: string }[];
     tech: string[];
     github?: string;
     demoUrl?: string;
@@ -94,16 +95,38 @@
     {
       id: 'photon-core',
       name: 'Photon-Core',
-      tagline: '5D Optical Storage Simulation',
+      tagline: '5D Optical Memory Simulation (PoC) & Academic Research',
       version: 'v1.0.0-poc',
       category: 'opensource',
       status: 'active',
-      companyOrContext: 'Deep Tech Lab',
+      companyOrContext: 'Investigación Universitaria & SWAL Lab Roadmap',
       period: '2025 - 2026',
-      description: 'Framework de simulación de física óptica de alto rendimiento en Rust para almacenamiento volumétrico de datos 5D en cristales de sílice fundida. Modela birrefringencia por láser de femtosegundo, crosstalk espacial 3D, corrección de errores Reed-Solomon y esteganografía multidimensional.',
-      architecture: 'Modelado matemático de voxels fotónicos con paralelismo Rayon en Rust. Codificación Reed-Solomon entrelazada y simulación de degradación térmica/mecánica.',
-      metrics: ['Rendimiento de codificación >470 MB/s', 'Corrección de errores Reed-Solomon con tolerancia >30% crosstalk', 'Publicación académica de soporte'],
-      tech: ['Rust', 'Physics Sim', 'Reed-Solomon ECC', 'Steganography', 'Rayon Parallelism'],
+      description: 'Investigación universitaria de mi autoría y propiedad intelectual, desarrollada como base científica y hoja de ruta para que SouthWest AI Labs experimente con futuras capacidades de almacenamiento volumétrico ultra-denso. Es una prueba de concepto (PoC) y software de simulación en Rust que modela la física óptica de pulsos láser de femtosegundo en sílice fundida, corrección de errores Reed-Solomon, birrefringencia y mitigación de crosstalk 3D.',
+      architecture: 'Simulador determinista en Rust que modela la interacción física entre luz y vidrio de sílice fundida: retardo óptico (slow axis) y orientación del eje óptico como 2 dimensiones adicionales a los ejes espaciales (X, Y, Z). Incluye paralelismo Rayon para evaluar tasas de codificación teóricas >470 MB/s y corrección Reed-Solomon entrelazada.',
+      metrics: [
+        'Simulación matemática y software PoC de autoría propia',
+        'Rendimiento de codificación computacional >470 MB/s',
+        'Tolerancia a crosstalk espacial 3D >30% con Reed-Solomon ECC',
+        'Base de investigación para el Roadmap físico de SWAL'
+      ],
+      researchLinks: [
+        {
+          title: '5D Data Storage in Glass (ORC Southampton: 360 TB & billion-year survival)',
+          source: 'University of Southampton Optoelectronics Research Centre',
+          url: 'https://www.southampton.ac.uk/news/2016/02/5d-data-storage-hundred-billion-years.page'
+        },
+        {
+          title: 'Project Silica: Storing data in glass for thousands of years with ultrafast laser',
+          source: 'Microsoft Research',
+          url: 'https://www.microsoft.com/en-us/research/project/project-silica/'
+        },
+        {
+          title: 'High-speed ultrafast laser 5D optical data storage in fused silica',
+          source: 'Optica Publishing Group / SPIE',
+          url: 'https://opg.optica.org/optica/fulltext.cfm?uri=optica-8-11-1424'
+        }
+      ],
+      tech: ['Rust', 'Physics Sim', 'Reed-Solomon ECC', 'Steganography', 'Rayon Parallelism', 'Optical Voxel Math'],
       github: 'https://github.com/iberi22/photon-core',
       color: 'var(--color-accent)',
       timeline: [
@@ -517,6 +540,42 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Academic Research & News References (if available) -->
+                {#if project.researchLinks && project.researchLinks.length > 0}
+                  <div class="pt-6 border-t border-white/5 space-y-3">
+                    <h4 class="text-xs font-mono text-accent uppercase tracking-wider flex items-center gap-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                      Estudios Científicos &amp; Noticias del Avance Tecnológico (Memoria 5D en Vidrio)
+                    </h4>
+                    <p class="text-text-muted text-xs font-mono leading-relaxed">
+                      Publicaciones científicas globales e hitos que respaldan la viabilidad teórica de este modelo de simulación y roadmap:
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-3 pt-1">
+                      {#each project.researchLinks as link}
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="flex flex-col justify-between p-3.5 rounded-lg bg-bg-surface-dark/70 border border-white/10 hover:border-accent/50 hover:bg-accent/5 transition-all text-xs font-mono group cursor-pointer"
+                        >
+                          <div class="space-y-1">
+                            <span class="text-text-primary group-hover:text-accent font-bold leading-snug line-clamp-2 block">
+                              {link.title}
+                            </span>
+                            <span class="text-text-muted text-[11px] block">
+                              {link.source}
+                            </span>
+                          </div>
+                          <div class="flex items-center gap-1 text-accent text-[11px] font-bold mt-3 pt-2 border-t border-white/5">
+                            <span>Leer Estudio / Noticia</span>
+                            <span>↗</span>
+                          </div>
+                        </a>
+                      {/each}
+                    </div>
+                  </div>
+                {/if}
 
                 <!-- Timeline & Milestones -->
                 <div class="pt-6 border-t border-white/5">

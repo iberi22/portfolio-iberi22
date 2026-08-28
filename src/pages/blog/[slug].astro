@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.svelte';
 import Footer from '../../components/Footer.svelte';
 import { baseUrl } from '../../lib/baseUrl';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -14,23 +14,125 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+const { Content } = await render(post);
 ---
 
 <Layout>
   <Nav client:load />
-  <main class="min-h-screen flex items-center justify-center px-6 pt-24">
-    <section class="max-w-2xl mx-auto text-center">
-      <span class="text-accent text-sm tracking-widest mb-4 block"># blog</span>
-      <h1 class="section-title">
-        Contenido desactivado
-      </h1>
-      <p class="text-text-muted text-lg mt-4 leading-relaxed">
-        La ruta <code class="text-accent">{post.id}</code> se mantiene solo para no romper enlaces antiguos.
-      </p>
-      <a href={baseUrl('blog/')} class="btn-primary mt-10 inline-flex">
-        Volver al blog
-      </a>
-    </section>
+  <main class="min-h-screen px-6 pt-32 pb-24">
+    <article class="max-w-4xl mx-auto">
+      <div class="mb-12 border-b border-white/10 pb-8">
+        <a href={baseUrl('blog/')} class="text-accent text-xs font-mono tracking-widest uppercase mb-6 inline-flex items-center gap-1 hover:underline">
+          ← Volver a artículos
+        </a>
+        <div class="flex items-center gap-4 text-xs font-mono text-text-muted mb-4 mt-2">
+          <span>{post.data.date}</span>
+          <span>·</span>
+          <span>Arquitectura Agéntica</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-text-primary mb-6 leading-tight">
+          {post.data.title}
+        </h1>
+        <div class="flex flex-wrap gap-2">
+          {post.data.tags.map((tag) => (
+            <span class="text-xs font-mono px-3 py-1 rounded bg-white/5 text-accent border border-accent/20">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div class="markdown-body prose prose-invert max-w-none text-text-primary">
+        <Content />
+      </div>
+
+      <div class="mt-16 pt-8 border-t border-white/10 flex justify-between items-center">
+        <a href={baseUrl('blog/')} class="btn-secondary text-sm">
+          ← Ver todos los artículos
+        </a>
+        <a href={baseUrl('agenda/')} class="btn-primary text-sm">
+          Agendar sesión técnica →
+        </a>
+      </div>
+    </article>
   </main>
   <Footer client:load />
 </Layout>
+
+<style is:global>
+  .markdown-body h1,
+  .markdown-body h2,
+  .markdown-body h3,
+  .markdown-body h4 {
+    color: var(--color-text-primary);
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+  .markdown-body h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.5rem;
+    color: var(--color-accent);
+  }
+  .markdown-body h3 {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+  }
+  .markdown-body p {
+    color: #d1d5db;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+  .markdown-body ul,
+  .markdown-body ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1.25rem;
+    color: #d1d5db;
+  }
+  .markdown-body li {
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+  }
+  .markdown-body pre {
+    background: #0d0d0e !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-family: var(--font-fira);
+    font-size: 0.875rem;
+  }
+  .markdown-body code {
+    font-family: var(--font-fira);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.875em;
+    color: #67e8f9;
+  }
+  .markdown-body pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+  .markdown-body hr {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 2.5rem 0;
+  }
+  .markdown-body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .markdown-body blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+</style>

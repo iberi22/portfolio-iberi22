@@ -1,37 +1,56 @@
 ---
-title: 'Offline-First Architecture for Mobile'
-excerpt: 'Patterns and trade-offs for building resilient mobile apps with Flutter.'
+title: 'Arquitectura Offline-First para Aplicaciones Móviles Críticas'
+excerpt: 'Patrones de resiliencia, sincronización CRDT y almacenamiento cifrado local con Flutter implementados en OrionHealth.'
 date: '2026-05-07'
-tags: ['Flutter', 'Mobile', 'Architecture']
-draft: true
-published: false
+tags: ['Flutter', 'Mobile', 'Offline-First', 'SQLite', 'Security']
+draft: false
+published: true
 ---
 
-## The Constraint
+# Arquitectura Offline-First para Aplicaciones Móviles Críticas
 
-Connectivity is a privilege, not a guarantee. In industrial environments, mining operations, and remote field work — the network drops. Apps that require always-on connectivity fail exactly when they're needed most.
+La conectividad a internet en el mundo real es un privilegio, no una garantía. En sectores como la salud, operaciones industriales, minería o trabajo de campo en zonas remotas, la red se degrada o desaparece por completo. Las aplicaciones que exigen conexión permanente fallan precisamente en el momento más crítico.
 
-## The Approach
+La arquitectura **Offline-First** establece que la aplicación debe ser **100% operativa sin conexión a internet**. La sincronización con el servidor pasa a ser un proceso secundario en segundo plano, nunca un bloqueador de la experiencia de usuario.
 
-**Offline-first** means the app works fully without internet. Sync is a background concern, not a gate.
+---
 
-### Core Patterns
+## 1. Patrones Fundamentales
 
-1. **Local storage as source of truth** — SQLite/WAL mode for transactional integrity
-2. **Encrypted at rest** — health data is sensitive, AES-256-GCM on device
-3. **Sync engine** — background reconciliation with CRDT-inspired conflict resolution
-4. **Optimistic UI** — every write reflects instantly, sync happens later
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 OFFLINE-FIRST MOBILE PIPELINE               │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  [UI Layer] ──► [Optimistic Local Store (SQLite/WAL)]       │
+│                           │                                 │
+│                           ▼                                 │
+│                 [AES-256-GCM Encryption]                    │
+│                           │                                 │
+│                           ▼ (Background Queue)              │
+│                 [CRDT Reconciliation Engine]                │
+│                           │                                 │
+│                           ▼                                 │
+│                 [Remote Cloud / Backend Sync]               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
 
-### Trade-offs
+1. **Almacenamiento Local como Fuente de Verdad:** Base de datos SQLite local configurada en modo WAL (*Write-Ahead Logging*) para garantizar transaccionalidad inmediata y lecturas no bloqueantes.
+2. **Cifrado en Reposo (Zero-Knowledge):** Al tratar información sensible y de salud, toda la base de datos se cifra en el dispositivo mediante **AES-256-GCM / SQLCipher**.
+3. **Motor de Sincronización Basado en CRDTs:** Reconciliación en segundo plano inspirada en tipos de datos libres de conflicto (*Conflict-Free Replicated Data Types*) para resolver discrepancias temporales entre dispositivos.
+4. **UI Optimista Inmediata:** Cualquier acción o registro se refleja al instante en la interfaz de usuario con latencia de 0 ms; la cola de sincronización despacha los cambios cuando la red esté disponible.
 
-- **Storage complexity** — conflict resolution adds real engineering cost
-- **Sync latency** — users may see stale data across devices
-- **Initial download** — first sync can be large
+---
 
-## OrionHealth
+## 2. Trade-offs y Decisiones de Ingeniería
 
-This architecture powers [OrionHealth](https://github.com/iberi22/OrionHealth), an offline-first health tracker built in Flutter with encrypted local storage and a robust sync engine.
+- **Complejidad de Resolución de Conflictos:** La reconciliación multiversión añade coste de ingeniería, pero elimina la pérdida de datos del usuario.
+- **Latencia de Propagación:** En entornos distribuidos, la consistencia eventual es la compensación natural por una disponibilidad absoluta del 100%.
+- **Gestión de Migraciones:** Los esquemas locales deben soportar migraciones incrementales automáticas sin tiempo de inactividad ni corrupción de datos.
 
-## What's Next
+---
 
-Multi-device sync GA, end-to-end encryption verification, and zero-downtime schema migrations.
+## 3. Implementación Real: OrionHealth
+
+Esta arquitectura es el núcleo que impulsa a **[OrionHealth](https://github.com/iberi22/OrionHealth)**, un gestor de salud y telemetría médica personal construido en **Flutter & Dart**, con almacenamiento local cifrado, motor de sincronización asíncrono y control de privacidad estricto.

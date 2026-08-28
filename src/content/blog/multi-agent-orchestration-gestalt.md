@@ -1,33 +1,60 @@
 ---
-title: 'Multi-Agent Orchestration with Gestalt'
-excerpt: 'Designing a CLI orchestrator that coordinates multiple AI agents using SurrealDB.'
+title: 'Orquestación Multi-Agente con Gestalt: Coordinación Determinista en Rust'
+excerpt: 'Diseño y fundamentos de un orquestador CLI en Rust para coordinar enjambres de agentes autónomos con estado persistente en SurrealDB y protocolos inter-agente.'
 date: '2026-05-07'
-tags: ['Rust', 'Agents', 'Architecture']
-draft: true
-published: false
+tags: ['Rust', 'Multi-Agent', 'SurrealDB', 'Architecture', 'Systems']
+draft: false
+published: true
 ---
 
-## The Challenge
+# Orquestación Multi-Agente con Gestalt: Coordinación Determinista en Rust
 
-Single-agent systems are limited. True intelligence emerges from coordination — multiple agents working together, sharing context, and delegating tasks.
+Los sistemas basados en un único agente son intrínsecamente limitados frente a proyectos complejos. La verdadera inteligencia operativa y la escalabilidad técnica emergen de la **coordinación estructurada**: múltiples agentes especializados colaborando, compartiendo contexto y delegando tareas de forma asíncrona.
 
-Enter **Gestalt**: a CLI orchestrator built in Rust, designed from the ground up for multi-agent coordination.
+Bajo este principio diseñamos **[Gestalt](https://github.com/iberi22/gestalt)**: un orquestador CLI de alto rendimiento construido en **Rust**, concebido específicamente para coordinar enjambres de agentes de código y procesos distribuidos.
 
-## Architecture
+---
 
-- **SurrealDB** for persistent state management across agents
-- **Role-based routing** — agents specialize, the orchestrator delegates
-- **Inter-agent protocol** — structured communication between agents
-- **CLI-first** — no GUI overhead, pure terminal utility
+## 1. El Desafío Arquitectónico
 
-## Key Insights
+Cuando múltiples agentes interactúan en una misma base de código o pipeline, surgen tres cuellos de botella críticos:
+- **Pérdida de Estado Compartido:** Sin un almacén de estado persistente y transaccional, cada agente opera como una isla aislada.
+- **Acoplamiento a Modelos Específicos:** Atar la lógica del orquestador a un único proveedor o modelo de lenguaje limita la resiliencia y el fallback.
+- **Falta de Idempotencia:** Las acciones ejecutadas por agentes deben poder reintentarse de forma determinista sin generar efectos colaterales destructivos.
 
-1. **State is the bottleneck** — without shared persistent state, agents are islands
-2. **Roles over models** — an orchestrator shouldn't care which LLM an agent uses, only what role it fulfills
-3. **Idempotency matters** — agent actions should be retryable without side effects
+---
 
-## Roadmap
+## 2. Pilares de la Arquitectura
 
-Swarm intelligence patterns, dynamic agent spawning, and production-level error recovery.
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    GESTALT ORCHESTRATOR                     │
+├─────────────────────────────────────────────────────────────┤
+│  1. SurrealDB State Engine (Persistencia multi-modelo)      │
+│  2. Role-Based Routing (Especialización sobre modelos)      │
+│  3. Structured Inter-Agent IPC Protocol (Mensajería tipada) │
+│  4. CLI-First Interface (Cero sobrecarga de UI, Rust puro)  │
+└─────────────────────────────────────────────────────────────┘
+```
 
-Stay tuned.
+- **SurrealDB para Gestión de Estado Persistente:** Almacena grafos de dependencias, relaciones entre tareas y el histórico de ejecución de cada subagente.
+- **Enrutamiento Basado en Roles (Roles over Models):** El orquestador no delega en función del nombre del LLM, sino del **rol funcional** (ej. Arquitecto de Tipos, Verificador de Tests, Implementador de Core, Auditor de Seguridad).
+- **Protocolo Inter-Agente Estructurado:** Mensajería tipada y validación formal de contratos antes de transferir artefactos entre agentes.
+- **Filosofía CLI-First:** Rendimiento extremo, integración directa con scripts de Unix y compatibilidad con pipelines de CI/CD.
+
+---
+
+## 3. Principios y Aprendizajes Clave
+
+1. **El Estado es el Cuello de Botella:** La memoria compartida y la base de datos de grafos determinan el límite de complejidad que un enjambre puede resolver.
+2. **Idempotencia Obligatoria:** Cada transición de estado debe ser atómica y verificable mediante suites de tests locales.
+3. **Aislamiento en VFS:** Los agentes ejecutan modificaciones dentro de sandboxes o espacios de trabajo aislados antes del merge final.
+
+---
+
+## 4. Roadmap & Próximos Pasos
+
+El desarrollo continuo de Gestalt se enfoca en tres áreas clave:
+- Patrones avanzados de inteligencia de enjambre (*swarm intelligence*).
+- Despacho y creación dinámica de agentes bajo demanda con presupuestos de cómputo adaptativos.
+- Recuperación automática de fallos y auditoría de invariantes en tiempo de ejecución.

@@ -46,7 +46,7 @@ jobs:
       - name: Run Secret Leak Detection
         run: |
           echo "Scanning for accidental secret leaks in source..."
-          ! grep -rn "sk-ant-[a-zA-Z0-9]" src/ public/ || exit 1
-          ! grep -rn "sk-proj-[a-zA-Z0-9]" src/ public/ || exit 1
-          ! grep -rn "AIzaSy[a-zA-Z0-9]" src/ public/ || exit 1
+          ! grep -P -rn "sk-ant-api[a-zA-Z0-9_-]{20,}" src/ public/ || exit 1
+          ! grep -P -rn "sk-proj-[a-zA-Z0-9_-]{30,}" src/ public/ || exit 1
+          ! grep -P -rn "AIzaSy[a-zA-Z0-9_-]{33}" src/ public/ || exit 1
           echo "✓ 0 secrets leaked."

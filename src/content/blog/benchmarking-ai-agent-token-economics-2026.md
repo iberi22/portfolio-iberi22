@@ -5,7 +5,7 @@ description: 'Comparativa técnica empírica de token economics entre Google Jul
 date: '2026-08-29'
 tags: ['AI Agents', 'LLM', 'Benchmarking', 'Jules', 'Claude Code', 'Ollama', 'DevOps']
 draft: false
-published: false
+published: true
 canonical: 'https://iberi22.github.io/portfolio-iberi22/blog/benchmarking-ai-agent-token-economics-2026/'
 readingTime: 14
 ---

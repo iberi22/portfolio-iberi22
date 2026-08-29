@@ -5,7 +5,7 @@ description: 'Guía de diseño de pipelines deterministas para coding agents: mi
 date: '2026-08-29'
 tags: ['AI Agents', 'Architecture', 'Software Engineering', 'DevOps', 'Multi-Agent']
 draft: false
-published: false
+published: true
 canonical: 'https://iberi22.github.io/portfolio-iberi22/blog/anti-drift-coding-agent-architecture/'
 readingTime: 12
 ---

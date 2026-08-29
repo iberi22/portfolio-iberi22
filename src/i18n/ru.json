@@ -6,110 +6,266 @@
     "contact": "Контакты",
     "git": "GIT",
     "github": "GITHUB",
-    "agenda": "Запись",
-    "simulator": "Simulator"
+    "agenda": "Консультация",
+    "simulator": "Симулятор ресурсов"
   },
   "hero": {
-    "badge": "Full-Stack инженер и специалист по оркестрации ИИ",
-    "firstName": "Сэмюэл",
+    "badge": "Ведущий Full-Stack разработчик · 10+ лет в Продакшене",
+    "firstName": "Брайан",
     "lastName": "Белалькасар",
-    "tagline": "Создание отказоустойчивых систем в масштабе.",
-    "taglineExtra": "Rust, оркестрация ИИ и облачные архитектуры.",
+    "tagline": "Промышленный софт, отточенный десятилетием реальной практики.",
+    "taglineExtra": "JavaScript, PHP, веб- и мобильные архитектуры — от идеи до внедрения в горнодобывающей промышленности, налоговом учете, издательстве и электронной коммерции.",
     "viewProjects": "Посмотреть проекты",
-    "getInTouch": "Связаться",
-    "scroll": "ПРОКРУТКА"
+    "getInTouch": "Связаться со мной",
+    "scroll": "ПРОКРУТИТЬ"
   },
   "about": {
     "heading": "# обо мне",
-    "title": "Проектирование",
-    "titleAccent": "отказоустойчивой",
-    "titleSuffix": "инфраструктуры",
-    "bio": "Я Брайан Белалькасар — Full-Stack и системный инженер с более чем 10-летним опытом разработки и внедрения production-решений в промышленном секторе, налоговой сфере, e-commerce и издательстве. Сочетаю инженерную экспертизу с ИИ-ускоренной разработкой для создания высокопроизводительных распределенных систем.",
-    "philosophy": "От оркестрации мультиагентных роев до создания офлайн-приложений для здоровья — каждый проект строится по одной философии:",
-    "philosophyAccent": "чистая архитектура, никаких компромиссов.",
+    "title": "Веб-инженерия",
+    "titleAccent": " Full-Stack",
+    "titleSuffix": " с десятилетним опытом",
+    "bio": "Я Брайан Белалькасар, разработчик Full-Stack с более чем 10 годами создания ПО в продакшене. Работал в различных отраслях: горная промышленность и энергетика (Tripro), налоговый и юридический консалтинг (Restrepo y Londoño), B2B/B2C e-commerce (Siesa Ecommerce), ERP (LogicalSoft) и издательство (Los Tres Editores). Мой стек — JavaScript и PHP на сеньор-уровне, совмещенный с ИИ-ускорением.",
+    "philosophy": "Я верю в завершенный цикл: каждая функция проходит через моделирование, реализацию, проверку и тестирование под контролем человека.",
+    "philosophyAccent": "быстро итерировать, всегда проверять, поставлять в продакшен.",
     "statProjects": "Ключевые проекты",
     "statStack": "Основной стек",
     "competencies": "Ключевые компетенции",
-    "stackIndex": "Индекс технологий"
+    "stackIndex": "Индекс технологий",
+    "yearsInProduction": "Лет в Продакшене",
+    "fullStackLabel": "Full-Stack JS · PHP · Rust · AI",
+    "specialties": {
+      "0x01": {
+        "title": "Full-Stack инженерия и продвинутый PHP",
+        "desc": "10+ лет в продакшене: архитектура проприетарных плагинов WordPress, кастомные темы с нуля, REST API, хуки и архитектуры Node.js."
+      },
+      "0x02": {
+        "title": "ИИ-каркасы, оркестрация и навыки",
+        "desc": "Детерминированные пайплайны с автономными агентами (Hermes, GitCore, Gestalt, Jules), создание навыков, скрипты QA и маршрутизация моделей."
+      },
+      "0x03": {
+        "title": "Системы, Rust и Offline-First Mobile",
+        "desc": "Высокопроизводительные сервисы на Rust, мобильные приложения на Flutter, зашифрованные локальные базы данных и WebAssembly."
+      },
+      "0x04": {
+        "title": "Реляционные и векторные базы данных",
+        "desc": "Проектирование схем в PostgreSQL/MySQL и локальный семантический поиск с pgvector, SQLite-vec и эпизодической памятью HNSW."
+      },
+      "0x05": {
+        "title": "Инфраструктура VPS, cPanel и хостинг",
+        "desc": "Развертывание серверов VPS на Linux/NixOS, администрирование cPanel/WHM, тюнинг Nginx/PHP-FPM и настройка SSL/DNS."
+      },
+      "0x06": {
+        "title": "Безопасность, харденинг и инструменты MCP",
+        "desc": "Аудит кода, сканирование уязвимостей, проприетарные антивирусные инструменты и инспекционные серверы по протоколу MCP."
+      }
+    },
+    "stackCategories": {
+      "cat1": "Языки и среды выполнения",
+      "cat2": "Веб, CMS и фреймворки",
+      "cat3": "Базы данных и векторный поиск",
+      "cat4": "ИИ-каркасы и оркестрация агентов",
+      "cat5": "Инфраструктура, серверы и DevSecOps"
+    }
   },
   "projects": {
     "heading": "# проекты",
     "title": "Создание",
-    "titleAccent": "отказоустойчивых",
+    "titleAccent": "распределенных",
     "titleSuffix": "систем",
-    "subtitle": "От ядер памяти ИИ до промышленного SaaS — каждый проект расширяет границы.",
+    "subtitle": "От промышленной телеметрии до ядер памяти ИИ — каждый проект закрывает цикл через симуляцию и помощь ИИ.",
     "techStack": "Технологический стек",
     "timeline": "Хронология и дорожная карта",
-    "repository": "Репозиторий"
+    "repository": "Репозиторий",
+    "filter": {
+      "all": "Все",
+      "production": "Продакшен и индустрия (10+ лет)",
+      "opensource": "Open Source и Deep Tech"
+    },
+    "section": {
+      "opensource": "// 01. Deep Tech ядра и Open Source экосистема",
+      "production": "// 02. Профессиональный опыт и софт в продакшене (10+ лет)"
+    },
+    "status": {
+      "production": "Продакшен",
+      "active": "Активен",
+      "beta": "Бета",
+      "prototype": "Прототип"
+    },
+    "btn": {
+      "showDetails": "Посмотреть архитектуру и метрики",
+      "hideDetails": "Скрыть детали",
+      "viewRepo": "Репозиторий",
+      "visitDemo": "Сайт проекта",
+      "readStudy": "Научная статья"
+    },
+    "label": {
+      "architecture": "Архитектура и технические решения",
+      "stack": "Полный стек технологий",
+      "metrics": "Метрики производительности и результаты",
+      "research": "Научные исследования (5D Glass Memory)",
+      "researchDesc": "Публикации и научные вехи, подтверждающие теоретическую модель:",
+      "timeline": "Хронология и этапы"
+    },
+    "xavier2": {
+      "name": "Xavier",
+      "tagline": "Когнитивное ядро памяти для ИИ",
+      "companyOrContext": "SouthWest AI Labs",
+      "period": "2025 - Настоящее время",
+      "description": "Постоянное локальное ядро когнитивной памяти для агентов ИИ на Rust. Контейнеризованный микросервис Docker, предоставляющий векторное хранилище, индекс семантического поиска HNSW и графы знаний.",
+      "architecture": "Движок на Rust со SQLite-vec и pgvector. Векторный поиск по косинусному сходству с локальными эмбеддингами без внешних облаков.",
+      "metrics": [
+        "Задержка поиска <10мс на локальных индексах",
+        "100% автономность без привязки к облаку",
+        "Интеграция с Hermes и Gestalt"
+      ],
+      "timeline": [
+        { "date": "2025 Q4", "label": "Архитектурный дизайн и уровень векторного хранения на Rust" },
+        { "date": "2026 Q1", "label": "Релиз v0.1 - CRUD-операции, локальные эмбеддинги и REST" },
+        { "date": "2026 Q2", "label": "v0.6.0-beta - Индексы HNSW, Docker и эпизодическая память" },
+        { "date": "2026 Q3", "label": "Дорожная карта: Интеграция семантических графов" }
+      ]
+    },
+    "gitcore": {
+      "name": "GitCore",
+      "tagline": "Автономный мультиагентный оркестратор Git/GitHub",
+      "companyOrContext": "SouthWest AI Labs",
+      "period": "2026 - Настоящее время",
+      "description": "Детерминированный каркас для автономных кодинг-агентов (Jules, Claude Code, OpenCode). Автоматизирует создание задач, микрофрагментацию до 15 параллельных задач и слияние без конфликтов.",
+      "architecture": "Декуплированная архитектура на Rust и скриптах CLI. Система непересекающихся файловых островов.",
+      "metrics": [
+        "До 15 параллельных автономных задач",
+        "100% трассируемость через канонические задачи",
+        "0 конфликтов при слиянии PR"
+      ],
+      "timeline": [
+        { "date": "2026 Q1", "label": "Протокол задач и трассируемость агентов" },
+        { "date": "2026 Q2", "label": "Wave Operations: микрофрагментация на 15 задач" },
+        { "date": "2026 Q3", "label": "Интеграция с Hermes Gateway и предаудит" }
+      ]
+    },
+    "photon-core": {
+      "name": "Photon-Core",
+      "tagline": "Симуляция 5D оптического хранения данных",
+      "companyOrContext": "SouthWest AI Labs",
+      "period": "2026 - Настоящее время",
+      "description": "Фреймворк симуляции оптической физики на Rust для объемного 5D хранения данных в кристаллах плавленого кварца.",
+      "architecture": "Многопоточный движок на Rust с параллелизацией Rayon. Моделирование лазерного воздействия и коррекция ошибок Рида-Соломона.",
+      "metrics": [
+        "Пропускная способность кодирования >470 МБ/с",
+        "Симуляция 5D вокселей",
+        "Восстановление данных через ECC Рида-Соломона"
+      ],
+      "timeline": [
+        { "date": "2026 Q1", "label": "Математическая модель и определение фотонного вокселя" },
+        { "date": "2026 Q2", "label": "Интеграция ECC Рида-Соломона и 3D-перекрестных помех" },
+        { "date": "2026 Q3", "label": "Стеганографическое сокрытие данных и CLI-тулкит" }
+      ]
+    },
+    "gestalt": {
+      "name": "Gestalt",
+      "tagline": "Автономный роевой оркестратор",
+      "companyOrContext": "SouthWest AI Labs",
+      "period": "2025 - Настоящее время",
+      "description": "Оркестратор автономных роев и интеллектуальная маршрутизация мультиролевых агентов через CLI на Rust.",
+      "architecture": "Асинхронная архитектура на Tokio и SurrealDB для сохранения состояний и коммуникации между агентами.",
+      "metrics": [
+        "Маршрутизация агентов <5мс",
+        "Асинхронная модель состояний SurrealDB",
+        "Полный детерминизм в локальном окружении"
+      ],
+      "timeline": [
+        { "date": "2025 Q3", "label": "Прототип маршрутизации задач на SurrealDB" },
+        { "date": "2025 Q4", "label": "Мультиагентная координация и CLI" },
+        { "date": "2026 Q1", "label": "Интеграция с Xavier Memory Core" }
+      ]
+    },
+    "nvc": {
+      "tagline": "Офлайн голосовой ассистент",
+      "description": "Локальный голосовой ассистент, сочетающий аудиоядро на Rust и интерфейс на Flutter через Flutter Rust Bridge со распознаванием речи через Vosk.",
+      "t0": "Модульная архитектура на Rust",
+      "t1": "Захват аудио cpal и транскрипция Vosk",
+      "t2": "Интеграция Flutter Rust Bridge",
+      "t3": "Дорожная карта: локальный пайплайн LLM"
+    },
+    "orion": {
+      "tagline": "Offline-First экосистема здоровья",
+      "description": "Персональное приложение для здоровья без подключения к сети на Flutter и Dart с зашифрованным хранилищем SQLite.",
+      "t0": "Старт Flutter и локальные схемы",
+      "t1": "Offline-first с зашифрованным SQLite",
+      "t2": "Движок синхронизации и панель аналитики",
+      "t3": "Дорожная карта: облачная синхронизация"
+    },
+    "gos": {
+      "tagline": "Кулинарный PWA-сервис",
+      "description": "Монорепозиторий PWA для поиска ресторанов и офлайн-отзывов на Flutter и PWA.",
+      "t0": "Старт монорепозитория и дизайн-система",
+      "t1": "PWA shell, сервис-воркеры и офлайн-кэш",
+      "t2": "Бета-релиз с отзывами и сканированием меню",
+      "t3": "Дорожная карта: рекомендации на базе ИИ"
+    }
   },
   "blog": {
     "heading": "# блог",
-    "title": "Идеи",
-    "titleAccent": "и архитектура",
-    "subtitle": "Глубокое погружение в системную архитектуру, ИИ-инфраструктуру и инженерию моих проектов.",
+    "title": "Идеи и",
+    "titleAccent": "архитектура",
+    "subtitle": "Глубокие разборы архитектуры систем, инфраструктуры ИИ и инженерии моих проектов.",
     "draft": "Черновик",
     "comingSoon": "СКОРО",
-    "pipelineStatus": "Автоматический конвейер активен / Статус системы: норма"
+    "pipelineStatus": "Автоматический пайплайн активен / Статус системы: в норме"
   },
   "contact": {
     "heading": "# контакты",
     "title": "Давайте",
-    "titleAccent": "создадим",
-    "titleSuffix": "что-то надёжное",
-    "subtitle": "Работаете над ИИ-инфраструктурой, системной архитектурой или промышленной автоматизацией? Буду рад услышать.",
+    "titleAccent": "построим",
+    "titleSuffix": "масштабируемое решение",
+    "subtitle": "Нужен инженер с реальным опытом в продакшене и знанием различных бизнес-моделей? Напишите мне.",
     "emailPlaceholder": "ВАШ@EMAIL.COM",
-    "messagePlaceholder": "ОПИШИТЕ ВАШ ПРОЕКТ ИЛИ АРХИТЕКТУРУ...",
-    "submit": "НАЧАТЬ КОНТАКТ",
+    "messagePlaceholder": "ОПИШИТЕ ВАШ ПРОЕКТ ИЛИ ЗАДАЧУ...",
+    "submit": "ОТПРАВИТЬ ЗАПРОС",
     "email": "EMAIL"
   },
   "footer": {
-    "tagline": "Системный архитектор и разработчик",
-    "partOf": "Часть",
+    "tagline": "Ведущий Full-Stack разработчик",
+    "partOf": "Проект",
     "builtWith": "Создано с помощью"
   },
-  "locale": {
-    "label": "Язык",
-    "announcement": "Этот сайт говорит на вашем языке. Язык не является барьером для создания программного обеспечения в сообществе.",
-    "mission": "SouthWest AI Labs — это лаборатория идей для решений с интеграцией сообщества. Наша миссия: дать каждому доступ к передовым инструментам для проектирования информационных систем, улучшающих качество жизни.",
-    "accelerate": "Мы ускоряем системы, которые приносят качество жизни людям."
-  },
   "agenda": {
-    "badge": "TECHNICAL ADVISORY",
-    "title": "Book a technical session",
-    "subtitle": "Analysis and unification of your development resources — AI, automation and infrastructure — to sustainably optimize your software projects.",
-    "p1t": "Resource audit",
-    "p1d": "Full mapping of your current tools, AI agents, repositories and processes: what works, what's duplicated, what's missing.",
-    "p2t": "AI orchestration plan",
-    "p2d": "Concrete protocols to integrate autonomous agents into your workflow with reviews, tests and verifiable acceptance criteria.",
-    "p3t": "Long-term sustainability",
-    "p3d": "Reusable design systems, shared libraries and living documentation so maintenance never eats your velocity.",
-    "fmtTitle": "Session format",
-    "fmtDur": "Duration",
-    "fmtDurV": "60 minutes (remote)",
-    "fmtMod": "Format",
-    "fmtModV": "Video call + follow-up diagnostic document",
-    "fmtLang": "Languages",
-    "fmtLangV": "English / Español / 中文 +7",
-    "fmtFol": "Follow-up",
-    "fmtFolV": "First introductory session free of charge",
-    "topTitle": "Common topics",
-    "top1": "Set up an AI-agent-assisted development pipeline from scratch",
-    "top2": "Audit and unify scattered resources (repos, tooling, automations)",
-    "top3": "Local-first & privacy: run AI on your own hardware without cloud lock-in",
-    "top4": "Optimizing the throughput of existing dev teams",
-    "top5": "Sustainable architecture: design systems, shared libraries, technical debt",
-    "top6": "Technical viability assessment for ideas and digital products",
-    "slotsLabel": "Availability",
-    "slot1": "Mon–Fri · afternoons (GMT-5)",
-    "slot2": "Reply within 24h",
-    "slot3": "Limited slots per week",
-    "formTitle": "Book your session",
-    "formName": "Your name",
-    "formEmail": "Your email",
-    "formMsg": "Briefly tell me about your case: project, team, what you want to optimize…",
-    "formSubmit": "Send request",
-    "formNote": "Your mail client will open with the request ready to send. You can also write directly to iberi22@gmail.com",
-    "okTitle": "Request prepared!",
-    "okText": "Check your mail client and send the message. I'll reply within 24 hours."
+    "badge": "ТЕХНИЧЕСКИЙ КОНСАЛТИНГ",
+    "title": "Записаться на техническую сессию",
+    "subtitle": "Аудит и объединение ваших ресурсов разработки — ИИ, автоматизации и инфраструктуры — для устойчивой оптимизации ваших проектов.",
+    "p1t": "Аудит ресурсов",
+    "p1d": "Полный анализ ваших инструментов, ИИ-агентов, репозиториев и процессов: что работает, что дублируется, чего не хватает.",
+    "p2t": "План оркестрации ИИ",
+    "p2d": "Четкие протоколы внедрения автономных агентов в ваш процесс разработки с код-ревью, тестами и верификацией.",
+    "p3t": "Долгосрочная надежность",
+    "p3d": "Модульные дизайн-системы, библиотеки и живая документация, предотвращающие накопление технического долга.",
+    "fmtTitle": "Формат сессии",
+    "fmtDur": "Длительность",
+    "fmtDurV": "60 минут (удаленно)",
+    "fmtMod": "Формат",
+    "fmtModV": "Видеозвонок + подробный отчет с рекомендациями",
+    "fmtLang": "Языки",
+    "fmtLangV": "Русский / English / Español +7",
+    "fmtFol": "Стоимость",
+    "fmtFolV": "Первая вводная диагностическая сессия — бесплатно",
+    "topTitle": "Популярные темы",
+    "top1": "Настройка пайплайна с ИИ-агентами с нуля",
+    "top2": "Аудит и унификация разрозненных репозиториев и инструментов",
+    "top3": "Local-first и приватность: запуск ИИ на собственном оборудовании",
+    "top4": "Оптимизация скорости работы инженерных команд",
+    "top5": "Устойчивая архитектура: устранение техдолга и масштабирование",
+    "top6": "Оценка технической жизнеспособности цифровых продуктов",
+    "slotsLabel": "Доступность",
+    "slot1": "Пн–Пт · после полудня (GMT-5)",
+    "slot2": "Ответ в течение 24 часов",
+    "slot3": "Ограниченное количество мест в неделю",
+    "formTitle": "Забронировать консультацию",
+    "formName": "Ваше имя",
+    "formEmail": "Ваш email",
+    "formMsg": "Кратко опишите вашу задачу: проект, команда, что хотите оптимизировать…",
+    "formSubmit": "Отправить запрос",
+    "formNote": "Ваш почтовый клиент откроется с готовым сообщением. Вы также можете написать на iberi22@gmail.com",
+    "okTitle": "Запрос подготовлен!",
+    "okText": "Проверьте почтовую программу и отправьте письмо. Я отвечу в течение 24 часов."
   }
 }

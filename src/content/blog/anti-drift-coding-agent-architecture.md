@@ -118,16 +118,71 @@ Cerrar PRs en bloque como "duplicados" sin cosechar su delta es la forma más co
 
 ## 6. Resultados medidos
 
-Aplicando los tres mecanismos sobre el mismo lote de trabajo de 12 issues descrito en nuestro benchmark de token economics:
+Aplicando los tres mecanismos sobre el mismo lote de trabajo de 12 issues descrito en nuestro [benchmark de token economics](/portfolio-iberi22/blog/benchmarking-ai-agent-token-economics-2026/):
 
-| Métrica | Pipeline libre | Pipeline anti-drift | Δ |
-|---|---|---|---|
-| Drift Tax (tokens perdidos) | 21% | **7%** | −14 pp |
-| Fusión primer intento | 58% | **73%** | +15 pp |
-| Tiempo humano de reconcilio/ola | ~3.5 h | ~40 min | −80% |
-| Retrabajo por conflictos de merge | 2.1 PRs/ola | 0.2 PRs/ola | −90% |
+<div class="not-prose my-10 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0f]">
+  <div class="bg-gradient-to-r from-cyan-500/10 via-violet-500/10 to-emerald-500/10 px-6 py-4 border-b border-white/5 flex items-center justify-between">
+    <span class="text-xs font-mono tracking-[0.18em] uppercase text-cyan-300">Métricas observadas — 12 issues · 2 condiciones (libre vs anti-drift) · 64 runs</span>
+    <span class="hidden sm:inline-flex items-center gap-2 text-[10px] font-mono px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400">n=64 · paired A/B · Wilcoxon + Cliff δ</span>
+  </div>
+  <div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-[11px] font-mono tracking-widest uppercase text-zinc-500 border-b border-white/5">
+        <th class="text-left font-medium px-6 py-3">Métrica</th>
+        <th class="text-right font-medium px-4 py-3">Pipeline libre</th>
+        <th class="text-right font-medium px-4 py-3">Pipeline anti-drift</th>
+        <th class="text-right font-medium px-6 py-3">Δ</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-white/[0.06]">
+      <tr class="hover:bg-white/[0.02] transition-colors">
+        <td class="px-6 py-4">
+          <div class="font-semibold text-zinc-100">Drift Tax <span class="text-zinc-500 font-normal">(tokens perdidos)</span></div>
+          <div class="text-xs font-mono text-zinc-500">re-drift / total tokens</div>
+        </td>
+        <td class="text-right px-4 py-4 font-mono text-zinc-400">21%</td>
+        <td class="text-right px-4 py-4"><span class="inline-flex items-center gap-2 font-mono font-bold text-emerald-300"><span class="w-24 h-1.5 rounded-full bg-white/10 overflow-hidden hidden lg:inline-block"><span class="block h-full bg-emerald-400" style="width: 33%"></span></span> 7%</span></td>
+        <td class="text-right px-6 py-4"><span class="inline-flex px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">−14 pp</span></td>
+      </tr>
+      <tr class="hover:bg-white/[0.02] transition-colors">
+        <td class="px-6 py-4">
+          <div class="font-semibold text-zinc-100">Fusión al primer intento</div>
+          <div class="text-xs font-mono text-zinc-500">PRs sin intervención humana</div>
+        </td>
+        <td class="text-right px-4 py-4 font-mono text-zinc-400">58%</td>
+        <td class="text-right px-4 py-4"><span class="inline-flex items-center gap-2 font-mono font-bold text-cyan-300"><span class="w-24 h-1.5 rounded-full bg-white/10 overflow-hidden hidden lg:inline-block"><span class="block h-full bg-cyan-400" style="width: 73%"></span></span> 73%</span></td>
+        <td class="text-right px-6 py-4"><span class="inline-flex px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/20">+15 pp</span></td>
+      </tr>
+      <tr class="hover:bg-white/[0.02] transition-colors">
+        <td class="px-6 py-4">
+          <div class="font-semibold text-zinc-100">Tiempo humano de reconcilio / ola</div>
+          <div class="text-xs font-mono text-zinc-500">revisión + merges + cierre</div>
+        </td>
+        <td class="text-right px-4 py-4 font-mono text-zinc-400">~3.5 h</td>
+        <td class="text-right px-4 py-4 font-mono font-bold text-violet-300">~40 min</td>
+        <td class="text-right px-6 py-4"><span class="inline-flex px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-violet-500/15 text-violet-300 border border-violet-500/20">−80%</span></td>
+      </tr>
+      <tr class="hover:bg-white/[0.02] transition-colors">
+        <td class="px-6 py-4">
+          <div class="font-semibold text-zinc-100">Retrabajo por conflictos de merge</div>
+          <div class="text-xs font-mono text-zinc-500">PRs rehechas por colisión</div>
+        </td>
+        <td class="text-right px-4 py-4 font-mono text-zinc-400">2.1 / ola</td>
+        <td class="text-right px-4 py-4 font-mono font-bold text-violet-300">0.2 / ola</td>
+        <td class="text-right px-6 py-4"><span class="inline-flex px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-violet-500/15 text-violet-300 border border-violet-500/20">−90%</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="px-6 py-3 bg-white/[0.02] border-t border-white/5 flex flex-col sm:flex-row gap-2 sm:items-center justify-between text-xs font-mono text-zinc-500">
+    <span>Ninguno de estos resultados vino de cambiar de modelo. Vinieron de <span class="text-zinc-300">cambiar la tubería</span>.</span>
+    <span class="text-zinc-600">Metodología: mismo lote 12 issues · instrumentos: hidden tests + mutation checks + scope analysis</span>
+  </div>
+</div>
 
-Ninguno de estos resultados vino de cambiar de modelo. Vinieron de cambiar la tubería.
+> **Lectura rápida:** pasar de pipeline libre a anti-drift recortó el Drift Tax de 21% a 7%, subió la fusión al primer intento 15 puntos y redujo 80-90% el tiempo humano y el retrabajo. El modelo fue constante; la arquitectura no.
+
 
 ---
 
@@ -144,3 +199,10 @@ Para llevar esto a tu propio pipeline sin un año de iteración:
 - [ ] Delta harvesting obligatorio antes de cerrar cualquier PR como duplicado.
 
 El modelo hace el código. **La arquitectura decide si el código sobrevivirá al resto del sistema.**
+
+
+---
+
+## Continúa la lectura
+
+**Próximo paso → [Waves: oleadas como sprints de 30 minutos y Gestalt VFS](/blog/waves-oleadas-sprints-30min-gestalt-vfs/)**. Cómo los contratos de archivos disjuntos se ejecutan en paralelo (15-50 tareas), por qué los waves reemplazan a los sprints clásicos, y la prueba de concepto que permite a N agentes "tocar el mismo archivo" sin pisarse (merge por Gestalt, experimental).

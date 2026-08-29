@@ -16,6 +16,8 @@ interface Props {
   articleTitle?: string;
   tags?: string[];
   section?: string;
+  paywalled?: boolean;
+  paywallSelector?: string;
 }
 
 const {
@@ -32,6 +34,8 @@ const {
   articleTitle,
   tags = [],
   section = "Engineering",
+  paywalled = false,
+  paywallSelector = ".paywall",
 } = Astro.props;
 
 const canonicalUrl = canonicalFromPath(Astro.url.pathname);
@@ -70,12 +74,17 @@ const articleTags: string[] = tags;
 const aboutNames = Array.from(new Set(articleTags.map((t) => tagToEntity[t]).filter(Boolean))) as (keyof typeof wikidataEntities)[];
 const mentionNames = Array.from(new Set(articleTags.map((t) => tagToEntity[t])) as (keyof typeof wikidataEntities)[]);
 
+const paywallHasPart = paywalled ? { "hasPart": { "@type": "WebPageElement", "isAccessibleForFree": false, "cssSelector": paywallSelector } } : {};
+const paywallAccessible = paywalled ? { "isAccessibleForFree": false } : {};
+
 const jsonLd = article ? {
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": title,
   "description": description,
   "image": image,
+  ...(paywalled ? { "isAccessibleForFree": false } : {}),
+  ...(paywalled ? { "hasPart": { "@type": "WebPageElement", "isAccessibleForFree": false, "cssSelector": paywallSelector } } : {}),
   "author": {
     "@type": "Person",
     "name": "Brahyan Belalcázar",
@@ -116,6 +125,10 @@ const jsonLd = article ? {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl.toString()} />
     <meta name="theme-color" content="#121212" />
+
+    <!-- Paywall metering (Flexible Sampling) — client-side, Googlebot sees full HTML + isAccessibleForFree schema -->
+    {paywalled && <script is:inline src={baseUrl('scripts/paywall-meter.js')} defer></script>}
+    {paywalled && <link rel="stylesheet" href={baseUrl('scripts/paywall.css')} />}
 
     <!-- Google Search Console verification (replace content with property token) -->
     <meta name="google-site-verification" content="REPLACE_WITH_GSC_TOKEN" />

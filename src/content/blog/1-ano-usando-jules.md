@@ -188,3 +188,10 @@ La gran lección de este primer año es contundente: **el verdadero salto de pro
 
 Google Jules, respaldado por la potencia de Gemini y orquestado mediante un arnés determinista como GitCore, nos demostró que un solo ingeniero con la arquitectura correcta puede liderar y entregar proyectos con la cadencia, robustez y calidad de un equipo de ingeniería completo.
 
+
+
+---
+
+## Continúa la lectura
+
+Las **oleadas de 15 issues paralelos** que se mencionan en este post (Wave 1, Wave 2, Wave 3) ya tienen un artículo dedicado: **[Waves: oleadas como sprints de 30 minutos y Gestalt VFS](/blog/waves-oleadas-sprints-30min-gestalt-vfs/)**. Allí explico por qué 30 min × N waves vence al sprint clásico, y presento Gestalt VFS como la PoC que rompe el techo de paralelismo (muchos agentes sobre el mismo archivo, merge en Rust).

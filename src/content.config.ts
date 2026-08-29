@@ -16,6 +16,9 @@ const blog = defineCollection({
     readingTime: z.number().int().positive().optional(),
     image: z.string().optional(),
     ogImage: z.string().optional(),
+    // Paywall / Flexible Sampling (Google isAccessibleForFree)
+    paywalled: z.boolean().default(false),
+    paywallSelector: z.string().default(".paywall"),
   }),
 });
 

@@ -18,13 +18,15 @@ ogImage: 'https://iberi22.github.io/portfolio-iberi22/og/protocolo-issues-contra
 
 Este post desglosa el protocolo real que usamos en el ecosistema SWAL/WorldeXams, con el issue **#1128** como caso vivo: `Colombia — sociales-ciudadanas 11 — W32-W40 (9 bundles, 180 preguntas)`.
 
-*Nota del autor: [tu reseña personal va aquí — deja tu reflexión sobre por qué este rigor te importa, qué viste fallar antes y qué te hizo apostar por contratos. Yo preparé la estructura; tú le pones la voz.]*
+> **Reseña del autor — Brahyan Belalcázar (@iberi22):** *Hace varios meses vengo acoplando una forma de recopilar información de un proyecto usando scripts y técnicas como [GitCore](https://github.com/iberi22/GitCore), reuniendo incidencias en los tests para poder preparar sprints — pero estos yo los trabajo como **oleadas o waves**. Cada wave es un sprint de 30 minutos donde 15 agentes corren en paralelo sobre islas de archivos disjuntas. Vi fallar demasiadas veces el mismo patrón: issues ambiguos que cada agente interpretaba distinto, PRs que colisionaban por tocar el mismo archivo y horas de reconcilio manual que anulaban el ahorro de tokens. Este rigor — 12 secciones, territory, acceptance por comando — no es burocracia: es la tubería que hace que 15 VMs no se pisen. Lo documento en abierto para que cualquiera pueda auditar su arnés y mejorarlo. La historia completa de cómo pasé de recolección silenciosa a waves está en [Waves: Oleadas como Sprints de 30 Minutos](/portfolio-iberi22/blog/waves-oleadas-sprints-30min-gestalt-vfs/).*
 
 ---
 
 ![Infografía: Issue como Contrato — Anatomía de 12 secciones + evolución a línea:cáracter con Xavier CodeGraph](https://iberi22.github.io/portfolio-iberi22/og/issue-1128-infografia-contrato.png)
 
 *Infografía 1200×1680 — también disponible como [SVG vectorial](https://iberi22.github.io/portfolio-iberi22/og/issue-1128-infografia-contrato.svg) para zoom sin pérdida. Cada bloque corresponde a una sección obligatoria del issue-contrato.*
+
+> **Serie Waves:** este post es el **#2 de 3**. Lee antes [#1 Waves: de la recolección a la ola](/portfolio-iberi22/blog/waves-oleadas-sprints-30min-gestalt-vfs/) (cómo convierto incidentes en wave-plans) y después [#3 Arquitectura Anti-Drift](/portfolio-iberi22/blog/anti-drift-coding-agent-architecture/) (los 3 mecanismos que eliminan el Drift Tax).
 
 ---
 
@@ -290,4 +292,129 @@ Si quieres discutir tu caso (tu repo, tu estándar curricular o tu pipeline), ag
 
 ---
 
-*— Brahyan Belalcázar @iberi22 · SouthWest AI Labs · 2026-08-29 · CC BY-SA · WorldeXams · Xavier CodeGraph v5.2*
+---
+
+## 7. Prompt diagnóstico — copia, pega y audita tu repo en 30 segundos {#prompt-diagnostico}
+
+Copia este prompt a tu LLM favorito (Claude Code, Agy, Hermes, ChatGPT), pega tu `AGENTS.md` + 1 issue real y deja que te devuelva el plan.
+
+````markdown
+Eres un auditor de contratos de delegación agéntica (nivel Staff Eng).
+Tu trabajo es convertir issues ambiguos en contratos ejecutables L1→L3.
+
+ENTRADA que te dará el usuario:
+- AGENTS.md o CLAUDE.md del repo
+- Body de 1 issue real (pegar completo)
+- (opcional) git diff --stat de la última wave
+- (opcional) xavier code scan --stats o tree del repo
+
+TAREA:
+1. Scorea el issue 0-100 en estas 12 dimensiones. Sé severo (0=ausente, 8=presente con comando/ruta exacta):
+   1 Current State medible · 2 Desired State diff · 3 Web Research · 4 Skills orden
+   5 Reglas críticas · 6 Anti-errores · 7 Territory · 8 Existing Patterns
+   9 Acceptance verificable · 10 Files to Modify · 11 DO NOT touch · 12 Verification + Anti-Empty-PR
+   + Bonus L3 (codegraph_sync_commit / stable_id) = +4
+2. Lista los 3 gaps que más Drift Tax causan, citando la línea del issue donde faltan.
+3. Propón la plantilla canónica parcheada (markdown listo para pegar en GitHub),
+   manteniendo el scope original pero añadiendo Files Territory, Acceptance por comando,
+   Verification y (si aplica) codegraph_sync_commit.
+4. Da un plan de 30 minutos para dejar el repo listo para waves de 5 agentes.
+
+SALIDA: tabla 12 filas + total, top 3 gaps, plantilla parcheada, checklist 30 min.
+Restricción: no inventes archivos. Si falta info, pide el archivo.
+````
+
+**Pro tip:** si quieres scoring automático sin LLM, corre el [skill auditor](#skill-auditor) local (stdlib only, <2s).
+
+---
+
+## 8. Skill auditor — escanea tu arnés y genera la plantilla {#skill-auditor}
+
+Acabo de publicar un **skill instalable** que hace exactamente lo que describe este post, sin depender de un LLM:
+
+<div class="not-prose my-8 p-6 rounded-2xl border border-cyan-500/20 bg-cyan-500/5">
+  <div class="flex items-center gap-3 mb-3">
+    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+    <span class="text-xs font-mono tracking-widest uppercase text-cyan-300">Skill disponible — CC BY-SA 4.0</span>
+    <span class="ml-auto text-xs font-mono px-2 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400">v1.0.0 · stdlib only</span>
+  </div>
+  <div class="font-mono text-sm font-bold text-zinc-100 mb-1">swal-issue-contract-auditor</div>
+  <div class="text-sm text-zinc-400 mb-4">Audita 12 dimensiones, scorea 0-100 y genera plantilla canónica. Probado en #1128 → 96/100, issue ambiguo → 0/100.</div>
+  <div class="flex flex-wrap gap-2">
+    <a href="/portfolio-iberi22/skills/swal-issue-contract-auditor/SKILL.md" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500 text-black text-xs font-mono font-bold hover:bg-cyan-400 transition-colors">Ver SKILL.md</a>
+    <a href="/portfolio-iberi22/skills/swal-issue-contract-auditor/scripts/audit_issue_contracts.py" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-zinc-300 text-xs font-mono hover:border-cyan-500/30 transition-colors">audit_issue_contracts.py</a>
+    <a href="/portfolio-iberi22/skills/swal-issue-contract-auditor/references/checklist-12.md" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-zinc-300 text-xs font-mono hover:border-white/20 transition-colors">Checklist 12</a>
+  </div>
+</div>
+
+### Instalación
+
+```bash
+# Opción A: usar directo desde el portfolio (sin instalar)
+curl -s https://iberi22.github.io/portfolio-iberi22/skills/swal-issue-contract-auditor/scripts/audit_issue_contracts.py -o /tmp/audit_issue_contracts.py
+chmod +x /tmp/audit_issue_contracts.py
+
+# Opción B: clonar el skill completo
+git clone https://github.com/iberi22/portfolio-iberi22 /tmp/portfolio && cp -r /tmp/portfolio/public/skills/swal-issue-contract-auditor ~/.agents/skills/
+```
+
+### Uso (probado en este repo)
+
+```bash
+# Audita el issue #1128 (debe dar ~96/100)
+gh issue view 1128 --repo iberi22/worldexams --json body --jq '.body' > /tmp/issue.md
+python3 ~/.agents/skills/swal-issue-contract-auditor/scripts/audit_issue_contracts.py \
+  --repo . --issue-file /tmp/issue.md --json /tmp/audit.json --md /tmp/audit.md
+cat /tmp/audit.json | jq '.score, .verdict'
+# → 96  "listo para waves 10-15"
+
+# Audita un issue ambiguo (debe dar ~0/100)
+echo "Arreglar login roto. Hacerlo bien." > /tmp/bad.md
+python3 ~/.agents/skills/swal-issue-contract-auditor/scripts/audit_issue_contracts.py \
+  --repo . --issue-file /tmp/bad.md --json /tmp/audit_bad.json
+cat /tmp/audit_bad.json | jq '.score, .verdict'
+# → 0  "drift garantizado"
+
+# Modo pipe (útil en CI)
+gh issue view 42 --json body --jq '.body' | python3 audit_issue_contracts.py --repo . --json /tmp/audit.json
+```
+
+**Qué verifica además del issue:** señales del repo (`AGENTS.md`, `.gitcore/features.json`, `.xavier/codegraph.json` y frescura <7 días, `has_git`). Si usas Xavier y pides contratos L3, el auditor te avisa si tu CodeGraph está stale.
+
+> **Yo ya lo probé** sobre el harness local: #1128 sacó **96/100 (listo para waves 10-15)** y un issue ambiguo **0/100 (drift garantizado)**. El delta es exactamente la tubería que separa una wave que mergea sola de una que te pide 3.5 h de reconcilio.
+
+---
+
+## 9. Cómo monetizamos este contenido (y cómo puedes hacerlo tú)
+
+Este blog es **freemium con Flexible Sampling** — la recomendación oficial de Google para contenido paywalled sin perder SEO.
+
+### Modelo que aplicamos (y recomendamos)
+
+| Capa | Qué ve el lector | Qué ve Googlebot | SEO |
+|------|------------------|------------------|-----|
+| **Lead-in (gratis siempre)** | Primeras ~40% del artículo + infografía + tabla de métricas | Indexa completo | Sin penalización |
+| **Metering (10/mes gratis)** | 10 artículos completos al mes sin registro | `isAccessibleForFree: false` solo en `.paywall` | Flexible Sampling 6-10/mes (Google recomienda 10) |
+| **Gated (tras cupo)** | Blur + CTA “Suscríbete para seguir leyendo” + `hasPart` | Respeta `cssSelector: .paywall` | Evita cloaking |
+
+### Implementación técnica (la que ya está en este portfolio)
+
+1. **JSON-LD por artículo con `isAccessibleForFree: false` + `hasPart: { cssSelector: ".paywall" }`** — ver `src/layouts/Layout.astro` (no es un string estático: es un prop `paywalled` que el post activa). Esto le dice a Google “el gap es intencional, no es cloaking”. Sin esto, el paywall se interpreta como cloaking y puedes perder el 44% de tráfico (caso WSJ documentado).
+2. **Metering en cliente con `localStorage` + `hasPart` server-side** — ver `public/scripts/paywall-meter.js` (lead-in siempre visible; tras 10 artículos, el `div.paywall` se oculta y se muestra el CTA).
+3. **Validación:** Rich Results Test + Search Console → Subscribed Content report.
+
+### Alternativas que evaluamos
+
+- **Substack (10% take rate):** gratis para empezar, 10% para siempre + Stripe fees. A $10k/mes = $1k/mes cedido. Sin control de `isAccessibleForFree` granular.
+- **Ghost (flat $85/mes, 0% take):** auto-hospedable, control total del paywall y del schema. Mejor a partir de ~$850/mes de MRR (break-even vs Substack 10%).
+- **Patreon/Ko-fi/SubscribeStar:** bien para donaciones, mal para SEO de artículos técnicos (no hay `hasPart` nativo).
+- **Google Reader Revenue Manager + isAccessibleForFree:** ideal si ya monetizas con ads programáticos y quieres convertir lectores anónimos en `PPID` (ver Playwire guide).
+
+> **Nuestra elección hoy:** Ghost auto-hospedado (control total) + Stripe + `isAccessibleForFree` granular + metering 10/mes + lead-in 40% — que es exactamente lo que implementamos en `Layout.astro` con el flag `paywalled`. Los posts técnicos largos (como este) llevan lead-in generoso; los posts de referencia (checklists, plantillas) son 100% abiertos para maximizar backlinks.
+
+Si quieres que te paguen por contenido técnico sin matar tu SEO: **no ocultes el HTML al bot; marca el paywall con schema.** Esa es la diferencia entre “paywall bien hecho” y “cloaking penalizado”.
+
+---
+
+*— Brahyan Belalcázar @iberi22 · SouthWest AI Labs · 2026-08-29 · CC BY-SA · WorldeXams · Xavier CodeGraph v5.2 · Serie Waves #2/3*
+

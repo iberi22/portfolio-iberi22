@@ -193,6 +193,38 @@ const canonicalHref = post.data.canonical ?? siteUrl(`blog/${post.id}/`);
     padding: 0;
     color: inherit;
   }
+  .markdown-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+    overflow-x: auto;
+    display: table;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .markdown-body th {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: var(--color-accent);
+    font-weight: 700;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-fira);
+  }
+  .markdown-body td {
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #d1d5db;
+    line-height: 1.6;
+  }
+  .markdown-body tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+  .markdown-body tr:hover {
+    background-color: rgba(16, 185, 129, 0.05);
+  }
   .markdown-body hr {
     border: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.1);

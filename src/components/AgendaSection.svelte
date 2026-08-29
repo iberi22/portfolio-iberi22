@@ -19,28 +19,28 @@
 
   const tracks = [
     {
-      badge: 'NETWORKING & INTERCAMBIO TÉCNICO',
+      badge: 'agenda.track1Badge',
       title: 'agenda.track1Title',
       desc: 'agenda.track1Desc',
       icon: '🤝',
       accent: true,
-      price: 'Sin costo ($0)'
+      price: 'agenda.track1Price'
     },
     {
-      badge: 'EQUIPOS & EMPRESAS',
+      badge: 'agenda.track2Badge',
       title: 'agenda.track2Title',
       desc: 'agenda.track2Desc',
       icon: '🎓',
       accent: false,
-      price: 'Coordinado'
+      price: 'agenda.track2Price'
     },
     {
-      badge: 'SETUP & CLI TOOLS',
+      badge: 'agenda.track3Badge',
       title: 'agenda.track3Title',
       desc: 'agenda.track3Desc',
       icon: '🛠️',
       accent: false,
-      price: 'Hands-on'
+      price: 'agenda.track3Price'
     }
   ];
 
@@ -82,20 +82,20 @@
     const topic = data.get('topic');
     const message = data.get('message');
 
-    const subject = encodeURIComponent(`Solicitud Networking & Conexión Técnica: ${service} — ${name}`);
+    const subject = encodeURIComponent(`${t('agenda.mailSubject')}: ${service} — ${name}`);
     const body = encodeURIComponent(
-      `SOLICITUD DE NETWORKING PROFESIONAL & INTERCAMBIO TÉCNICO\n` +
+      `${t('agenda.mailHeader')}\n` +
       `=========================================================\n\n` +
-      `Nombre: ${name}\n` +
-      `Correo: ${email}\n` +
-      `Perfil / Empresa: ${profile}\n` +
-      `Tema de Interés: ${service}\n` +
-      `Stack / Infraestructura Actual: ${infra}\n` +
-      `Área de Enfoque / Conversación: ${topic}\n\n` +
-      `¿De qué te gustaría hablar o qué estás construyendo?:\n${message}\n\n` +
+      `${t('agenda.formName')}: ${name}\n` +
+      `${t('agenda.formEmail')}: ${email}\n` +
+      `${t('agenda.formProfile')}: ${profile}\n` +
+      `${t('agenda.formService')}: ${service}\n` +
+      `${t('agenda.formInfra')}: ${infra}\n` +
+      `${t('agenda.mailArea')}: ${topic}\n\n` +
+      `${t('agenda.formMsg')}:\n${message}\n\n` +
       `---\n` +
-      `Modalidad: 1 reunión semanal de networking/asesoría (Viernes), planificada con 1 semana de antelación.\n` +
-      `Herramientas / Ecosistema: Hermes, OpenClaw, GitCore, Gestalt, Jules, Ollama/vLLM`
+      `${t('agenda.mailFooter1')}\n` +
+      `${t('agenda.mailFooter2')}`
     );
 
     window.location.href = `mailto:iberi22@gmail.com?subject=${subject}&body=${body}`;
@@ -110,10 +110,10 @@
       <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
         <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono tracking-widest uppercase bg-accent/10 text-accent border border-accent/30 shadow-lg shadow-accent/10">
           <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-          NETWORKING PROFESIONAL & CONEXIÓN TÉCNICA · 1 MEET / SEMANA
+          {t('agenda.badgeHeader')}
         </span>
         <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-          🤝 100% Sin Costo
+          {t('agenda.badgeFree')}
         </span>
       </div>
 
@@ -141,9 +141,9 @@
           🤝
         </div>
         <div>
-          <h3 class="text-base font-bold text-white">Conexión Profesional & Ayuda Mutua en Ingeniería de Software</h3>
+          <h3 class="text-base font-bold text-white">{t('agenda.noticeTitle')}</h3>
           <p class="text-xs text-text-secondary mt-1 leading-relaxed">
-            Creo firmemente en el poder de conectar con otras personas, compartir conocimientos y construir redes de apoyo mutuo en el mundo de la tecnología. Reservo <strong>1 día a la semana para una meet técnica 1 a 1 de 45-60 min completamente sin costo</strong>, programada con <strong>1 semana de antelación</strong> para intercambiar experiencias sobre arquitectura de software, IA y resolver dudas de desarrollo.
+            {@html t('agenda.noticeTextHtml')}
           </p>
         </div>
       </div>
@@ -156,7 +156,7 @@
           <div>
             <div class="flex items-center justify-between mb-4">
               <span class="text-xs font-mono font-bold tracking-widest px-2.5 py-1 rounded {track.accent ? 'bg-accent text-black' : 'bg-white/10 text-text-muted'}">
-                {track.badge}
+                {t(track.badge)}
               </span>
               <span class="text-2xl group-hover:scale-110 transition-transform">{track.icon}</span>
             </div>
@@ -164,8 +164,8 @@
             <p class="text-text-secondary text-sm leading-relaxed mb-6">{t(track.desc)}</p>
           </div>
           <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono">
-            <span class="text-text-muted">Modalidad:</span>
-            <span class="font-bold text-text-primary {track.accent ? 'text-accent text-sm' : ''}">{track.price}</span>
+            <span class="text-text-muted">{t('agenda.modalityLabel')}</span>
+            <span class="font-bold text-text-primary {track.accent ? 'text-accent text-sm' : ''}">{t(track.price)}</span>
           </div>
         </div>
       {/each}
@@ -231,7 +231,7 @@
     <div class="glass-card p-8 md:p-10 mt-12 border-accent/20 bg-bg-surface-dark/80 entry-rise" style="animation-delay: 540ms">
       <div class="flex items-center gap-3 mb-4">
         <span class="px-2.5 py-1 rounded text-[10px] font-mono font-bold uppercase bg-accent/10 text-accent border border-accent/30">
-          Metodología Basada en Datos
+          {t('agenda.methodologyBadge')}
         </span>
         <span class="text-xs font-mono text-text-muted tracking-wider">SWAL Simulation Framework</span>
       </div>
@@ -246,7 +246,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="p-5 rounded-xl border border-white/10 bg-black/40 flex flex-col justify-between">
           <div>
-            <span class="text-accent text-xs font-mono font-bold block mb-2">01 / RECOLECCIÓN</span>
+            <span class="text-accent text-xs font-mono font-bold block mb-2">{t('agenda.m1Label')}</span>
             <h4 class="text-text-primary text-sm font-bold mb-2">{t('agenda.m1t')}</h4>
             <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m1d')}</p>
           </div>
@@ -254,7 +254,7 @@
 
         <div class="p-5 rounded-xl border border-accent/30 bg-accent/5 flex flex-col justify-between">
           <div>
-            <span class="text-accent text-xs font-mono font-bold block mb-2">02 / SIMULACIÓN</span>
+            <span class="text-accent text-xs font-mono font-bold block mb-2">{t('agenda.m2Label')}</span>
             <h4 class="text-text-primary text-sm font-bold mb-2">{t('agenda.m2t')}</h4>
             <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m2d')}</p>
           </div>
@@ -262,7 +262,7 @@
 
         <div class="p-5 rounded-xl border border-white/10 bg-black/40 flex flex-col justify-between">
           <div>
-            <span class="text-accent text-xs font-mono font-bold block mb-2">03 / GENERACIÓN</span>
+            <span class="text-accent text-xs font-mono font-bold block mb-2">{t('agenda.m3Label')}</span>
             <h4 class="text-text-primary text-sm font-bold mb-2">{t('agenda.m3t')}</h4>
             <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m3d')}</p>
           </div>
@@ -270,7 +270,7 @@
 
         <div class="p-5 rounded-xl border border-white/10 bg-black/40 flex flex-col justify-between">
           <div>
-            <span class="text-accent text-xs font-mono font-bold block mb-2">04 / VALIDACIÓN</span>
+            <span class="text-accent text-xs font-mono font-bold block mb-2">{t('agenda.m4Label')}</span>
             <h4 class="text-text-primary text-sm font-bold mb-2">{t('agenda.m4t')}</h4>
             <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m4d')}</p>
           </div>
@@ -359,7 +359,7 @@
                 name="message"
                 rows="4"
                 required
-                placeholder="Describe tu caso actual: arquitectura, repositorio, qué pipelines o herramientas CLI deseas configurar o capacitar…"
+                placeholder={t('agenda.formMsgPh')}
                 class="field w-full resize-none"
               ></textarea>
             </div>
@@ -376,11 +376,11 @@
               <div class="flex flex-wrap items-center justify-center gap-6 pt-2">
                 <span class="flex items-center gap-1.5 text-xs text-text-muted font-mono">
                   <svg class="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                  1 meet semanal sin costo (Planificada con 1 sem. de antelación)
+                  {t('agenda.meetFooterNote')}
                 </span>
                 <span class="flex items-center gap-1.5 text-xs text-text-muted font-mono">
                   <svg class="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  Respuesta en &lt;24h
+                  {t('agenda.responseFooterNote')}
                 </span>
               </div>
 

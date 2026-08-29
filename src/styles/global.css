@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -15,7 +14,11 @@
   --color-secondary: #06B6D4;
   --color-error: #F87171;
 
-  --font-fira: "Fira Code", monospace;
+  --font-fira: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-size-fluid-sm: clamp(0.8rem, 0.17vw + 0.76rem, 0.89rem);
+  --font-size-fluid-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
+  --font-size-fluid-lg: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
+  --font-size-fluid-xl: clamp(1.56rem, 1.02vw + 1.31rem, 2.11rem);
 
   --animation-float: float 6s ease-in-out infinite;
   --animation-glow: glow 3s ease-in-out infinite;

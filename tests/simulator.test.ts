@@ -34,8 +34,8 @@ function calculateSimulationTiers(params: SimulationParams) {
     {
       id: 'tier_velocity',
       name: subs.googleAiPro ? 'Wave Parallelism (Jules)' : subs.claudePro ? 'Claude Subagents' : 'Concurrent Pipeline',
-      costEstUsd: params.useFreeTiers ? 0 : Math.round(monthlyTokensM * 1.5),
-      costEfficiencyScore: subs.googleAiPro ? 88 : 82,
+      costEstUsd: params.useFreeTiers ? 0 : subs.googleAiPro ? 20 : subs.claudePro ? 20 : Math.round(monthlyTokensM * 1.2),
+      costEfficiencyScore: subs.googleAiPro ? 92 : 86,
       devVelocityScore: subs.googleAiPro ? 99 : 92,
       resilienceScore: 93,
       concurrencyLimit: subs.googleAiPro ? julesConcurrency : subs.claudePro ? claudeConcurrency : openrouterConcurrency,
@@ -43,8 +43,8 @@ function calculateSimulationTiers(params: SimulationParams) {
     {
       id: 'tier_hybrid',
       name: 'Balanced Hybrid Orchestrator',
-      costEstUsd: params.useFreeTiers ? 0 : Math.round(monthlyTokensM * 0.9),
-      costEfficiencyScore: 90,
+      costEstUsd: params.useFreeTiers ? 0 : (subs.claudePro || subs.openaiPlus ? 20 : 0) + Math.round(monthlyTokensM * 0.35),
+      costEfficiencyScore: 94,
       devVelocityScore: 91,
       resilienceScore: 96,
       concurrencyLimit: Math.max(claudeConcurrency, openrouterConcurrency),
@@ -52,7 +52,7 @@ function calculateSimulationTiers(params: SimulationParams) {
     {
       id: 'tier_cost',
       name: 'Ultra-Cost Optimizer',
-      costEstUsd: params.useFreeTiers ? 0 : subs.localHardware ? Math.round(monthlyTokensM * 0.20) : Math.round(monthlyTokensM * 0.40),
+      costEstUsd: params.useFreeTiers ? 0 : subs.localHardware ? Math.round(monthlyTokensM * 0.15) : Math.round(monthlyTokensM * 0.30),
       costEfficiencyScore: 98,
       devVelocityScore: 79,
       resilienceScore: 89,
@@ -289,14 +289,14 @@ describe('Resource Simulator E2E & Parameter Validation Suite', () => {
       expect(hybridTier).toBeDefined();
 
       if (depth === 'short') {
-        // 100 daily * 1000 multiplier * 30 days = 3M tokens -> 3 * 0.9 = 2.7 -> 3 USD
-        expect(hybridTier?.costEstUsd).toBe(3);
+        // 100 daily * 1000 multiplier * 30 days = 3M tokens -> 3 * 0.35 = 1.05 -> 1 USD
+        expect(hybridTier?.costEstUsd).toBe(1);
       } else if (depth === 'medium') {
-        // 100 * 2000 * 30 = 6M tokens -> 6 * 0.9 = 5.4 -> 5 USD
-        expect(hybridTier?.costEstUsd).toBe(5);
+        // 100 * 2000 * 30 = 6M tokens -> 6 * 0.35 = 2.1 -> 2 USD
+        expect(hybridTier?.costEstUsd).toBe(2);
       } else if (depth === 'deep') {
-        // 100 * 4000 * 30 = 12M tokens -> 12 * 0.9 = 10.8 -> 11 USD
-        expect(hybridTier?.costEstUsd).toBe(11);
+        // 100 * 4000 * 30 = 12M tokens -> 12 * 0.35 = 4.2 -> 4 USD
+        expect(hybridTier?.costEstUsd).toBe(4);
       }
     });
 

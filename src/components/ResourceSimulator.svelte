@@ -245,6 +245,14 @@
     const openrouterConcurrency = subs.openrouter ? 8 : 3;
     const localConcurrency = profile.hardware.ramGb >= 64 ? 4 : profile.hardware.ramGb >= 32 ? 2 : 1;
 
+    // Realistic Subscription Monthly Base Economics (as of 2026)
+    // Google AI Pro: $20/mo (Jules 15-Wave, 100 runs/24h included)
+    // Claude Pro / Team: $20 / $30/mo (Claude 3.7 Sonnet + Claude Code CLI)
+    // OpenAI Plus / Pro: $20 / $200/mo (GPT-4o + o-series reasoning)
+    // OpenRouter: $0 base / Pay-as-you-go (DeepSeek V3 @ $0.14/M in, $0.28/M out)
+    // Local Hardware: $0/mo (Ollama / vLLM on own GPU/RAM)
+    const activeSubBase = (subs.googleAiPro ? 20 : 0) + (subs.claudePro ? 20 : 0) + (subs.openaiPlus ? 20 : 0);
+
     // Build dynamic tailored scenarios
     const tiers = [
       {
@@ -255,27 +263,27 @@
           ? '⚡ Tier 1: Multi-Subagent Swarm (Claude Code CLI + Sonnet)'
           : '⚡ Tier 1: Multi-Worker Concurrent Pipeline',
         tagline: subs.googleAiPro
-          ? 'Oleadas masivas de hasta 15 tareas paralelas con Google Jules (100 ejecuciones/24h)'
+          ? 'Oleadas masivas de hasta 15 tareas paralelas con Google Jules (100 ejecuciones/24h incluidas en $20/mes)'
           : subs.claudePro
           ? 'Orquestación de subagentes paralelos en CLI con Claude Code y chequeo de contexto'
           : 'Ejecución concurrente optimizada por CLI según cuotas activas',
         description: subs.googleAiPro
-          ? 'Aprovecha tu suscripción Google AI Pro para disparar hasta 15 micro-tareas autónomas simultáneas con suite E2E en la nube.'
+          ? 'Aprovecha tu suscripción Google AI Pro ($20/mes) para disparar hasta 15 micro-tareas autónomas simultáneas con suite E2E en la nube sin costo adicional de tokens dentro de tu cuota.'
           : subs.claudePro
-          ? 'Aprovecha tu suscripción Claude Pro/Team para coordinar subagentes especializados con Claude Code reduciendo el context drift.'
+          ? 'Aprovecha tu suscripción Claude Pro/Team ($20-$30/mes) para coordinar subagentes especializados con Claude Code reduciendo el context drift.'
           : 'Paralelismo dinámico balanceado para entrega rápida de código.',
-        costEstUsd: useFree ? 0 : Math.round(monthlyTokensM * 1.5),
+        costEstUsd: useFree ? 0 : subs.googleAiPro ? 20 : subs.claudePro ? 20 : Math.round(monthlyTokensM * 1.2),
         estLatencyMs: subs.googleAiPro ? 180 : 320,
         concurrencyLimit: subs.googleAiPro ? julesConcurrency : subs.claudePro ? claudeConcurrency : openrouterConcurrency,
         antiDriftScore: 94,
         e2eVerificationRate: 97,
-        costEfficiencyScore: subs.googleAiPro ? 88 : 82,
+        costEfficiencyScore: subs.googleAiPro ? 92 : 86,
         devVelocityScore: subs.googleAiPro ? 99 : 92,
         resilienceScore: 93,
         primaryRouting: subs.googleAiPro
-          ? 'Google Jules 15-Wave Parallel Engine → Gemini Family (Flash / Pro)'
+          ? 'Google Jules 15-Wave Parallel Engine ($20/mo incluido) → Gemini Flash / Pro'
           : subs.claudePro
-          ? 'Claude Code CLI Subagent Swarm → Claude Family (Sonnet)'
+          ? 'Claude Code CLI Subagent Swarm ($20/mo incluido) → Claude Sonnet'
           : 'OpenRouter Multi-Model Wave Routing',
         recommendedCli: subs.googleAiPro ? 'jules' : subs.claudePro ? 'claude_code' : 'hermes',
       },
@@ -283,24 +291,24 @@
         id: 'tier_hybrid',
         title: '⚖️ Tier 2: Balanced Hybrid Orchestrator (Claude + OpenRouter / DeepSeek)',
         tagline: 'Razonamiento arquitectónico en Claude/OpenAI + ejecución económica vía OpenRouter/Local',
-        description: 'El flujo más eficiente entre desarrolladores: diseña contratos y planes con modelos premium y delega micro-tareas a modelos de centavos.',
-        costEstUsd: useFree ? 0 : Math.round(monthlyTokensM * 0.9),
+        description: 'El flujo más eficiente entre desarrolladores: diseña contratos y planes con modelos premium y delega micro-tareas a modelos de centavos ($0.14-$0.55/M tokens).',
+        costEstUsd: useFree ? 0 : (subs.claudePro || subs.openaiPlus ? 20 : 0) + Math.round(monthlyTokensM * 0.35),
         estLatencyMs: 340,
         concurrencyLimit: Math.max(claudeConcurrency, openrouterConcurrency),
         antiDriftScore: 98,
         e2eVerificationRate: 98,
-        costEfficiencyScore: 90,
+        costEfficiencyScore: 94,
         devVelocityScore: 91,
         resilienceScore: 96,
-        primaryRouting: 'Claude Sonnet / OpenAI o-series (Arquitectura) → OpenRouter DeepSeek / Groq (Workers)',
+        primaryRouting: 'Claude Sonnet / OpenAI o-series (Arquitectura) → OpenRouter DeepSeek V3 / Groq (Workers)',
         recommendedCli: 'hermes',
       },
       {
         id: 'tier_cost',
         title: '💰 Tier 3: Ultra-Cost Optimizer (Local Ollama + DeepSeek / Groq LPU)',
         tagline: 'Ollama local para triage, lints y tests + APIs de centavos para síntesis',
-        description: 'Reduce hasta un 85% tu gasto mensual delegando validaciones a hardware propio y usando subastas de OpenRouter para generación.',
-        costEstUsd: useFree ? 0 : hasLocal ? Math.round(monthlyTokensM * 0.20) : Math.round(monthlyTokensM * 0.40),
+        description: 'Reduce hasta un 85% tu gasto mensual delegando validaciones a hardware propio y usando subastas de OpenRouter (DeepSeek V3 @ $0.14/M in, Groq LPU).',
+        costEstUsd: useFree ? 0 : hasLocal ? Math.round(monthlyTokensM * 0.15) : Math.round(monthlyTokensM * 0.30),
         estLatencyMs: hasLocal ? 720 : 380,
         concurrencyLimit: hasLocal ? localConcurrency : 4,
         antiDriftScore: 90,
@@ -308,7 +316,7 @@
         costEfficiencyScore: 98,
         devVelocityScore: 79,
         resilienceScore: 89,
-        primaryRouting: 'Local Ollama (Qwen / Llama) → OpenRouter (DeepSeek / Groq LPU)',
+        primaryRouting: 'Local Ollama (Qwen 2.5 Coder / Llama 3.3) → OpenRouter (DeepSeek V3 / Groq LPU)',
         recommendedCli: 'openclaw',
       },
       {
@@ -571,7 +579,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
         🧪 {t('simulator.betaBadge')}
       </span>
       <span class="px-3 py-1 rounded-full text-xs font-mono bg-accent/10 border border-accent/30 text-accent">
-        🎁 {t('simulator.freeCommunity')}
+        ⚡ {t('simulator.freeCommunity')}
       </span>
       <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
         🔒 {t('simulator.serverless')}

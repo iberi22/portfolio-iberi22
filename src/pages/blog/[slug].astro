@@ -17,7 +17,8 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 // Reading time: prefer frontmatter value, else estimate from body (~200 wpm)
-const bodyWords = (await post.body() ?? '').split(/\s+/).length;
+const bodyText = typeof post.body === 'string' ? post.body : '';
+const bodyWords = bodyText.split(/\s+/).length;
 const readingTime = post.data.readingTime ?? Math.max(1, Math.round(bodyWords / 200));
 const canonicalHref = post.data.canonical ?? siteUrl(`blog/${post.id}/`);
 ---

@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { baseUrl, siteUrl } from '../lib/baseUrl';
+import { baseUrl, siteUrl, canonicalFromPath } from '../lib/baseUrl';
 
 interface Props {
   title?: string;
@@ -24,7 +24,7 @@ const {
   tags = [],
 } = Astro.props;
 
-const canonicalUrl = siteUrl(Astro.url.pathname);
+const canonicalUrl = canonicalFromPath(Astro.url.pathname);
 
 const siteRoot = siteUrl();
 const blogRoot = siteUrl('blog/');

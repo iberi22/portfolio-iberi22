@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '../i18n/index';
+  import { baseUrl } from '../lib/baseUrl';
 
   const topics = [
     'agenda.top1',
@@ -275,6 +276,26 @@
             <p class="text-text-muted text-xs leading-relaxed">{t('agenda.m4d')}</p>
           </div>
         </div>
+      </div>
+
+      <!-- Interactive Pre-Meet Diagnostic Tool CTA Card -->
+      <div class="mt-8 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 bg-accent/5 -mx-4 md:-mx-6 -mb-4 md:-mb-6 p-6 rounded-b-2xl border-t border-accent/20">
+        <div class="space-y-1.5 text-center sm:text-left">
+          <div class="flex items-center justify-center sm:justify-start gap-2">
+            <span class="text-lg">🧪</span>
+            <h4 class="text-base font-bold text-text-primary">{t('agenda.diagCtaTitle')}</h4>
+          </div>
+          <p class="text-xs text-text-secondary max-w-xl leading-relaxed">
+            {t('agenda.diagCtaDesc')}
+          </p>
+        </div>
+        <a
+          href={baseUrl('simulator')}
+          class="shrink-0 inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-accent text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-accent-light transition-all shadow-lg shadow-accent/20 hover:scale-[1.02]"
+        >
+          <span>{t('agenda.diagCtaBtn')}</span>
+          <span class="text-sm">→</span>
+        </a>
       </div>
     </div>
 

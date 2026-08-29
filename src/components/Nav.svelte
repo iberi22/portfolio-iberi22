@@ -12,7 +12,6 @@
     { key: 'about', href: '#about' },
     { key: 'projects', href: '#projects' },
     { key: 'blog', href: baseUrl('blog') },
-    { key: 'simulator', href: baseUrl('simulator') },
     { key: 'contact', href: '#contact' },
     { key: 'agenda', href: baseUrl('agenda') },
   ];

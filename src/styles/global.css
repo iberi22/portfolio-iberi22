@@ -31,6 +31,35 @@
   }
 }
 
+:root, html.theme-dark {
+  --color-bg-primary: #121212;
+  --color-bg-surface: #1E1E1E;
+  --color-bg-surface-dark: #0A0A0A;
+  --color-bg-surface-light: #2A2A2A;
+  --color-text-primary: #F5F5DC;
+  --color-text-secondary: #E8E8C0;
+  --color-text-muted: #9CA3AF;
+  --color-accent: #10B981;
+  --color-accent-light: #34D399;
+  --color-accent-dark: #059669;
+  --color-secondary: #06B6D4;
+  --color-error: #F87171;
+}
+
+html.theme-light {
+  --color-bg-primary: #F8FAFC;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-surface-dark: #F1F5F9;
+  --color-bg-surface-light: #E2E8F0;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748B;
+  --color-accent: #059669;
+  --color-accent-light: #10B981;
+  --color-accent-dark: #047857;
+  --color-secondary: #0891B2;
+}
+
 @layer base {
   * {
     margin: 0;
@@ -41,6 +70,10 @@
   html {
     scroll-behavior: smooth;
     background-color: var(--color-bg-primary);
+  }
+
+  html[dir="rtl"] {
+    text-align: right;
   }
 
   body {
@@ -109,6 +142,11 @@
     border-radius: 8px;
     position: relative;
     overflow: hidden;
+  }
+
+  html.theme-light .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.08);
   }
 
   .glass-card::after {

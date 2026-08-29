@@ -3,7 +3,7 @@ import '../styles/global.css';
 import { baseUrl } from '../lib/baseUrl';
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href={baseUrl('favicon.svg')} />
@@ -14,6 +14,41 @@ import { baseUrl } from '../lib/baseUrl';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <title>Brahyan Belalcázar — iberi22 | Full-Stack Engineer &amp; AI Orchestration</title>
+    <script is:inline>
+      (function() {
+        // Auto-detect system dark/light theme
+        function applyTheme() {
+          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('theme-dark', isDark);
+          document.documentElement.classList.toggle('theme-light', !isDark);
+        }
+        applyTheme();
+        try {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+        } catch(e) {}
+
+        // Auto-detect locale and set direction before render
+        try {
+          const rtlLangs = ['ar', 'ur'];
+          const top10 = ['en', 'es', 'zh', 'hi', 'ar', 'fr', 'pt', 'bn', 'ru', 'ur'];
+          let stored = localStorage.getItem('portfolio_lang') || localStorage.getItem('swal-locale');
+          if (!stored) {
+            const navLangs = (navigator.languages || [navigator.language]).map(l => l.split('-')[0].toLowerCase());
+            stored = navLangs.find(l => top10.includes(l)) || 'es';
+          }
+          if (top10.includes(stored)) {
+            document.documentElement.lang = stored;
+            if (rtlLangs.includes(stored)) {
+              document.documentElement.setAttribute('dir', 'rtl');
+              document.documentElement.classList.add('rtl');
+            } else {
+              document.documentElement.setAttribute('dir', 'ltr');
+              document.documentElement.classList.remove('rtl');
+            }
+          }
+        } catch(e) {}
+      })();
+    </script>
   </head>
   <body>
     <slot />

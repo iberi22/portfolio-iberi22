@@ -1,6 +1,54 @@
 ---
 import '../styles/global.css';
 import { baseUrl } from '../lib/baseUrl';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+  publishDate?: string;
+}
+
+const {
+  title = "Brahyan Belalcázar — iberi22 | Full-Stack Engineer & AI Orchestration",
+  description = "Brahyan Belalcázar — iberi22. Full-Stack Engineer & AI Orchestration Specialist. Software en producción con tubería de desarrollo orquestada por IA.",
+  image = "https://iberi22.github.io/portfolio-iberi22/favicon.svg",
+  article = false,
+  publishDate,
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://iberi22.github.io");
+
+const jsonLd = article ? {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": title,
+  "description": description,
+  "author": {
+    "@type": "Person",
+    "name": "Brahyan Belalcázar",
+    "url": "https://iberi22.github.io/portfolio-iberi22/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Brahyan Belalcázar"
+  },
+  "url": canonicalUrl.toString(),
+  "datePublished": publishDate || "2026-08-28"
+} : {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Brahyan Belalcázar",
+  "alternateName": "iberi22",
+  "url": "https://iberi22.github.io/portfolio-iberi22/",
+  "jobTitle": "Full-Stack Engineer & AI Orchestration Architect",
+  "sameAs": [
+    "https://github.com/iberi22",
+    "https://linkedin.com/in/brahyan-belalcazar",
+    "https://x.com/iberi22"
+  ]
+};
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -8,8 +56,30 @@ import { baseUrl } from '../lib/baseUrl';
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href={baseUrl('favicon.svg')} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Brahyan Belalcázar — iberi22. Full-Stack Engineer & AI Orchestration Specialist. Software en producción con tubería de desarrollo orquestada por IA." />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl.toString()} />
     <meta name="theme-color" content="#121212" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content={article ? "article" : "website"} />
+    <meta property="og:url" content={canonicalUrl.toString()} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:site_name" content="Brahyan Belalcázar — iberi22" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalUrl.toString()} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:creator" content="@iberi22" />
+
+    <!-- JSON-LD Structured Data Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" />
@@ -17,7 +87,6 @@ import { baseUrl } from '../lib/baseUrl';
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" />
     </noscript>
-    <title>Brahyan Belalcázar — iberi22 | Full-Stack Engineer &amp; AI Orchestration</title>
     <script is:inline>
       (function() {
         // Auto-detect system dark/light theme

@@ -17,7 +17,12 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<Layout>
+<Layout
+  title={`${post.data.title} | Brahyan Belalcázar (iberi22)`}
+  description={post.data.title + ' — Arquitectura, orquestación agéntica y desarrollo de software por Brahyan Belalcázar.'}
+  article={true}
+  publishDate={post.data.date}
+>
   <Nav client:load />
   <main class="min-h-screen px-6 pt-32 pb-24">
     <article class="max-w-4xl mx-auto">

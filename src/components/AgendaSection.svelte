@@ -19,7 +19,7 @@
 
   const tracks = [
     {
-      badge: 'SERVICIO A LA COMUNIDAD · 100% GRATIS',
+      badge: 'NETWORKING & INTERCAMBIO TÉCNICO',
       title: 'agenda.track1Title',
       desc: 'agenda.track1Desc',
       icon: '🤝',
@@ -27,7 +27,7 @@
       price: 'Sin costo ($0)'
     },
     {
-      badge: 'EQUIPOS & DEVS',
+      badge: 'EQUIPOS & EMPRESAS',
       title: 'agenda.track2Title',
       desc: 'agenda.track2Desc',
       icon: '🎓',
@@ -45,8 +45,8 @@
   ];
 
   const pillars = [
-    { icon: '📊', t: 'agenda.p1t', d: 'agenda.p1d' },
-    { icon: '🎓', t: 'agenda.p2t', d: 'agenda.p2d' },
+    { icon: '🌐', t: 'agenda.p1t', d: 'agenda.p1d' },
+    { icon: '💡', t: 'agenda.p2t', d: 'agenda.p2d' },
     { icon: '⚡', t: 'agenda.p3t', d: 'agenda.p3d' },
   ];
 
@@ -82,20 +82,20 @@
     const topic = data.get('topic');
     const message = data.get('message');
 
-    const subject = encodeURIComponent(`Solicitud Meet Técnica Gratuita: ${service} — ${name}`);
+    const subject = encodeURIComponent(`Solicitud Networking & Conexión Técnica: ${service} — ${name}`);
     const body = encodeURIComponent(
-      `SOLICITUD DE MEET TÉCNICA GRATUITA (SERVICIO A LA COMUNIDAD)\n` +
-      `===========================================================\n\n` +
+      `SOLICITUD DE NETWORKING PROFESIONAL & INTERCAMBIO TÉCNICO\n` +
+      `=========================================================\n\n` +
       `Nombre: ${name}\n` +
       `Correo: ${email}\n` +
-      `Perfil: ${profile}\n` +
-      `Servicio / Interés: ${service}\n` +
-      `Infraestructura / Proveedores Actuales: ${infra}\n` +
-      `Tema de Enfoque: ${topic}\n\n` +
-      `Detalles del Caso / Repositorio / Proyecto:\n${message}\n\n` +
+      `Perfil / Empresa: ${profile}\n` +
+      `Tema de Interés: ${service}\n` +
+      `Stack / Infraestructura Actual: ${infra}\n` +
+      `Área de Enfoque / Conversación: ${topic}\n\n` +
+      `¿De qué te gustaría hablar o qué estás construyendo?:\n${message}\n\n` +
       `---\n` +
-      `Condición de Agenda: 1 reunión técnica semanal sin costo, planificada con 1 semana de antelación.\n` +
-      `Herramientas / Arneses de Interés: Hermes, OpenClaw, GitCore, Gestalt, Jules, Ollama/vLLM`
+      `Modalidad: 1 reunión semanal de networking/asesoría (Viernes), planificada con 1 semana de antelación.\n` +
+      `Herramientas / Ecosistema: Hermes, OpenClaw, GitCore, Gestalt, Jules, Ollama/vLLM`
     );
 
     window.location.href = `mailto:iberi22@gmail.com?subject=${subject}&body=${body}`;
@@ -110,10 +110,10 @@
       <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
         <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono tracking-widest uppercase bg-accent/10 text-accent border border-accent/30 shadow-lg shadow-accent/10">
           <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-          SERVICIO A LA COMUNIDAD · 1 MEET TÉCNICA / SEMANA
+          NETWORKING PROFESIONAL & CONEXIÓN TÉCNICA · 1 MEET / SEMANA
         </span>
         <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-          🎁 100% Sin Costo
+          🤝 100% Sin Costo
         </span>
       </div>
 
@@ -134,16 +134,16 @@
       </div>
     </div>
 
-    <!-- Community Service Banner Notice -->
+    <!-- Networking & Professional Collaboration Card Notice -->
     <div class="glass-card p-6 mt-10 border-accent/30 bg-accent/5 entry-rise">
       <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
         <div class="w-12 h-12 rounded-2xl bg-accent text-black flex items-center justify-center text-2xl font-bold shrink-0">
           🤝
         </div>
         <div>
-          <h3 class="text-base font-bold text-white">Compromiso Comunitario: 1 Sesión Técnica Semanal Sin Costo</h3>
+          <h3 class="text-base font-bold text-white">Conexión Profesional & Ayuda Mutua en Ingeniería de Software</h3>
           <p class="text-xs text-text-secondary mt-1 leading-relaxed">
-            Como aporte a la comunidad técnica y para apoyar a desarrolladores, startups y proyectos de código abierto, destino <strong>1 día a la semana para brindar una meet técnica 1 a 1 de 45-60 min completamente gratis</strong>, programada con <strong>1 semana de antelación</strong> para analizar tu arquitectura y repositorios con rigor profesional.
+            Creo firmemente en el poder de conectar con otras personas, compartir conocimientos y construir redes de apoyo mutuo en el mundo de la tecnología. Reservo <strong>1 día a la semana para una meet técnica 1 a 1 de 45-60 min completamente sin costo</strong>, programada con <strong>1 semana de antelación</strong> para intercambiar experiencias sobre arquitectura de software, IA y resolver dudas de desarrollo.
           </p>
         </div>
       </div>

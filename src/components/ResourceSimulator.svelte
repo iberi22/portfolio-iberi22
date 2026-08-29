@@ -567,23 +567,33 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
   <!-- Privacy & Free Community Tool Banner -->
   <div class="space-y-4 text-center md:text-left border-b border-white/10 pb-8">
     <div class="flex flex-wrap items-center gap-2.5">
-      <span class="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase bg-accent text-black shadow-lg shadow-accent/20">
-        HERRAMIENTA GRATIS · APORTE SENIOR
+      <span class="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase bg-amber-400 text-black shadow-lg shadow-amber-400/20">
+        🧪 EN FASE BETA · DIAGNÓSTICO & SIMULACIÓN
+      </span>
+      <span class="px-3 py-1 rounded-full text-xs font-mono bg-accent/10 border border-accent/30 text-accent">
+        🎁 Herramienta Gratuita de Diagnóstico Técnico
       </span>
       <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
         🔒 100% Serverless · Privacidad Total en tu Navegador
       </span>
-      <span class="px-3 py-1 rounded-full text-xs font-mono bg-indigo-500/10 border border-indigo-500/30 text-indigo-300">
-        🌐 Familias Genéricas Dinámicas
-      </span>
     </div>
 
     <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-      Simulador de Recursos, Gastos & Generador de Skills
+      Simulador de Recursos, Gastos & Generador de Skills <span class="text-xs font-mono text-amber-400 font-normal px-2.5 py-0.5 border border-amber-400/30 rounded-full align-middle">BETA</span>
     </h1>
     <p class="text-text-muted max-w-3xl text-sm md:text-base leading-relaxed">
-      Configura tus suscripciones activas (Google AI Pro, Claude Pro, OpenAI Plus, OpenRouter o Local), hardware y presupuesto para simular las 5 mejores configuraciones agénticas y generar prompts maestros, scripts de auto-escaneo CLI y prompts para agentes con búsqueda web en vivo.
+      Herramienta de diagnóstico preliminar para reunir datos técnicos reales de tu entorno, iterar sobre parámetros de costo vs. velocidad, descubrir capacidades no aprovechadas de capas LLM y llegar a la sesión técnica con un plan claro para generar <strong>custom skills 100% personalizadas</strong> a tus sistemas.
     </p>
+
+    <!-- Beta Purpose & Meeting Prep Card -->
+    <div class="glass-card p-5 mt-4 border-amber-500/30 bg-amber-500/5 text-xs text-amber-200/90 leading-relaxed space-y-2 rounded-xl">
+      <div class="flex items-center gap-2 font-bold text-white font-mono uppercase tracking-wider">
+        <span>🎯</span> Propósito del Simulador & Preparación de la Meet Técnica
+      </div>
+      <p>
+        El fin de esta herramienta en beta es recolectar e iterar información clave para la toma de decisiones técnicas (hardware local, suscripciones activas, gastos mensuales, profundidad de repositorios y capas LLM). Con estos datos puedes probar distintas combinaciones de presupuesto y rendimiento, descargar los artefactos y llegar a la <strong>meet técnica semanal</strong> con el terreno preparado para co-diseñar un plan de ingeniería y generar custom skills ancladas a tus propios sistemas.
+      </p>
+    </div>
 
     <!-- Toolbar: Save / Reset / Export / Import -->
     <div class="flex flex-wrap items-center gap-3 pt-4">

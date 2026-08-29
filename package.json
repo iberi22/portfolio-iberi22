@@ -1,7 +1,7 @@
 {
   "name": "portfolio-iberi22",
   "type": "module",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Brahyan Belalcázar (iberi22) - Full-Stack Engineer & AI Orchestration Portfolio",
   "scripts": {

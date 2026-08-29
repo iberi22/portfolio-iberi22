@@ -10,6 +10,10 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
     published: z.boolean().default(false),
+    // SEO fields (optional so legacy posts keep building)
+    description: z.string().optional(),
+    canonical: z.string().optional(),
+    readingTime: z.number().int().positive().optional(),
   }),
 });
 

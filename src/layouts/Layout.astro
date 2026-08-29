@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { baseUrl } from '../lib/baseUrl';
+import { baseUrl, siteUrl } from '../lib/baseUrl';
 
 interface Props {
   title?: string;
@@ -8,6 +8,9 @@ interface Props {
   image?: string;
   article?: boolean;
   publishDate?: string;
+  articlePath?: string;
+  articleTitle?: string;
+  tags?: string[];
 }
 
 const {
@@ -16,9 +19,46 @@ const {
   image = "https://iberi22.github.io/portfolio-iberi22/favicon.svg",
   article = false,
   publishDate,
+  articlePath,
+  articleTitle,
+  tags = [],
 } = Astro.props;
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://iberi22.github.io");
+const canonicalUrl = siteUrl(Astro.url.pathname);
+
+const siteRoot = siteUrl();
+const blogRoot = siteUrl('blog/');
+
+const breadcrumbLd = article && articlePath ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": siteRoot },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": blogRoot },
+    { "@type": "ListItem", "position": 3, "name": articleTitle || title, "item": canonicalUrl.toString() },
+  ],
+} : null;
+
+const wikidataEntities = {
+  ai: { "@type": "Thing", "name": "Artificial intelligence", "sameAs": "https://www.wikidata.org/wiki/Q11660" },
+  swArch: { "@type": "Thing", "name": "Software architecture", "sameAs": "https://www.wikidata.org/wiki/Q627503" },
+  swEng: { "@type": "Thing", "name": "Software engineering", "sameAs": "https://www.wikidata.org/wiki/Q193424" },
+  rust: { "@type": "Thing", "name": "Rust (programming language)", "sameAs": "https://www.wikidata.org/wiki/Q457774" },
+  llm: { "@type": "Thing", "name": "Large language model", "sameAs": "https://www.wikidata.org/wiki/Q116375277" },
+  agent: { "@type": "Thing", "name": "Intelligent agent", "sameAs": "https://www.wikidata.org/wiki/Q1995222" },
+  github: { "@type": "Thing", "name": "GitHub", "sameAs": "https://www.wikidata.org/wiki/Q364" },
+};
+
+// Tag → Wikidata concept mapping for `about` (primary topics)
+const tagToEntity: Record<string, keyof typeof wikidataEntities> = {
+  'AI': 'ai', 'Rust': 'rust', 'Architecture': 'swArch', 'Systems': 'swEng',
+  'AI Agents': 'agent', 'Multi-Agent': 'agent', 'LLM': 'llm', 'Jules': 'agent',
+  'GitOps': 'swEng', 'DevOps': 'swEng', 'Security': 'swEng', 'Vector-DB': 'ai',
+};
+
+const articleTags: string[] = tags;
+const aboutNames = Array.from(new Set(articleTags.map((t) => tagToEntity[t]).filter(Boolean))) as (keyof typeof wikidataEntities)[];
+const mentionNames = Array.from(new Set(articleTags.map((t) => tagToEntity[t])) as (keyof typeof wikidataEntities)[]);
 
 const jsonLd = article ? {
   "@context": "https://schema.org",
@@ -28,14 +68,18 @@ const jsonLd = article ? {
   "author": {
     "@type": "Person",
     "name": "Brahyan Belalcázar",
-    "url": "https://iberi22.github.io/portfolio-iberi22/"
+    "url": siteRoot
   },
   "publisher": {
     "@type": "Person",
     "name": "Brahyan Belalcázar"
   },
   "url": canonicalUrl.toString(),
-  "datePublished": publishDate || "2026-08-28"
+  "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl.toString() },
+  "datePublished": publishDate || "2026-08-28",
+  "inLanguage": "es",
+  ...(aboutNames.length ? { "about": aboutNames.map((n) => wikidataEntities[n]) } : {}),
+  ...(mentionNames.length ? { "mentions": mentionNames.map((n) => wikidataEntities[n]) } : {}),
 } : {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -61,6 +105,12 @@ const jsonLd = article ? {
     <link rel="canonical" href={canonicalUrl.toString()} />
     <meta name="theme-color" content="#121212" />
 
+    <!-- Google Search Console verification (replace content with property token) -->
+    <meta name="google-site-verification" content="REPLACE_WITH_GSC_TOKEN" />
+
+    <!-- RSS / Atom syndication feed -->
+    <link rel="alternate" type="application/rss+xml" title="iberi22 Engineering Blog" href={siteUrl('rss.xml')} />
+
     <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:url" content={canonicalUrl.toString()} />
@@ -79,6 +129,9 @@ const jsonLd = article ? {
 
     <!-- JSON-LD Structured Data Schema -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {breadcrumbLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+    )}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

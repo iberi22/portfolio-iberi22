@@ -8,6 +8,7 @@ export default defineConfig({
   site: 'https://iberi22.github.io',
   base: process.env.GITHUB_ACTIONS === 'true' ? '/portfolio-iberi22' : '/',
   output: 'static',
+  trailingSlash: 'always',
   vite: {
     plugins: [tailwindcss()],
     ssr: {

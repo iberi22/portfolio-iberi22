@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.svelte';
 import Footer from '../../components/Footer.svelte';
-import { baseUrl } from '../../lib/baseUrl';
+import { baseUrl, siteUrl } from '../../lib/baseUrl';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -15,13 +15,21 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+// Reading time: prefer frontmatter value, else estimate from body (~200 wpm)
+const bodyWords = (await post.body() ?? '').split(/\s+/).length;
+const readingTime = post.data.readingTime ?? Math.max(1, Math.round(bodyWords / 200));
+const canonicalHref = post.data.canonical ?? siteUrl(`blog/${post.id}/`);
 ---
 
 <Layout
   title={`${post.data.title} | Brahyan Belalcázar (iberi22)`}
-  description={post.data.title + ' — Arquitectura, orquestación agéntica y desarrollo de software por Brahyan Belalcázar.'}
+  description={post.data.description ?? (post.data.excerpt || post.data.title + ' — Arquitectura, orquestación agéntica y desarrollo de software por Brahyan Belalcázar.')}
   article={true}
   publishDate={post.data.date}
+  articlePath={`blog/${post.id}/`}
+  articleTitle={post.data.title}
+  tags={post.data.tags}
 >
   <Nav client:load />
   <main class="min-h-screen px-6 pt-32 pb-24">
@@ -32,6 +40,8 @@ const { Content } = await render(post);
         </a>
         <div class="flex items-center gap-4 text-xs font-mono text-text-muted mb-4 mt-2">
           <span>{post.data.date}</span>
+          <span>·</span>
+          <span>{readingTime} min de lectura</span>
           <span>·</span>
           <span>Arquitectura Agéntica</span>
         </div>
@@ -58,7 +68,7 @@ const { Content } = await render(post);
         </div>
         <div class="flex items-center gap-3">
           <a
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title + ' por @iberi22')}&url=${encodeURIComponent('https://iberi22.github.io/portfolio-iberi22/blog/' + post.id + '/')}`}
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title + ' por @iberi22')}&url=${encodeURIComponent(canonicalHref)}`}
             target="_blank"
             rel="noopener noreferrer"
             class="flex items-center gap-2 px-4 py-2 rounded-lg bg-black border border-white/15 text-white text-xs font-mono font-bold hover:border-accent hover:text-accent transition-all duration-200 cursor-pointer shadow-sm hover:shadow-accent/20"
@@ -71,7 +81,7 @@ const { Content } = await render(post);
           </a>
 
           <a
-            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://iberi22.github.io/portfolio-iberi22/blog/' + post.id + '/')}`}
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalHref)}`}
             target="_blank"
             rel="noopener noreferrer"
             class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0077B5]/10 border border-[#0077B5]/40 text-[#0077B5] hover:bg-[#0077B5]/20 hover:text-white text-xs font-mono font-bold transition-all duration-200 cursor-pointer shadow-sm"

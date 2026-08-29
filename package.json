@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "private": true,
-  "description": "Brahyan Belalcázar (iberi22) - Full-Stack Engineer & AI Orchestration Portfolio",
+  "description": "Brahyan Belalc\u00e1zar (iberi22) - Full-Stack Engineer & AI Orchestration Portfolio",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -22,6 +22,9 @@
   },
   "devDependencies": {
     "typescript": "~5.7.0",
-    "vitest": "4.1.11"
+    "vitest": "4.1.11",
+    "@playwright/test": "^1.62.1",
+    "@testing-library/svelte": "^5.4.2",
+    "jsdom": "^30.0.1"
   }
 }

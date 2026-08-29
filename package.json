@@ -19,6 +19,10 @@
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
-    "typescript": "~5.7.0"
+    "@playwright/test": "^1.62.1",
+    "@testing-library/svelte": "^5.4.2",
+    "jsdom": "^30.0.1",
+    "typescript": "~5.7.0",
+    "vitest": "^4.1.11"
   }
 }

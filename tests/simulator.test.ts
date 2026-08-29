@@ -120,7 +120,7 @@ LIVE RESEARCH DIRECTIVES (AS OF TODAY):
 }
 
 describe('Resource Simulator E2E & Parameter Validation Suite', () => {
-  describe('Subscription-Driven Dynamic Concurrency', () => {
+  describe('Subscription-Driven Dynamic Concurrency & Permutation Matrix', () => {
     it('grants 15 concurrent tasks for Google AI Pro users', () => {
       const results = calculateSimulationTiers({
         dailyPrompts: 150,
@@ -165,33 +165,142 @@ describe('Resource Simulator E2E & Parameter Validation Suite', () => {
       expect(velocityTier?.name).toContain('Claude Subagents');
     });
 
-    it('calculates local concurrency based on RAM capacity (1, 2, or 4 workers)', () => {
-      const highRam = calculateSimulationTiers({
+    it('defaults velocity tier concurrency to OpenRouter limit (8 or 3) when neither Google nor Claude Pro is active', () => {
+      const openrouterActive = calculateSimulationTiers({
         dailyPrompts: 100,
         contextDepth: 'short',
         budgetLimitUsd: 50,
-        currentMonthlySpendUsd: 0,
+        currentMonthlySpendUsd: 10,
         useFreeTiers: false,
-        subscriptions: { googleAiPro: false, claudePro: false, openaiPlus: false, openrouter: false, localHardware: true },
-        hardware: { ramGb: 64 },
-      });
-      const lowRam = calculateSimulationTiers({
-        dailyPrompts: 100,
-        contextDepth: 'short',
-        budgetLimitUsd: 50,
-        currentMonthlySpendUsd: 0,
-        useFreeTiers: false,
-        subscriptions: { googleAiPro: false, claudePro: false, openaiPlus: false, openrouter: false, localHardware: true },
+        subscriptions: { googleAiPro: false, claudePro: false, openaiPlus: true, openrouter: true, localHardware: false },
         hardware: { ramGb: 16 },
       });
 
-      expect(highRam.find(t => t.id === 'tier_local')?.concurrencyLimit).toBe(4);
-      expect(lowRam.find(t => t.id === 'tier_local')?.concurrencyLimit).toBe(1);
+      const openrouterInactive = calculateSimulationTiers({
+        dailyPrompts: 100,
+        contextDepth: 'short',
+        budgetLimitUsd: 50,
+        currentMonthlySpendUsd: 10,
+        useFreeTiers: false,
+        subscriptions: { googleAiPro: false, claudePro: false, openaiPlus: true, openrouter: false, localHardware: false },
+        hardware: { ramGb: 16 },
+      });
+
+      expect(openrouterActive.find(t => t.id === 'tier_velocity')?.concurrencyLimit).toBe(8);
+      expect(openrouterInactive.find(t => t.id === 'tier_velocity')?.concurrencyLimit).toBe(3);
+    });
+
+    it('validates concurrency limits across all 5 developer subscription toggles', () => {
+      const allSubscriptions: (keyof SubscriptionsState)[] = ['googleAiPro', 'claudePro', 'openaiPlus', 'openrouter', 'localHardware'];
+
+      allSubscriptions.forEach(sub => {
+        const subs: SubscriptionsState = {
+          googleAiPro: false,
+          claudePro: false,
+          openaiPlus: false,
+          openrouter: false,
+          localHardware: false,
+          [sub]: true,
+        };
+
+        const results = calculateSimulationTiers({
+          dailyPrompts: 120,
+          contextDepth: 'medium',
+          budgetLimitUsd: 80,
+          currentMonthlySpendUsd: 30,
+          useFreeTiers: false,
+          subscriptions: subs,
+          hardware: { ramGb: 32 },
+        });
+
+        expect(results).toHaveLength(5);
+        results.forEach(t => {
+          expect(t.concurrencyLimit).toBeGreaterThanOrEqual(1);
+        });
+      });
+    });
+
+    it('calculates local concurrency based on RAM capacity (1, 2, or 4 workers)', () => {
+      const ramConfigs = [
+        { ram: 16, expected: 1 },
+        { ram: 32, expected: 2 },
+        { ram: 64, expected: 4 },
+        { ram: 128, expected: 4 },
+      ];
+
+      ramConfigs.forEach(({ ram, expected }) => {
+        const sim = calculateSimulationTiers({
+          dailyPrompts: 100,
+          contextDepth: 'short',
+          budgetLimitUsd: 50,
+          currentMonthlySpendUsd: 0,
+          useFreeTiers: false,
+          subscriptions: { googleAiPro: false, claudePro: false, openaiPlus: false, openrouter: false, localHardware: true },
+          hardware: { ramGb: ram },
+        });
+
+        const localTier = sim.find(t => t.id === 'tier_local');
+        expect(localTier?.concurrencyLimit).toBe(expected);
+      });
     });
   });
 
-  describe('Context Depth & Budget Penalty Matrix', () => {
-    it('scales token usage across Short (1k), Medium (2k), and Deep (4k) context depths', () => {
+  describe('Workload Profiles & Context Depth Matrix', () => {
+    const workloads: ('fullstack' | 'frontend' | 'backend' | 'systems' | 'data_ml')[] = [
+      'fullstack',
+      'frontend',
+      'backend',
+      'systems',
+      'data_ml',
+    ];
+
+    it.each(workloads)('handles workload profile "%s" correctly in search prompts and tier calculations', (workload) => {
+      const prompt = generateCleanWebSearchPrompt('Mac Studio (64GB RAM)', workload, 40, 60);
+      expect(prompt).toContain(`Workload Profile: ${workload}.`);
+
+      const results = calculateSimulationTiers({
+        dailyPrompts: 100,
+        workloadType: workload,
+        contextDepth: 'medium',
+        budgetLimitUsd: 100,
+        currentMonthlySpendUsd: 50,
+        useFreeTiers: false,
+        subscriptions: { googleAiPro: true, claudePro: true, openaiPlus: true, openrouter: true, localHardware: true },
+        hardware: { ramGb: 64 },
+      });
+
+      expect(results).toHaveLength(5);
+    });
+
+    const contextDepths: ('short' | 'medium' | 'deep')[] = ['short', 'medium', 'deep'];
+
+    it.each(contextDepths)('scales monthly token estimation appropriately for context depth "%s"', (depth) => {
+      const results = calculateSimulationTiers({
+        dailyPrompts: 100,
+        contextDepth: depth,
+        budgetLimitUsd: 200,
+        currentMonthlySpendUsd: 50,
+        useFreeTiers: false,
+        subscriptions: { googleAiPro: true, claudePro: false, openaiPlus: false, openrouter: false, localHardware: false },
+        hardware: { ramGb: 32 },
+      });
+
+      const hybridTier = results.find(t => t.id === 'tier_hybrid');
+      expect(hybridTier).toBeDefined();
+
+      if (depth === 'short') {
+        // 100 daily * 1000 multiplier * 30 days = 3M tokens -> 3 * 0.9 = 2.7 -> 3 USD
+        expect(hybridTier?.costEstUsd).toBe(3);
+      } else if (depth === 'medium') {
+        // 100 * 2000 * 30 = 6M tokens -> 6 * 0.9 = 5.4 -> 5 USD
+        expect(hybridTier?.costEstUsd).toBe(5);
+      } else if (depth === 'deep') {
+        // 100 * 4000 * 30 = 12M tokens -> 12 * 0.9 = 10.8 -> 11 USD
+        expect(hybridTier?.costEstUsd).toBe(11);
+      }
+    });
+
+    it('scales token usage strictly across Short (1k), Medium (2k), and Deep (4k) context depths', () => {
       const shortResults = calculateSimulationTiers({
         dailyPrompts: 100,
         contextDepth: 'short',
@@ -215,7 +324,9 @@ describe('Resource Simulator E2E & Parameter Validation Suite', () => {
       const deepCost = deepResults.find(t => t.id === 'tier_hybrid')?.costEstUsd || 0;
       expect(deepCost).toBeGreaterThan(shortCost);
     });
+  });
 
+  describe('Budget Penalties & Free-Tier Guarantees', () => {
     it('penalizes tiers exceeding budget limits', () => {
       const results = calculateSimulationTiers({
         dailyPrompts: 500,
@@ -232,7 +343,7 @@ describe('Resource Simulator E2E & Parameter Validation Suite', () => {
       expect(winner.costEstUsd).toBeLessThanOrEqual(50);
     });
 
-    it('guarantees $0 estimated cost for all tiers when 100% Free-Tiers mode is enabled', () => {
+    it('guarantees $0 estimated cost for all non-enterprise tiers when 100% Free-Tiers mode is enabled', () => {
       const freeResults = calculateSimulationTiers({
         dailyPrompts: 200,
         contextDepth: 'medium',
@@ -248,6 +359,21 @@ describe('Resource Simulator E2E & Parameter Validation Suite', () => {
           expect(tier.costEstUsd).toBe(0);
         }
       });
+    });
+
+    it('always preserves $0 cost for Sovereign Local-First tier regardless of token volume', () => {
+      const heavyUsage = calculateSimulationTiers({
+        dailyPrompts: 1000,
+        contextDepth: 'deep',
+        budgetLimitUsd: 100,
+        currentMonthlySpendUsd: 0,
+        useFreeTiers: false,
+        subscriptions: { googleAiPro: false, claudePro: false, openaiPlus: false, openrouter: false, localHardware: true },
+        hardware: { ramGb: 64 },
+      });
+
+      const localTier = heavyUsage.find(t => t.id === 'tier_local');
+      expect(localTier?.costEstUsd).toBe(0);
     });
   });
 

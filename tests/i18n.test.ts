@@ -15,6 +15,7 @@ const languages = { es, en, zh, hi, ar, bn, pt, ru, fr, ur };
 describe('i18n Top 10 World Languages Integrity', () => {
   it('should have all 10 language dictionaries loaded', () => {
     expect(Object.keys(languages)).toHaveLength(10);
+    expect(Object.keys(languages)).toEqual(['es', 'en', 'zh', 'hi', 'ar', 'bn', 'pt', 'ru', 'fr', 'ur']);
   });
 
   it('should contain all essential navigation keys in every language', () => {
@@ -35,6 +36,15 @@ describe('i18n Top 10 World Languages Integrity', () => {
       expect(dict, `Language ${langCode} must have footer section`).toHaveProperty('footer');
       expect(dict.hero).toHaveProperty('badge');
       expect(dict.footer).toHaveProperty('tagline');
+    }
+  });
+
+  it('should contain agenda section keys in every language', () => {
+    for (const [langCode, dict] of Object.entries(languages)) {
+      expect(dict, `Language ${langCode} must have agenda section`).toHaveProperty('agenda');
+      expect(dict.agenda).toHaveProperty('badge');
+      expect(dict.agenda).toHaveProperty('title');
+      expect(dict.agenda).toHaveProperty('subtitle');
     }
   });
 

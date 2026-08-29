@@ -174,7 +174,7 @@
     profile = JSON.parse(JSON.stringify(defaultProfile));
     syncProvidersState();
     saveProfile();
-    showFeedback('Valores restablecidos a valores por defecto');
+    showFeedback(t('simulator.resetFeedback'));
   }
 
   function exportProfileJson() {
@@ -211,10 +211,10 @@
           };
           syncProvidersState();
           saveProfile();
-          showFeedback('¡Perfil importado exitosamente!');
+          showFeedback(t('simulator.importFeedback'));
         }
       } catch (err) {
-        alert('Archivo JSON no válido.');
+        alert(t('simulator.invalidJsonError'));
       }
     };
     reader.readAsText(file);
@@ -768,9 +768,9 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
       <!-- 1. Diagnostic Questionnaire -->
       <div class="space-y-4">
-        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Diagnóstico de Trabajo</h3>
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">{t('simulator.workloadDiagTitle')}</h3>
         <div>
-          <label class="block text-xs text-text-muted mb-1">Tipo de Desarrollo Principal</label>
+          <label class="block text-xs text-text-muted mb-1">{t('simulator.primaryDevType')}</label>
           <select
             bind:value={profile.diagnostic.workloadType}
             onchange={saveProfile}
@@ -785,7 +785,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
         </div>
 
         <div>
-          <label class="block text-xs text-text-muted mb-1">Profundidad de Contexto / Repositorio</label>
+          <label class="block text-xs text-text-muted mb-1">{t('simulator.contextDepthLabel')}</label>
           <select
             bind:value={profile.diagnostic.contextDepth}
             onchange={saveProfile}
@@ -800,9 +800,9 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
 
       <!-- 2. Hardware & Compute -->
       <div class="space-y-4">
-        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Hardware & Entorno</h3>
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">{t('simulator.hardwareTitle')}</h3>
         <div>
-          <label class="block text-xs text-text-muted mb-1">Entorno de Computo</label>
+          <label class="block text-xs text-text-muted mb-1">{t('simulator.computeEnv')}</label>
           <select
             bind:value={profile.hardware.type}
             onchange={saveProfile}
@@ -830,14 +830,14 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
 
       <!-- 3. Budget & Free Tier Controls -->
       <div class="space-y-4">
-        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">Gastos & Prompts Diarios</h3>
+        <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">{t('simulator.expensesTitle')}</h3>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-[11px] text-text-muted mb-1">Gasto Actual ($/mes)</label>
+            <label class="block text-[11px] text-text-muted mb-1">{t('simulator.currentSpend')}</label>
             <input type="number" bind:value={profile.diagnostic.currentMonthlySpendUsd} onchange={saveProfile} min="0" max="2000" class="w-full bg-black/40 border border-white/15 rounded px-2.5 py-1.5 text-xs text-accent font-bold font-mono" />
           </div>
           <div>
-            <label class="block text-[11px] text-text-muted mb-1">Presupuesto ($/mes)</label>
+            <label class="block text-[11px] text-text-muted mb-1">{t('simulator.budgetLimit')}</label>
             <input type="number" bind:value={profile.diagnostic.budgetLimitUsd} onchange={saveProfile} min="0" max="2000" class="w-full bg-black/40 border border-white/15 rounded px-2.5 py-1.5 text-xs text-emerald-400 font-bold font-mono" />
           </div>
         </div>
@@ -911,7 +911,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
       <h2 class="text-xl font-bold text-accent flex items-center gap-2">
         <span>📊</span> {t('simulator.sectionSimulations')}
       </h2>
-      <span class="text-xs font-mono text-text-muted">Ajustado a tus Suscripciones & Hardware</span>
+      <span class="text-xs font-mono text-text-muted">{t('simulator.section2Subtitle')}</span>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
@@ -922,7 +922,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
         >
           {#if idx === 0}
             <div class="absolute top-0 right-0 bg-accent text-black font-extrabold text-[10px] px-2 py-0.5 rounded-bl">
-              TOP 1 RECOMENDADO
+              {t('simulator.top1Recommended')}
             </div>
           {/if}
 
@@ -956,23 +956,23 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
     <div class="bg-bg-surface-dark border border-accent/30 rounded-xl p-6 md:p-8 space-y-6 shadow-2xl">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
         <div>
-          <span class="text-xs font-mono text-accent uppercase tracking-widest font-semibold">Configuración Activa Seleccionada</span>
+          <span class="text-xs font-mono text-accent uppercase tracking-widest font-semibold">{t('simulator.activeConfigTitle')}</span>
           <h3 class="text-2xl font-bold text-white mt-1">{currentSelectedTier.title}</h3>
           <p class="text-sm text-text-muted mt-1">{currentSelectedTier.description}</p>
         </div>
         <div class="flex items-center gap-4 bg-black/40 border border-white/10 rounded-lg p-3">
           <div class="text-center px-2">
-            <span class="text-[10px] text-text-muted uppercase block">Latencia</span>
+            <span class="text-[10px] text-text-muted uppercase block">{t('simulator.latency')}</span>
             <span class="text-sm font-bold font-mono text-white">{currentSelectedTier.estLatencyMs} ms</span>
           </div>
           <div class="h-8 w-px bg-white/10"></div>
           <div class="text-center px-2">
-            <span class="text-[10px] text-text-muted uppercase block">Verificación</span>
+            <span class="text-[10px] text-text-muted uppercase block">{t('simulator.verification')}</span>
             <span class="text-sm font-bold font-mono text-accent">{currentSelectedTier.e2eVerificationRate}%</span>
           </div>
           <div class="h-8 w-px bg-white/10"></div>
           <div class="text-center px-2">
-            <span class="text-[10px] text-text-muted uppercase block">Puntuación</span>
+            <span class="text-[10px] text-text-muted uppercase block">{t('simulator.score')}</span>
             <span class="text-sm font-bold font-mono text-accent">{currentSelectedTier.overallScore}/100</span>
           </div>
         </div>
@@ -982,7 +982,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
         <div class="space-y-2">
           <div class="flex justify-between text-xs">
-            <span class="text-text-muted">Eficiencia de Costo</span>
+            <span class="text-text-muted">{t('simulator.costEfficiency')}</span>
             <span class="font-mono text-white font-bold">{currentSelectedTier.costEfficiencyScore}%</span>
           </div>
           <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
@@ -992,7 +992,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
 
         <div class="space-y-2">
           <div class="flex justify-between text-xs">
-            <span class="text-text-muted">Velocidad de Desarrollo</span>
+            <span class="text-text-muted">{t('simulator.devVelocity')}</span>
             <span class="font-mono text-white font-bold">{currentSelectedTier.devVelocityScore}%</span>
           </div>
           <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
@@ -1002,7 +1002,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
 
         <div class="space-y-2">
           <div class="flex justify-between text-xs">
-            <span class="text-text-muted">Calidad & Resiliencia Anti-Drift</span>
+            <span class="text-text-muted">{t('simulator.antiDriftQuality')}</span>
             <span class="font-mono text-white font-bold">{currentSelectedTier.resilienceScore}%</span>
           </div>
           <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
@@ -1020,7 +1020,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
         <h2 class="text-xl font-bold text-accent flex items-center gap-2">
           <span>🛠️</span> {t('simulator.sectionArtifacts')}
         </h2>
-        <p class="text-xs text-text-muted mt-1">Artefactos deterministas optimizados en inglés para máxima precisión de razonamiento en LLMs</p>
+        <p class="text-xs text-text-muted mt-1">{t('simulator.section3Subtitle')}</p>
       </div>
       <button
         onclick={downloadAllArtifacts}
@@ -1035,9 +1035,9 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
       <span class="text-lg shrink-0">💡</span>
       <div>
         <strong class="text-white font-mono uppercase tracking-wider block mb-1">
-          ¿Por qué todos los prompts se generan estrictamente en inglés?
+          {t('simulator.whyEnglishTitle')}
         </strong>
-        Los modelos fundacionales (Claude 3.7/Sonnet, OpenAI o-series/GPT-4o, Gemini 2.5/Pro, DeepSeek R1/V3) tienen más del <strong>85% de su corpus de entrenamiento y benchmarks de razonamiento en inglés</strong>. Ejecutar prompts de agentes en inglés incrementa la <strong>tasa de acierto de herramientas y seguimiento de directivas hasta en un 40%</strong>, elimina ambigüedades de traducción y consume ~35% menos tokens BPE.
+        {t('simulator.whyEnglishText')}
       </div>
     </div>
 
@@ -1047,37 +1047,37 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
         onclick={() => activeTab = 'sim'}
         class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'sim' ? 'bg-accent text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        📜 Master Prompt
+        📜 {t('simulator.tabMasterPrompt')}
       </button>
       <button
         onclick={() => activeTab = 'websearch'}
         class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'websearch' ? 'bg-emerald-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        🌐 Prompt Búsqueda Web
+        🌐 {t('simulator.tabWebSearchPrompt')}
       </button>
       <button
         onclick={() => activeTab = 'metrics'}
         class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'metrics' ? 'bg-purple-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        📊 Escáner de Métricas
+        📊 {t('simulator.tabMetricsPrompt')}
       </button>
       <button
         onclick={() => activeTab = 'cliaudit'}
         class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'cliaudit' ? 'bg-amber-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        💻 Script Auto-Escaneo CLI
+        💻 {t('simulator.tabCliAuditScript')}
       </button>
       <button
         onclick={() => activeTab = 'skill'}
         class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'skill' ? 'bg-indigo-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        ⚡ Custom SKILL.md
+        ⚡ {t('simulator.tabSkill')}
       </button>
       <button
         onclick={() => activeTab = 'env'}
         class="px-3 py-2 text-xs font-mono font-bold tracking-wider uppercase rounded-md transition-all cursor-pointer {activeTab === 'env' ? 'bg-sky-400 text-black' : 'bg-white/5 text-text-muted hover:text-white'}"
       >
-        🔒 .env.example
+        🔒 {t('simulator.tabEnv')}
       </button>
     </div>
 
@@ -1092,7 +1092,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
             onclick={() => copyToClipboard(generatedMasterPrompt, 'Master System Prompt')}
             class="px-3 py-1 text-xs font-semibold rounded bg-white/5 border border-white/15 text-white hover:bg-white/15 transition-all cursor-pointer"
           >
-            📋 Copiar Prompt
+            📋 {t('simulator.copyPrompt')}
           </button>
         </div>
         <pre class="bg-black/60 border border-white/10 rounded-lg p-4 text-xs font-mono text-accent-light overflow-x-auto max-h-72 leading-relaxed whitespace-pre-wrap">{generatedMasterPrompt}</pre>
@@ -1110,7 +1110,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
             onclick={() => copyToClipboard(generatedWebSearchPrompt, 'Prompt con Búsqueda Web')}
             class="px-3 py-1 text-xs font-semibold rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 transition-all cursor-pointer"
           >
-            📋 Copiar Prompt de Búsqueda Web
+            📋 {t('simulator.copyWebSearch')}
           </button>
         </div>
         <pre class="bg-black/60 border border-emerald-500/20 rounded-lg p-4 text-xs font-mono text-emerald-300 overflow-x-auto max-h-72 leading-relaxed whitespace-pre-wrap">{generatedWebSearchPrompt}</pre>
@@ -1128,7 +1128,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
             onclick={() => copyToClipboard(generatedMetricsPrompt, 'Prompt Escáner de Métricas')}
             class="px-3 py-1 text-xs font-semibold rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 hover:bg-purple-500/30 transition-all cursor-pointer"
           >
-            📋 Copiar Prompt de Métricas
+            📋 {t('simulator.copyMetrics')}
           </button>
         </div>
         <pre class="bg-black/60 border border-purple-500/20 rounded-lg p-4 text-xs font-mono text-purple-300 overflow-x-auto max-h-72 leading-relaxed whitespace-pre-wrap">{generatedMetricsPrompt}</pre>
@@ -1146,7 +1146,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
             onclick={() => copyToClipboard(generatedCliAuditScript, 'Script CLI de Auto-Escaneo')}
             class="px-3 py-1 text-xs font-semibold rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 transition-all cursor-pointer"
           >
-            📋 Copiar Script Shell
+            📋 {t('simulator.copyCliScript')}
           </button>
         </div>
         <pre class="bg-black/60 border border-amber-500/20 rounded-lg p-4 text-xs font-mono text-amber-300 overflow-x-auto max-h-72 leading-relaxed whitespace-pre-wrap">{generatedCliAuditScript}</pre>
@@ -1164,7 +1164,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
             onclick={() => copyToClipboard(generatedSkillMd, 'SKILL.md')}
             class="px-3 py-1 text-xs font-semibold rounded bg-white/5 border border-white/15 text-white hover:bg-white/15 transition-all cursor-pointer"
           >
-            📋 Copiar SKILL.md
+            📋 {t('simulator.copySkill')}
           </button>
         </div>
         <pre class="bg-black/60 border border-white/10 rounded-lg p-4 text-xs font-mono text-indigo-300 overflow-x-auto max-h-72 leading-relaxed whitespace-pre-wrap">{generatedSkillMd}</pre>
@@ -1182,7 +1182,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
             onclick={() => copyToClipboard(generatedEnvExample, '.env.example')}
             class="px-3 py-1 text-xs font-semibold rounded bg-white/5 border border-white/15 text-white hover:bg-white/15 transition-all cursor-pointer"
           >
-            📋 Copiar .env.example
+            📋 {t('simulator.copyEnv')}
           </button>
         </div>
         <pre class="bg-black/60 border border-white/10 rounded-lg p-4 text-xs font-mono text-sky-300 overflow-x-auto max-h-72 leading-relaxed whitespace-pre-wrap">{generatedEnvExample}</pre>

@@ -568,30 +568,30 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
   <div class="space-y-4 text-center md:text-left border-b border-white/10 pb-8">
     <div class="flex flex-wrap items-center gap-2.5">
       <span class="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase bg-amber-400 text-black shadow-lg shadow-amber-400/20">
-        🧪 EN FASE BETA · DIAGNÓSTICO & SIMULACIÓN
+        🧪 {t('simulator.betaBadge')}
       </span>
       <span class="px-3 py-1 rounded-full text-xs font-mono bg-accent/10 border border-accent/30 text-accent">
-        🎁 Herramienta Gratuita de Diagnóstico Técnico
+        🎁 {t('simulator.freeCommunity')}
       </span>
       <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-        🔒 100% Serverless · Privacidad Total en tu Navegador
+        🔒 {t('simulator.serverless')}
       </span>
     </div>
 
     <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-      Simulador de Recursos, Gastos & Generador de Skills <span class="text-xs font-mono text-amber-400 font-normal px-2.5 py-0.5 border border-amber-400/30 rounded-full align-middle">BETA</span>
+      {t('simulator.title')} <span class="text-xs font-mono text-amber-400 font-normal px-2.5 py-0.5 border border-amber-400/30 rounded-full align-middle">BETA</span>
     </h1>
     <p class="text-text-muted max-w-3xl text-sm md:text-base leading-relaxed">
-      Herramienta de diagnóstico preliminar para reunir datos técnicos reales de tu entorno, iterar sobre parámetros de costo vs. velocidad, descubrir capacidades no aprovechadas de capas LLM y llegar a la sesión técnica con un plan claro para generar <strong>custom skills 100% personalizadas</strong> a tus sistemas.
+      {t('simulator.subtitle')}
     </p>
 
     <!-- Beta Purpose & Meeting Prep Card -->
     <div class="glass-card p-5 mt-4 border-amber-500/30 bg-amber-500/5 text-xs text-amber-200/90 leading-relaxed space-y-2 rounded-xl">
       <div class="flex items-center gap-2 font-bold text-white font-mono uppercase tracking-wider">
-        <span>🎯</span> Propósito del Simulador & Preparación de la Meet Técnica
+        <span>🎯</span> {t('simulator.betaPurposeTitle')}
       </div>
       <p>
-        El fin de esta herramienta en beta es recolectar e iterar información clave para la toma de decisiones técnicas (hardware local, suscripciones activas, gastos mensuales, profundidad de repositorios y capas LLM). Con estos datos puedes probar distintas combinaciones de presupuesto y rendimiento, descargar los artefactos y llegar a la <strong>meet técnica semanal</strong> con el terreno preparado para co-diseñar un plan de ingeniería y generar custom skills ancladas a tus propios sistemas.
+        {t('simulator.betaPurposeDesc')}
       </p>
     </div>
 
@@ -601,19 +601,19 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
         onclick={saveProfile}
         class="px-4 py-2 text-xs font-bold rounded-md bg-accent text-black hover:bg-accent-light transition-all shadow-md cursor-pointer"
       >
-        💾 Guardar Perfil Local
+        💾 {t('simulator.saveProfile')}
       </button>
       <button
         onclick={exportProfileJson}
         class="px-4 py-2 text-xs font-semibold rounded-md bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all cursor-pointer"
       >
-        📥 Exportar JSON
+        📥 {t('simulator.exportProfile')}
       </button>
       <button
         onclick={triggerImport}
         class="px-4 py-2 text-xs font-semibold rounded-md bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all cursor-pointer"
       >
-        📤 Importar JSON
+        📤 {t('simulator.importProfile')}
       </button>
       <input
         type="file"
@@ -626,7 +626,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
         onclick={resetProfile}
         class="px-4 py-2 text-xs font-semibold rounded-md bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all cursor-pointer"
       >
-        🔄 Restablecer
+        🔄 {t('simulator.resetDefaults')}
       </button>
 
       {#if copyFeedback}
@@ -641,18 +641,18 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
   <div class="bg-bg-surface-dark border border-white/10 rounded-xl p-6 md:p-8 space-y-8 shadow-xl">
     <div class="flex items-center justify-between border-b border-white/10 pb-4">
       <h2 class="text-xl font-bold text-accent flex items-center gap-2">
-        <span>⚙️</span> 1. Diagnóstico de Suscripciones, Hardware & Proveedores
+        <span>⚙️</span> {t('simulator.sectionResources')}
       </h2>
-      <span class="text-xs font-mono text-emerald-400">0% Llamadas a Servidores Externos</span>
+      <span class="text-xs font-mono text-emerald-400">0% External Server Calls</span>
     </div>
 
     <!-- Active Subscriptions & Tools Selector -->
     <div class="p-5 rounded-xl border border-accent/20 bg-accent/5 space-y-3">
       <div class="flex items-center justify-between">
         <h3 class="text-xs uppercase tracking-wider text-accent font-bold">
-          🔑 Tus Suscripciones y Cuentas Activas (Orquestación como Subagentes / CLI)
+          🔑 {t('simulator.subsTitle')}
         </h3>
-        <span class="text-[11px] text-text-muted">Ajusta dinámicamente la concurrencia</span>
+        <span class="text-[11px] text-text-muted">{t('simulator.subsSub')}</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -665,7 +665,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
           />
           <div>
             <span class="text-xs font-bold block text-white">Google AI Pro</span>
-            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Jules 15 tareas paralelas (100 runs/24h)</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Jules 15 parallel waves (100 runs/24h)</span>
           </div>
         </label>
 
@@ -678,7 +678,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
           />
           <div>
             <span class="text-xs font-bold block text-white">Claude Pro / Team</span>
-            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Claude Code CLI & subagentes Sonnet</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Claude Code CLI & Sonnet subagents</span>
           </div>
         </label>
 
@@ -691,7 +691,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
           />
           <div>
             <span class="text-xs font-bold block text-white">OpenAI Plus / Pro</span>
-            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">GPT / o-series subagentes CLI</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">GPT / o-series CLI subagents</span>
           </div>
         </label>
 
@@ -704,7 +704,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
           />
           <div>
             <span class="text-xs font-bold block text-white">OpenRouter API</span>
-            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Ruteo multi-modelo & subastas</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Multi-model routing & spot auction</span>
           </div>
         </label>
 
@@ -716,8 +716,8 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
             class="accent-accent w-4 h-4 mt-0.5"
           />
           <div>
-            <span class="text-xs font-bold block text-white">Hardware Local</span>
-            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Ollama / vLLM ($0 en tu PC)</span>
+            <span class="text-xs font-bold block text-white">Local Hardware</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Ollama / vLLM ($0 on your machine)</span>
           </div>
         </label>
       </div>
@@ -727,9 +727,9 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
     <div>
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">
-          Familias de Modelos y Proveedores ({providersList.filter(p => p.active).length}/{providersList.length} activos)
+          {t('simulator.providersTitle')} ({providersList.filter(p => p.active).length}/{providersList.length})
         </h3>
-        <span class="text-[11px] text-text-muted">Evaluadas en vivo por agentes</span>
+        <span class="text-[11px] text-text-muted">{t('simulator.providersSub')}</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 max-h-64 overflow-y-auto p-1 border border-white/5 rounded-lg bg-black/20">
@@ -901,7 +901,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
   <div class="space-y-6">
     <div class="flex items-center justify-between">
       <h2 class="text-xl font-bold text-accent flex items-center gap-2">
-        <span>📊</span> 2. Simulación de Escenarios Paramétricos (Top 5 Tiers Dinámicos)
+        <span>📊</span> {t('simulator.sectionSimulations')}
       </h2>
       <span class="text-xs font-mono text-text-muted">Ajustado a tus Suscripciones & Hardware</span>
     </div>
@@ -1010,7 +1010,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
       <div>
         <h2 class="text-xl font-bold text-accent flex items-center gap-2">
-          <span>🛠️</span> 3. Generador de Prompts Pragmáticos en Inglés, Scripts CLI & Skills
+          <span>🛠️</span> {t('simulator.sectionArtifacts')}
         </h2>
         <p class="text-xs text-text-muted mt-1">Artefactos deterministas optimizados en inglés para máxima precisión de razonamiento en LLMs</p>
       </div>
@@ -1018,7 +1018,7 @@ description: Deterministic engineering protocol for ${p.diagnostic.workloadType.
         onclick={downloadAllArtifacts}
         class="px-5 py-2 text-xs font-bold rounded-md bg-accent text-black hover:bg-accent-light transition-all shadow-lg flex items-center gap-2 self-start md:self-auto cursor-pointer"
       >
-        <span>📦</span> Descargar Todos los Artefactos
+        <span>📦</span> {t('simulator.downloadAll')}
       </button>
     </div>
 

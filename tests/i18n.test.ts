@@ -40,11 +40,12 @@ describe('i18n Top 10 World Languages Integrity', () => {
   });
 
   it('should contain agenda section keys in every language', () => {
+    const essentialAgendaKeys = ['badge', 'title', 'subtitle'];
     for (const [langCode, dict] of Object.entries(languages)) {
       expect(dict, `Language ${langCode} must have agenda section`).toHaveProperty('agenda');
-      expect(dict.agenda).toHaveProperty('badge');
-      expect(dict.agenda).toHaveProperty('title');
-      expect(dict.agenda).toHaveProperty('subtitle');
+      for (const key of essentialAgendaKeys) {
+        expect(dict.agenda, `Language ${langCode} agenda must contain key "${key}"`).toHaveProperty(key);
+      }
     }
   });
 
@@ -56,6 +57,41 @@ describe('i18n Top 10 World Languages Integrity', () => {
         expect(dict.projects, `Language ${langCode} projects must have "${proj}"`).toHaveProperty(proj);
         expect(dict.projects[proj]).toHaveProperty('tagline');
         expect(dict.projects[proj]).toHaveProperty('description');
+      }
+    }
+  });
+
+  it('should contain complete dynamic agenda section keys in primary locales (es and en)', () => {
+    const fullAgendaKeys = [
+      'badgeHeader',
+      'badgeFree',
+      'noticeTitle',
+      'noticeTextHtml',
+      'track1Badge',
+      'track1Price',
+      'track2Badge',
+      'track2Price',
+      'track3Badge',
+      'track3Price',
+      'modalityLabel',
+      'methodologyBadge',
+      'm1Label',
+      'm2Label',
+      'm3Label',
+      'm4Label',
+      'formMsgPh',
+      'meetFooterNote',
+      'responseFooterNote',
+      'mailSubject',
+      'mailHeader',
+      'mailArea',
+      'mailFooter1',
+      'mailFooter2',
+    ];
+    for (const langCode of ['es', 'en'] as const) {
+      const dict = languages[langCode];
+      for (const key of fullAgendaKeys) {
+        expect(dict.agenda, `Language ${langCode} agenda must contain key "${key}"`).toHaveProperty(key);
       }
     }
   });

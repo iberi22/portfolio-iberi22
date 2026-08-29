@@ -15,6 +15,14 @@
     active: boolean;
   }
 
+  interface SubscriptionsState {
+    googleAiPro: boolean;    // Jules 15 parallel tasks + 100 runs/24h
+    claudePro: boolean;      // Claude Code CLI subagents / Sonnet
+    openaiPlus: boolean;     // OpenAI Plus/Pro / o-series subagents
+    openrouter: boolean;     // OpenRouter API smart routing
+    localHardware: boolean;  // Ollama / vLLM / LM Studio
+  }
+
   interface HardwareState {
     type: 'gpu_high' | 'mac_studio' | 'cpu_only' | 'vps_linux' | 'cloud_ec2';
     ramGb: number;
@@ -24,7 +32,6 @@
   interface DiagnosticState {
     workloadType: 'fullstack' | 'frontend' | 'backend' | 'systems' | 'data_ml';
     contextDepth: 'short' | 'medium' | 'deep';
-    concurrencyStyle: 'single' | 'wave_5' | 'wave_15';
     dailyPrompts: number;
     budgetLimitUsd: number;
     currentMonthlySpendUsd: number;
@@ -36,11 +43,12 @@
     testPath: string;
     docsUrl: string;
     envKeys: string;
-    selectedCli: 'hermes' | 'openclaw' | 'gitcore' | 'jules' | 'claude_code' | 'opencode';
+    selectedCli: 'jules' | 'claude_code' | 'hermes' | 'openclaw' | 'gitcore' | 'opencode';
   }
 
   interface UserProfile {
     version: string;
+    subscriptions: SubscriptionsState;
     providers: Record<string, boolean>;
     hardware: HardwareState;
     diagnostic: DiagnosticState;
@@ -72,7 +80,14 @@
   ];
 
   const defaultProfile: UserProfile = {
-    version: '2.0.0',
+    version: '3.0.0',
+    subscriptions: {
+      googleAiPro: true,
+      claudePro: true,
+      openaiPlus: true,
+      openrouter: true,
+      localHardware: true,
+    },
     providers: {
       gemini_family: true,
       claude_family: true,
@@ -90,7 +105,6 @@
     diagnostic: {
       workloadType: 'fullstack',
       contextDepth: 'medium',
-      concurrencyStyle: 'wave_5',
       dailyPrompts: 120,
       budgetLimitUsd: 60,
       currentMonthlySpendUsd: 40,
@@ -101,25 +115,29 @@
       testPath: './tests',
       docsUrl: 'https://github.com/iberi22/portfolio-iberi22',
       envKeys: 'OPENROUTER_API_KEY, GEMINI_API_KEY, ANTHROPIC_API_KEY, DEEPSEEK_API_KEY, GROQ_API_KEY',
-      selectedCli: 'jules',
+      selectedCli: 'claude_code',
     },
   };
 
   let profile = $state<UserProfile>(JSON.parse(JSON.stringify(defaultProfile)));
   let providersList = $state<ProviderItem[]>(JSON.parse(JSON.stringify(initialProvidersList)));
   let selectedTierIndex = $state<number>(0);
-  let activeTab = $state<'sim' | 'prompt' | 'websearch' | 'cliaudit' | 'skill' | 'env'>('sim');
+  let activeTab = $state<'sim' | 'prompt' | 'websearch' | 'metrics' | 'cliaudit' | 'skill' | 'env'>('sim');
   let copyFeedback = $state<string | null>(null);
   let fileInputRef = $state<HTMLInputElement | null>(null);
 
-  const STORAGE_KEY = 'swal_sim_profiles_v3';
+  const STORAGE_KEY = 'swal_sim_profiles_v4';
 
   onMount(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        profile = { ...defaultProfile, ...parsed };
+        profile = {
+          ...defaultProfile,
+          ...parsed,
+          subscriptions: { ...defaultProfile.subscriptions, ...(parsed.subscriptions || {}) }
+        };
       }
       syncProvidersState();
     } catch (e) {
@@ -186,7 +204,11 @@
         const content = e.target?.result as string;
         const imported = JSON.parse(content);
         if (imported && typeof imported === 'object') {
-          profile = { ...defaultProfile, ...imported };
+          profile = {
+            ...defaultProfile,
+            ...imported,
+            subscriptions: { ...defaultProfile.subscriptions, ...(imported.subscriptions || {}) }
+          };
           syncProvidersState();
           saveProfile();
           showFeedback('¡Perfil importado exitosamente!');
@@ -205,95 +227,120 @@
     }, 3000);
   }
 
-  // --- Algorithmic Simulation & Scoring Engine ---
+  // --- Dynamic Algorithmic Simulation & Scoring Engine ---
   const simulationResults = $derived.by(() => {
+    const subs = profile.subscriptions;
     const activeProviders = providersList.filter((p) => p.active);
-    const hasLocal = activeProviders.some((p) => p.category === 'local');
+    const hasLocal = subs.localHardware || activeProviders.some((p) => p.category === 'local');
     const useFree = profile.diagnostic.useFreeTiers;
 
     const multiplierContext = profile.diagnostic.contextDepth === 'deep' ? 4000 : profile.diagnostic.contextDepth === 'medium' ? 2000 : 1000;
     const totalDailyTokens = profile.diagnostic.dailyPrompts * multiplierContext;
     const monthlyTokensM = (totalDailyTokens * 30) / 1_000_000;
 
+    // Dynamic Concurrency & Routing based on user's actual subscriptions
+    const julesConcurrency = subs.googleAiPro ? 15 : 4;
+    const claudeConcurrency = subs.claudePro ? 5 : 2;
+    const openAiConcurrency = subs.openaiPlus ? 4 : 2;
+    const openrouterConcurrency = subs.openrouter ? 8 : 3;
+    const localConcurrency = profile.hardware.ramGb >= 64 ? 4 : profile.hardware.ramGb >= 32 ? 2 : 1;
+
+    // Build dynamic tailored scenarios
     const tiers = [
       {
-        id: 'tier1',
-        title: '💰 Tier 1: Ultra-Cost Optimizer (Local + DeepSeek / Groq)',
-        tagline: 'Ollama local para triage/lints + OpenRouter/DeepSeek para síntesis económica',
-        description: 'Reduce hasta un 85% de costos usando inferencia local en tu hardware y delegando código pesado a modelos de centavos por millón de tokens.',
-        costEstUsd: useFree ? 0 : hasLocal ? Math.round(monthlyTokensM * 0.22) : Math.round(monthlyTokensM * 0.45),
-        estLatencyMs: hasLocal ? 750 : 350,
-        concurrencyLimit: 4,
-        antiDriftScore: 89,
-        e2eVerificationRate: 93,
+        id: 'tier_velocity',
+        title: subs.googleAiPro
+          ? '⚡ Tier 1: Wave Parallelism (Google Jules Swarm + Gemini)'
+          : subs.claudePro
+          ? '⚡ Tier 1: Multi-Subagent Swarm (Claude Code CLI + Sonnet)'
+          : '⚡ Tier 1: Multi-Worker Concurrent Pipeline',
+        tagline: subs.googleAiPro
+          ? 'Oleadas masivas de hasta 15 tareas paralelas con Google Jules (100 ejecuciones/24h)'
+          : subs.claudePro
+          ? 'Orquestación de subagentes paralelos en CLI con Claude Code y chequeo de contexto'
+          : 'Ejecución concurrente optimizada por CLI según cuotas activas',
+        description: subs.googleAiPro
+          ? 'Aprovecha tu suscripción Google AI Pro para disparar hasta 15 micro-tareas autónomas simultáneas con suite E2E en la nube.'
+          : subs.claudePro
+          ? 'Aprovecha tu suscripción Claude Pro/Team para coordinar subagentes especializados con Claude Code reduciendo el context drift.'
+          : 'Paralelismo dinámico balanceado para entrega rápida de código.',
+        costEstUsd: useFree ? 0 : Math.round(monthlyTokensM * 1.5),
+        estLatencyMs: subs.googleAiPro ? 180 : 320,
+        concurrencyLimit: subs.googleAiPro ? julesConcurrency : subs.claudePro ? claudeConcurrency : openrouterConcurrency,
+        antiDriftScore: 94,
+        e2eVerificationRate: 97,
+        costEfficiencyScore: subs.googleAiPro ? 88 : 82,
+        devVelocityScore: subs.googleAiPro ? 99 : 92,
+        resilienceScore: 93,
+        primaryRouting: subs.googleAiPro
+          ? 'Google Jules 15-Wave Parallel Engine → Gemini Family (Flash / Pro)'
+          : subs.claudePro
+          ? 'Claude Code CLI Subagent Swarm → Claude Family (Sonnet)'
+          : 'OpenRouter Multi-Model Wave Routing',
+        recommendedCli: subs.googleAiPro ? 'jules' : subs.claudePro ? 'claude_code' : 'hermes',
+      },
+      {
+        id: 'tier_hybrid',
+        title: '⚖️ Tier 2: Balanced Hybrid Orchestrator (Claude + OpenRouter / DeepSeek)',
+        tagline: 'Razonamiento arquitectónico en Claude/OpenAI + ejecución económica vía OpenRouter/Local',
+        description: 'El flujo más eficiente entre desarrolladores: diseña contratos y planes con modelos premium y delega micro-tareas a modelos de centavos.',
+        costEstUsd: useFree ? 0 : Math.round(monthlyTokensM * 0.9),
+        estLatencyMs: 340,
+        concurrencyLimit: Math.max(claudeConcurrency, openrouterConcurrency),
+        antiDriftScore: 98,
+        e2eVerificationRate: 98,
+        costEfficiencyScore: 90,
+        devVelocityScore: 91,
+        resilienceScore: 96,
+        primaryRouting: 'Claude Sonnet / OpenAI o-series (Arquitectura) → OpenRouter DeepSeek / Groq (Workers)',
+        recommendedCli: 'hermes',
+      },
+      {
+        id: 'tier_cost',
+        title: '💰 Tier 3: Ultra-Cost Optimizer (Local Ollama + DeepSeek / Groq LPU)',
+        tagline: 'Ollama local para triage, lints y tests + APIs de centavos para síntesis',
+        description: 'Reduce hasta un 85% tu gasto mensual delegando validaciones a hardware propio y usando subastas de OpenRouter para generación.',
+        costEstUsd: useFree ? 0 : hasLocal ? Math.round(monthlyTokensM * 0.20) : Math.round(monthlyTokensM * 0.40),
+        estLatencyMs: hasLocal ? 720 : 380,
+        concurrencyLimit: hasLocal ? localConcurrency : 4,
+        antiDriftScore: 90,
+        e2eVerificationRate: 94,
         costEfficiencyScore: 98,
-        devVelocityScore: 78,
-        resilienceScore: 88,
+        devVelocityScore: 79,
+        resilienceScore: 89,
         primaryRouting: 'Local Ollama (Qwen / Llama) → OpenRouter (DeepSeek / Groq LPU)',
         recommendedCli: 'openclaw',
       },
       {
-        id: 'tier2',
-        title: '⚡ Tier 2: Maximum Velocity (Cloud Wave Parallelism)',
-        tagline: 'Oleadas masivas de agentes paralelos con Google Jules (15 micro-tareas) + Gemini Flash Family',
-        description: 'Optimizado para máxima velocidad de entrega de features mediante paralelismo extremo en la nube y pruebas E2E automatizadas.',
-        costEstUsd: Math.round(monthlyTokensM * 1.6),
-        estLatencyMs: 190,
-        concurrencyLimit: 15,
-        antiDriftScore: 92,
-        e2eVerificationRate: 96,
-        costEfficiencyScore: 80,
-        devVelocityScore: 99,
-        resilienceScore: 91,
-        primaryRouting: 'Google Jules 15-Wave Task Engine → Gemini Family (Flash / Pro)',
-        recommendedCli: 'jules',
-      },
-      {
-        id: 'tier3',
-        title: '⚖️ Tier 3: Balanced Hybrid Orchestrator',
-        tagline: 'Orquestador Claude Family / Hermes + Workers locales para pruebas deterministas',
-        description: 'El estándar de la industria: razonamiento de clase mundial para arquitectura y contratos, con ejecución local determinista sin sobrecostes.',
-        costEstUsd: Math.round(monthlyTokensM * 2.1),
-        estLatencyMs: 380,
-        concurrencyLimit: 8,
-        antiDriftScore: 97,
-        e2eVerificationRate: 98,
-        costEfficiencyScore: 86,
-        devVelocityScore: 90,
-        resilienceScore: 96,
-        primaryRouting: 'Claude Family (Sonnet) / Hermes Multi-Provider Router → Local Test Sandbox',
-        recommendedCli: 'hermes',
-      },
-      {
-        id: 'tier4',
+        id: 'tier_local',
         title: '🛡️ Tier 4: Sovereign Local-First (100% On-Premise)',
         tagline: 'Cero fugas de código a la nube. Runtimes locales (vLLM / Ollama) + Memoria Xavier',
-        description: 'Ideal para proyectos con estricto NDA y privacidad absoluta. Todo el ciclo corre en tu GPU o Mac Studio sin llamadas externas.',
+        description: 'Ideal para proyectos con estricto NDA y privacidad absoluta. Todo el ciclo corre en tu hardware local sin llamadas externas.',
         costEstUsd: 0,
-        estLatencyMs: profile.hardware.type === 'mac_studio' || profile.hardware.type === 'gpu_high' ? 620 : 1200,
-        concurrencyLimit: profile.hardware.ramGb >= 64 ? 6 : 2,
+        estLatencyMs: profile.hardware.type === 'mac_studio' || profile.hardware.type === 'gpu_high' ? 580 : 1100,
+        concurrencyLimit: localConcurrency,
         antiDriftScore: 95,
         e2eVerificationRate: 96,
-        costEfficiencyScore: 96,
-        devVelocityScore: 72,
-        resilienceScore: 98,
-        primaryRouting: 'Local vLLM / Ollama (DeepSeek / Llama) → Xavier2 SQLite-vec Local',
+        costEfficiencyScore: 99,
+        devVelocityScore: 74,
+        resilienceScore: 97,
+        primaryRouting: 'Local vLLM / Ollama (Qwen / DeepSeek R1) → SQLite-vec Local',
         recommendedCli: 'gitcore',
       },
       {
-        id: 'tier5',
-        title: '🏢 Tier 5: Enterprise Bedrock & Governance Swarm',
-        tagline: 'Enrutamiento multi-cuenta Amazon Bedrock / Vertex AI + Motor GitCore CI/CD',
-        description: 'Diseñado para empresas con requerimientos de gobernanza SOC2, rotación de API keys automatizada y suites de validación cruzada.',
-        costEstUsd: Math.round(monthlyTokensM * 3.2),
-        estLatencyMs: 280,
-        concurrencyLimit: 20,
+        id: 'tier_enterprise',
+        title: '🏢 Tier 5: Enterprise Governance & Resilient Failover',
+        tagline: 'Ruteo multi-cuenta con failover automático y rotación de credenciales',
+        description: 'Diseñado para squads que requieren alta disponibilidad, trazabilidad estricta y conmutación por error ante límites de cuota.',
+        costEstUsd: Math.round(monthlyTokensM * 2.8),
+        estLatencyMs: 270,
+        concurrencyLimit: 12,
         antiDriftScore: 99,
         e2eVerificationRate: 99,
-        costEfficiencyScore: 70,
-        devVelocityScore: 95,
+        costEfficiencyScore: 72,
+        devVelocityScore: 94,
         resilienceScore: 99,
-        primaryRouting: 'Amazon Bedrock / GCP Vertex AI → GitCore State Engine → Gated CI/CD',
+        primaryRouting: 'OpenRouter Multi-Account / AWS Bedrock → GitCore State Engine → Gated CI/CD',
         recommendedCli: 'gitcore',
       },
     ];
@@ -314,98 +361,92 @@
 
   const currentSelectedTier = $derived(simulationResults[selectedTierIndex] || simulationResults[0]);
 
-  // Active Providers Summary String (Generic Families)
+  // Active Providers Summary String
   const activeProvidersString = $derived(
     providersList.filter((p) => p.active).map((p) => p.family).join(', ') || 'Local Ollama / OpenRouter'
   );
 
-  // 1. MASTER SYSTEM PROMPT
+  // Active Subscriptions Summary
+  const activeSubscriptionsString = $derived.by(() => {
+    const s = profile.subscriptions;
+    const list: string[] = [];
+    if (s.googleAiPro) list.push('Google AI Pro (Jules 15-Wave, 100/24h)');
+    if (s.claudePro) list.push('Anthropic Claude Pro/Team (Claude Code CLI)');
+    if (s.openaiPlus) list.push('OpenAI Plus/Pro (Codegen & Reasoning)');
+    if (s.openrouter) list.push('OpenRouter API (Smart Multi-Provider Routing)');
+    if (s.localHardware) list.push('Hardware Local (Ollama / vLLM)');
+    return list.join(' | ') || 'Pago por Uso (Pay-as-you-go)';
+  });
+
+  // 1. MASTER SYSTEM PROMPT (Clean, Pragmatic, Zero Decorative Bloat)
   const generatedMasterPrompt = $derived.by(() => {
     const tier = currentSelectedTier;
     const p = profile;
-    return `================================================================================
-SWAL MASTER AGENT SYSTEM PROMPT [ARCHIVAL GRADE]
-Arquitectura Asignada: ${tier.title}
-Tipo de Carga: ${p.diagnostic.workloadType.toUpperCase()} | Profundidad de Contexto: ${p.diagnostic.contextDepth.toUpperCase()}
-Entorno de Hardware: ${p.hardware.type.toUpperCase()} (${p.hardware.ramGb}GB RAM, ${p.hardware.gpuVramGb}GB VRAM)
-Workspace: ${p.context.srcPath} | Tests: ${p.context.testPath}
-================================================================================
+    return `# Rol: Senior Software Engineer & AI Orchestrator
 
-1. DIRECTIVAS DE OPERACIÓN DETERMINISTA:
-- Eres un Agente de Ingeniería de Software Autónomo Staff/Senior operando bajo el framework determinista SWAL.
+## Entorno y Contexto de Ejecución
+- Arquitectura Asignada: ${tier.title}
 - Enrutamiento Primario: ${tier.primaryRouting}
 - Arnés CLI Activo: ${p.context.selectedCli.toUpperCase()}
-- Política de Tokens: Micro-fragmentación de código, lecturas quirúrgicas por rango, cero reescrituras de archivos no modificados.
-- Presupuesto mensual asignado: $${p.diagnostic.budgetLimitUsd} USD (Gasto actual reportado: $${p.diagnostic.currentMonthlySpendUsd} USD).
+- Workspace: \`${p.context.srcPath}\` | Tests: \`${p.context.testPath}\`
+- Concurrencia de Tareas: Máximo ${tier.concurrencyLimit} tareas simultáneas
+- Suscripciones y Recursos Disponibles: ${activeSubscriptionsString}
+- Modo Gratuito: ${p.diagnostic.useFreeTiers ? 'ACTIVO (Advertencia: ventana de contexto reducida y throttling en horas pico)' : 'INACTIVO (Prioridad a baja latencia y calidad)'}
 
-2. LÍMITES DE PROVEEDORES & RECURSOS:
-- Familias de Modelos Activas: ${activeProvidersString}
-- Concurrencia de Tareas Paralelas: Máximo ${tier.concurrencyLimit} tareas simultáneas.
-- Modo Servicios Gratuitos: ${p.diagnostic.useFreeTiers ? 'ACTIVO (Advertencia: ventana de contexto reducida y throttling en horas pico)' : 'INACTIVO (Prioridad a endpoints dedicados de baja latencia)'}.
-
-3. PROTOCOLO DE SEGURIDAD & AISLAMIENTO (ISLAS DISJUNTAS):
-- Regla 1 Issue → 1 Rama → 1 PR con pruebas automáticas.
-- Prohibido modificar archivos fuera del alcance de la tarea.
-- Cero fugas de credenciales: Toda API key se lee estrictamente de variables de entorno (${p.context.envKeys}).
-- Umbral de estabilidad Anti-Drift: Mínimo ${tier.antiDriftScore}%.
-- Verificación E2E obligatoria: Tasa de aprobación mínima del ${tier.e2eVerificationRate}%.`;
+## Directivas Operativas Clave
+1. Micro-fragmentación: 1 Issue → 1 Rama → 1 PR con pruebas automáticas.
+2. Lecturas quirúrgicas por rangos de líneas. Cero reescrituras completas de archivos intactos.
+3. Cero fugas de credenciales: Toda API key se lee estrictamente de variables de entorno (${p.context.envKeys}).
+4. Verificación obligatoria: Ejecutar la suite de pruebas locales (\`${p.context.testPath}\`) antes de confirmar cualquier cambio.
+5. Umbral de estabilidad Anti-Drift: Mantener calidad mínima del ${tier.antiDriftScore}%.`;
   });
 
-  // 2. LIVE WEB-SEARCH AGENT PROMPT (Cero Obsolescencia - Consulta al día de hoy)
+  // 2. LIVE WEB-SEARCH AGENT PROMPT (Clean, Direct, Live Search Ready)
   const generatedWebSearchPrompt = $derived.by(() => {
     const p = profile;
-    const tier = currentSelectedTier;
-    return `[PROMPT DE AUDITORÍA EN TIEMPO REAL CON BÚSQUEDA WEB]
-Actúa como un Consultor Senior en Infraestructura de IA y Arquitectura Agéntica.
+    return `Actúa como un Consultor Senior en Infraestructura de IA y Arquitectura Agéntica.
 
-MIS DATOS TÉCNICOS ACTUALES:
-- Hardware Disponible: ${p.hardware.type} (${p.hardware.ramGb}GB RAM, ${p.hardware.gpuVramGb}GB VRAM).
-- Tipo de Desarrollo: ${p.diagnostic.workloadType} (Profundidad de Contexto: ${p.diagnostic.contextDepth}).
-- Familias de Modelos Activas: ${activeProvidersString}.
-- Gasto Mensual Actual en IA: $${p.diagnostic.currentMonthlySpendUsd} USD/mes.
-- Presupuesto Máximo Objetivo: $${p.diagnostic.budgetLimitUsd} USD/mes.
-- Carga de Trabajo: ~${p.diagnostic.dailyPrompts} prompts/día.
-- Preferencia de Tiers Gratuitos: ${p.diagnostic.useFreeTiers ? 'Sí, quiero maximizar tiers gratuitos conociendo sus limitaciones de contexto y lentitud.' : 'No, prefiero estabilidad y velocidad de pago por uso.'}
+MIS DATOS TÉCNICOS:
+- Hardware: ${p.hardware.type} (${p.hardware.ramGb}GB RAM, ${p.hardware.gpuVramGb}GB VRAM).
+- Carga de Trabajo: ${p.diagnostic.workloadType} (Contexto: ${p.diagnostic.contextDepth}).
+- Suscripciones / Cuentas Activas: ${activeSubscriptionsString}.
+- Gasto Mensual Actual: $${p.diagnostic.currentMonthlySpendUsd} USD/mes (Presupuesto Objetivo: $${p.diagnostic.budgetLimitUsd} USD/mes).
+- Volumen Diario: ~${p.diagnostic.dailyPrompts} prompts/día.
+- Enfoque Free-Tiers: ${p.diagnostic.useFreeTiers ? 'Sí, maximizar endpoints gratuitos.' : 'No, prioridad a endpoints dedicados.'}
 
 INSTRUCCIONES DE INVESTIGACIÓN EN VIVO (AL DÍA DE HOY):
-1. Investiga en la web los modelos ACTIVOS MÁS RECIENTES para cada familia seleccionada (ej. versiones vigentes de Gemini Flash/Pro, Claude Sonnet, OpenAI GPT/o-series, DeepSeek V/R, Groq LPU y OpenRouter).
-2. Consulta los precios actuales por 1M de tokens (Input / Output) y estado de disponibilidad en tiempo real.
-3. Analiza las técnicas de enrutamiento y subastas de OpenRouter para recortar mi gasto actual ($${p.diagnostic.currentMonthlySpendUsd} USD/mes) sin perder calidad.
-4. Si mi hardware lo permite, evalúa qué pesos abiertos recientes (Qwen / Llama / DeepSeek) puedo correr 100% gratis en Ollama local para tareas de triage y tests.
-5. Recomienda una actualización formal para mi archivo SKILL.md y la configuración de mi arnés CLI (${p.context.selectedCli.toUpperCase()}).`;
+1. Investiga en la web los modelos activos y versiones más recientes para mis suscripciones (Google Gemini/Jules, Claude Sonnet, OpenAI GPT/o-series, DeepSeek, Groq y OpenRouter).
+2. Consulta precios vigentes por 1M de tokens (Input / Output) y límites de RPM/RPD actuales.
+3. Diseña una estrategia de balanceo para optimizar mi gasto mensual ($${p.diagnostic.currentMonthlySpendUsd} USD/mes) sin degradar calidad.
+4. Identifica qué modelos abiertos recientes puedo ejecutar sin costo en mi hardware local (${p.hardware.type}) con Ollama para triage y lints.
+5. Proporciona recomendaciones concisas para configurar mi arnés CLI (${p.context.selectedCli.toUpperCase()}).`;
   });
 
-  // 3. CLI HARDWARE SCAN SCRIPT (Para ejecutar en Terminal con Agentes Locales)
+  // 3. CLI HARDWARE SCAN SCRIPT
   const generatedCliAuditScript = $derived.by(() => {
     return `#!/usr/bin/env bash
-# ==============================================================================
 # SWAL Local Hardware & AI Runtimes Auditor (100% Local-First)
-# ==============================================================================
-echo "🔍 Escaneando entorno de hardware y runtimes de IA..."
+echo "🔍 Escaneando hardware y runtimes de IA locales..."
 
-# 1. OS & CPU
 echo "--- CPU & Sistema ---"
 uname -s -r -m
 nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null
 
-# 2. RAM
 echo "--- Memoria RAM ---"
 free -h 2>/dev/null || vm_stat 2>/dev/null
 
-# 3. GPU / VRAM
 echo "--- Aceleradores GPU / VRAM ---"
 if command -v nvidia-smi &> /dev/null; then
     nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader
 elif [[ "$(uname)" == "Darwin" ]]; then
     system_profiler SPDisplaysDataType | grep "Chipset Model\\|VRAM"
 else
-    echo "Sin GPU NVIDIA/Apple detectada (Modo CPU)"
+    echo "Sin GPU dedicada detectada (Modo CPU)"
 fi
 
-# 4. Local AI Runtimes
 echo "--- Runtimes Locales ---"
 if command -v ollama &> /dev/null; then
-    echo "✓ Ollama instalado. Modelos en disco:"
+    echo "✓ Ollama instalado. Modelos:"
     ollama list
 else
     echo "✗ Ollama no instalado"
@@ -415,28 +456,27 @@ if command -v vllm &> /dev/null; then
     echo "✓ vLLM instalado"
 fi
 
-echo "✅ Auditoría completada. Copia estos datos en tu simulador."
+echo "✅ Auditoría completada."
 `;
   });
 
   // 4. WORKSPACE & REPO METRICS SCANNER PROMPT
   const generatedMetricsPrompt = $derived.by(() => {
     const p = profile;
-    return `[PROMPT DE EXTRACCIÓN DE MÉTRICAS DE PROYECTOS & CÓDIGO]
-Actúa como un Ingeniero de DevOps & Agente de Auditoría de Repositorios.
+    return `Actúa como un Ingeniero de DevOps y Agente de Auditoría de Repositorios.
 
-MIS OBJETIVOS:
-Necesito extraer las métricas exactas de mis proyectos de software locales ubicados en \`${p.context.srcPath}\` para alimentar el Simulador Agéntico SWAL.
+OBJETIVO:
+Extraer las métricas exactas de los proyectos locales en \`${p.context.srcPath}\` para alimentar el Simulador Agéntico SWAL.
 
-INSTRUCCIONES DE EJECUCIÓN PARA EL AGENTE:
-1. Escribe y ejecuta un script local (Python, Node.js o Bash con tokei/cloc/find) que analice de forma recursiva mis directorios de proyectos.
-2. Extrae las siguientes métricas clave:
-   - Número total de repositorios / proyectos activos.
-   - Total de Líneas de Código (LOC) desglosadas por lenguaje (TypeScript, PHP, Rust, Python, Go, etc.).
-   - Tamaño total en disco (MB) excluyendo node_modules, .git, target, vendor y dist.
+INSTRUCCIONES:
+1. Escribe y ejecuta un script local (Python, Node.js o Bash con tokei/cloc/find) que analice recursivamente los proyectos en \`${p.context.srcPath}\`.
+2. Extrae las siguientes métricas:
+   - Número total de repositorios y proyectos activos.
+   - Total de Líneas de Código (LOC) desglosadas por lenguaje principal.
+   - Tamaño en disco (MB) excluyendo node_modules, .git, target, vendor y dist.
    - Conteo de archivos de configuración (.env, docker-compose, tsconfig, package.json).
-3. Genera un reporte resumido en formato Markdown y un payload JSON sanitizado listo para importar en el Simulador de Recursos SWAL.
-4. Asegúrate de NO leer ni imprimir valores de claves secretas de los archivos .env (solo listar nombres de variables).`;
+3. Genera un reporte resumido en Markdown y un JSON sanitizado listo para importar.
+4. NUNCA leas ni imprimas valores secretos de archivos .env (solo lista nombres de variables).`;
   });
 
   // 5. SKILL.MD TEMPLATE
@@ -445,50 +485,44 @@ INSTRUCCIONES DE EJECUCIÓN PARA EL AGENTE:
     const p = profile;
     return `---
 name: swal-resource-orchestrator-${p.context.selectedCli}
-description: Protocolo y habilidades de desarrollo determinista para ${p.diagnostic.workloadType.toUpperCase()} en ${p.hardware.type.toUpperCase()}.
+description: Protocolo de desarrollo determinista para ${p.diagnostic.workloadType.toUpperCase()} en ${p.hardware.type.toUpperCase()}.
 ---
 
 # SKILL: SWAL RESOURCE ORCHESTRATOR (${p.context.selectedCli.toUpperCase()})
 
-## 1. Mapeo y Enrutamiento de Familias de Modelos
-- **Tareas Simples / Lints / Lecturas**: Modelos ligeros (Gemini Flash / DeepSeek / Groq) o Local Ollama.
-- **Arquitectura / Refactor Complejo**: Claude Sonnet / DeepSeek Reasoning vía OpenRouter.
-- **Ruta Primaria Asignada**: \`${tier.primaryRouting}\`
+## 1. Mapeo y Enrutamiento
+- Tareas Rápidas / Lints: Modelos ligeros (Flash / DeepSeek / Groq) u Ollama local.
+- Arquitectura / Refactor: Claude Sonnet / OpenAI o-series vía OpenRouter o suscripción directa.
+- Ruta Primaria Asignada: \`${tier.primaryRouting}\`
 
-## 2. Guardrails de Ejecución y Cuotas
-- **Concurrencia Máxima de Tareas**: ${tier.concurrencyLimit} tareas simultáneas.
-- **Profundidad de Contexto**: ${p.diagnostic.contextDepth.toUpperCase()}
-- **Directorio de Código**: \`${p.context.srcPath}\`
-- **Directorio de Pruebas**: \`${p.context.testPath}\`
+## 2. Guardrails de Ejecución
+- Concurrencia Máxima: ${tier.concurrencyLimit} tareas simultáneas.
+- Directorio de Código: \`${p.context.srcPath}\`
+- Directorio de Pruebas: \`${p.context.testPath}\`
 
 ## 3. Protocolo Anti-Drift & Privacidad
 - Validar tests antes de cada commit.
-- Cero subida de credenciales ni secretos (.env).
+- Cero filtración de credenciales ni secretos (.env).
 `;
   });
 
   // 6. SANITIZED .ENV.EXAMPLE
   const generatedEnvExample = $derived.by(() => {
     const p = profile;
-    let env = `# .env.example — SWAL Local-First Simulation Framework\n`;
-    env += `# 100% Generado en local en tu navegador (0% almacenamiento en servidor)\n\n`;
+    let env = `# .env.example — SWAL Simulation Framework (100% Local)\n\n`;
     env += `SWAL_SIMULATOR_VERSION=${p.version}\n`;
     env += `SWAL_SELECTED_CLI=${p.context.selectedCli}\n`;
     env += `SWAL_WORKLOAD_TYPE=${p.diagnostic.workloadType}\n`;
     env += `SWAL_MONTHLY_BUDGET_USD=${p.diagnostic.budgetLimitUsd}\n\n`;
-    env += `# --- Proveedores y Credenciales ---\n`;
+    env += `# Credenciales Sanitizadas:\n`;
 
-    providersList.filter((x) => x.active).forEach((x) => {
-      if (x.id === 'openrouter_meta') env += `OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'gemini_family') env += `GEMINI_API_KEY=AIzaSyXxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'claude_family') env += `ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'openai_family') env += `OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'deepseek_family') env += `DEEPSEEK_API_KEY=sk-ds-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'groq_lpu') env += `GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx\n`;
-      if (x.id === 'bedrock_family') env += `AWS_ACCESS_KEY_ID=AKIAXXXXXXXXXXXXXXXX\nAWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxx\nAWS_REGION=us-east-1\n`;
-      if (x.id === 'ollama_local') env += `OLLAMA_HOST=http://localhost:11434\n`;
-      if (x.id === 'vllm_cluster') env += `VLLM_ENDPOINT=http://localhost:8000/v1\n`;
-    });
+    if (p.subscriptions.openrouter) env += `OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.subscriptions.googleAiPro || p.providers.gemini_family) env += `GEMINI_API_KEY=AIzaSyXxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.subscriptions.claudePro || p.providers.claude_family) env += `ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.subscriptions.openaiPlus || p.providers.openai_family) env += `OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.providers.deepseek_family) env += `DEEPSEEK_API_KEY=sk-ds-xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.providers.groq_lpu) env += `GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx\n`;
+    if (p.subscriptions.localHardware || p.providers.ollama_local) env += `OLLAMA_HOST=http://localhost:11434\n`;
 
     return env;
   });
@@ -538,7 +572,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
         🔒 100% Serverless · Privacidad Total en tu Navegador
       </span>
       <span class="px-3 py-1 rounded-full text-xs font-mono bg-indigo-500/10 border border-indigo-500/30 text-indigo-300">
-        🌐 Familias Genéricas (Sin Obsolescencia)
+        🌐 Familias Genéricas Dinámicas
       </span>
     </div>
 
@@ -546,7 +580,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
       Simulador de Recursos, Gastos & Generador de Skills
     </h1>
     <p class="text-text-muted max-w-3xl text-sm md:text-base leading-relaxed">
-      Audita tus familias de modelos, hardware y presupuesto para simular las 5 mejores configuraciones agénticas y generar prompts maestros, scripts de auto-escaneo CLI y prompts para agentes con búsqueda web en vivo.
+      Configura tus suscripciones activas (Google AI Pro, Claude Pro, OpenAI Plus, OpenRouter o Local), hardware y presupuesto para simular las 5 mejores configuraciones agénticas y generar prompts maestros, scripts de auto-escaneo CLI y prompts para agentes con búsqueda web en vivo.
     </p>
 
     <!-- Toolbar: Save / Reset / Export / Import -->
@@ -591,25 +625,102 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
     </div>
   </div>
 
-  <!-- SECTION 1: Providers, Diagnostic Questions & Hardware -->
+  <!-- SECTION 1: Subscriptions, Diagnostic Questions, Hardware & Providers -->
   <div class="bg-bg-surface-dark border border-white/10 rounded-xl p-6 md:p-8 space-y-8 shadow-xl">
     <div class="flex items-center justify-between border-b border-white/10 pb-4">
       <h2 class="text-xl font-bold text-accent flex items-center gap-2">
-        <span>⚙️</span> 1. Diagnóstico de Recursos & Familias de Modelos (Top 20)
+        <span>⚙️</span> 1. Diagnóstico de Suscripciones, Hardware & Proveedores
       </h2>
       <span class="text-xs font-mono text-emerald-400">0% Llamadas a Servidores Externos</span>
+    </div>
+
+    <!-- Active Subscriptions & Tools Selector -->
+    <div class="p-5 rounded-xl border border-accent/20 bg-accent/5 space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xs uppercase tracking-wider text-accent font-bold">
+          🔑 Tus Suscripciones y Cuentas Activas (Orquestación como Subagentes / CLI)
+        </h3>
+        <span class="text-[11px] text-text-muted">Ajusta dinámicamente la concurrencia</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <label class="flex items-start gap-2.5 p-3 rounded-lg border text-left transition-all cursor-pointer {profile.subscriptions.googleAiPro ? 'border-accent bg-accent/15 text-white' : 'border-white/10 bg-black/40 text-text-muted hover:border-white/20'}">
+          <input
+            type="checkbox"
+            bind:checked={profile.subscriptions.googleAiPro}
+            onchange={saveProfile}
+            class="accent-accent w-4 h-4 mt-0.5"
+          />
+          <div>
+            <span class="text-xs font-bold block text-white">Google AI Pro</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Jules 15 tareas paralelas (100 runs/24h)</span>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-2.5 p-3 rounded-lg border text-left transition-all cursor-pointer {profile.subscriptions.claudePro ? 'border-accent bg-accent/15 text-white' : 'border-white/10 bg-black/40 text-text-muted hover:border-white/20'}">
+          <input
+            type="checkbox"
+            bind:checked={profile.subscriptions.claudePro}
+            onchange={saveProfile}
+            class="accent-accent w-4 h-4 mt-0.5"
+          />
+          <div>
+            <span class="text-xs font-bold block text-white">Claude Pro / Team</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Claude Code CLI & subagentes Sonnet</span>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-2.5 p-3 rounded-lg border text-left transition-all cursor-pointer {profile.subscriptions.openaiPlus ? 'border-accent bg-accent/15 text-white' : 'border-white/10 bg-black/40 text-text-muted hover:border-white/20'}">
+          <input
+            type="checkbox"
+            bind:checked={profile.subscriptions.openaiPlus}
+            onchange={saveProfile}
+            class="accent-accent w-4 h-4 mt-0.5"
+          />
+          <div>
+            <span class="text-xs font-bold block text-white">OpenAI Plus / Pro</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">GPT / o-series subagentes CLI</span>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-2.5 p-3 rounded-lg border text-left transition-all cursor-pointer {profile.subscriptions.openrouter ? 'border-accent bg-accent/15 text-white' : 'border-white/10 bg-black/40 text-text-muted hover:border-white/20'}">
+          <input
+            type="checkbox"
+            bind:checked={profile.subscriptions.openrouter}
+            onchange={saveProfile}
+            class="accent-accent w-4 h-4 mt-0.5"
+          />
+          <div>
+            <span class="text-xs font-bold block text-white">OpenRouter API</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Ruteo multi-modelo & subastas</span>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-2.5 p-3 rounded-lg border text-left transition-all cursor-pointer {profile.subscriptions.localHardware ? 'border-accent bg-accent/15 text-white' : 'border-white/10 bg-black/40 text-text-muted hover:border-white/20'}">
+          <input
+            type="checkbox"
+            bind:checked={profile.subscriptions.localHardware}
+            onchange={saveProfile}
+            class="accent-accent w-4 h-4 mt-0.5"
+          />
+          <div>
+            <span class="text-xs font-bold block text-white">Hardware Local</span>
+            <span class="text-[10px] text-text-muted leading-tight block mt-0.5">Ollama / vLLM ($0 en tu PC)</span>
+          </div>
+        </label>
+      </div>
     </div>
 
     <!-- Generic Model Families Selector -->
     <div>
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-xs uppercase tracking-wider text-text-muted font-bold">
-          Selecciona tus Familias de Modelos y APIs ({providersList.filter(p => p.active).length}/{providersList.length} activas)
+          Familias de Modelos y Proveedores ({providersList.filter(p => p.active).length}/{providersList.length} activos)
         </h3>
-        <span class="text-[11px] text-text-muted">Familias genéricas evaluadas en vivo por agentes</span>
+        <span class="text-[11px] text-text-muted">Evaluadas en vivo por agentes</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 max-h-72 overflow-y-auto p-1 border border-white/5 rounded-lg bg-black/20">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 max-h-64 overflow-y-auto p-1 border border-white/5 rounded-lg bg-black/20">
         {#each providersList as p}
           <button
             type="button"
@@ -759,11 +870,11 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
       <div>
         <label class="block text-text-muted mb-1 font-mono">Arnés CLI Activo</label>
         <select bind:value={profile.context.selectedCli} onchange={saveProfile} class="w-full bg-black/40 border border-white/15 rounded px-2.5 py-1.5 font-mono text-white cursor-pointer">
+          <option value="claude_code">Claude Code CLI</option>
           <option value="jules">Google Jules Swarm</option>
           <option value="hermes">Hermes Gateway</option>
           <option value="openclaw">OpenClaw Browser</option>
           <option value="gitcore">GitCore Deterministic Engine</option>
-          <option value="claude_code">Claude Code CLI</option>
           <option value="opencode">OpenCode Go CLI</option>
         </select>
       </div>
@@ -774,13 +885,13 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
     </div>
   </div>
 
-  <!-- SECTION 2: Top 5 Configuration Ranking Engine -->
+  <!-- SECTION 2: Top 5 Dynamic Configuration Ranking Engine -->
   <div class="space-y-6">
     <div class="flex items-center justify-between">
       <h2 class="text-xl font-bold text-accent flex items-center gap-2">
-        <span>📊</span> 2. Simulación de Escenarios Paramétricos (Top 5 Tiers)
+        <span>📊</span> 2. Simulación de Escenarios Paramétricos (Top 5 Tiers Dinámicos)
       </h2>
-      <span class="text-xs font-mono text-text-muted">Optimizando Costo vs. Velocidad</span>
+      <span class="text-xs font-mono text-text-muted">Ajustado a tus Suscripciones & Hardware</span>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
@@ -882,14 +993,14 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
     </div>
   </div>
 
-  <!-- SECTION 3: Generator Tabs (Master Prompt, Live Search Prompt, CLI Audit Script, SKILL.md, .env) -->
+  <!-- SECTION 3: Generator Tabs (Pragmatic Master Prompt, Live Search Prompt, CLI Audit Script, SKILL.md, .env) -->
   <div class="bg-bg-surface-dark border border-white/10 rounded-xl p-6 md:p-8 space-y-8 shadow-xl">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
       <div>
         <h2 class="text-xl font-bold text-accent flex items-center gap-2">
-          <span>🛠️</span> 3. Generador de Prompts, Scripts CLI & Skills
+          <span>🛠️</span> 3. Generador de Prompts Pragmáticos, Scripts CLI & Skills
         </h2>
-        <p class="text-xs text-text-muted mt-1">Artefactos deterministas para web y terminal</p>
+        <p class="text-xs text-text-muted mt-1">Artefactos directos, precisos y listos para inyectar en tus agentes</p>
       </div>
       <button
         onclick={downloadAllArtifacts}
@@ -944,7 +1055,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
       <div class="space-y-3">
         <div class="flex items-center justify-between">
           <p class="text-xs text-text-muted">
-            Inyéctalo como system prompt en <strong>Claude Code, Antigravity, OpenCode, Cursor</strong> o tus agentes CLI:
+            Inyéctalo como system prompt en <strong>Claude Code, Antigravity, OpenCode, Jules, Cursor</strong> o agentes CLI:
           </p>
           <button
             onclick={() => copyToClipboard(generatedMasterPrompt, 'Master System Prompt')}
@@ -962,7 +1073,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
       <div class="space-y-3">
         <div class="flex items-center justify-between">
           <p class="text-xs text-emerald-300">
-            💡 Pega este prompt en un agente con <strong>búsqueda web en vivo</strong> (Gemini con Search, Perplexity, Claude con Search, ChatGPT Search o OpenClaw) para que investigue los modelos activos al día de hoy:
+            💡 Pega este prompt en un agente con <strong>búsqueda web en vivo</strong> (Gemini Search, Perplexity, Claude con Search, ChatGPT Search o OpenClaw) para consultar versiones vigentes y precios al día de hoy:
           </p>
           <button
             onclick={() => copyToClipboard(generatedWebSearchPrompt, 'Prompt con Búsqueda Web')}
@@ -980,7 +1091,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
       <div class="space-y-3">
         <div class="flex items-center justify-between">
           <p class="text-xs text-purple-300">
-            📊 Pega este prompt en tu agente local (Antigravity, Claude Code, OpenCode, Hermes) para que cree un script que cuente tus Líneas de Código (LOC), número de proyectos y tamaño total:
+            📊 Pega este prompt en tu agente local (Antigravity, Claude Code, OpenCode, Hermes) para extraer el conteo de LOC, proyectos y tamaño de tus repositorios:
           </p>
           <button
             onclick={() => copyToClipboard(generatedMetricsPrompt, 'Prompt Escáner de Métricas')}
@@ -1029,7 +1140,7 @@ description: Protocolo y habilidades de desarrollo determinista para ${p.diagnos
       </div>
     {/if}
 
-    <!-- TAB 5: .env.example -->
+    <!-- TAB 6: .env.example -->
     {#if activeTab === 'env'}
       <div class="space-y-3">
         <div class="flex items-center justify-between">

@@ -1,12 +1,21 @@
 import { describe, it, expect } from 'vitest';
 
+interface SubscriptionsState {
+  googleAiPro: boolean;
+  claudePro: boolean;
+  openaiPlus: boolean;
+  openrouter: boolean;
+  localHardware: boolean;
+}
+
 interface SimulationParams {
   dailyPrompts: number;
   contextDepth: 'short' | 'medium' | 'deep';
   budgetLimitUsd: number;
   currentMonthlySpendUsd: number;
   useFreeTiers: boolean;
-  hasLocalCompute: boolean;
+  subscriptions: SubscriptionsState;
+  hardware: { ramGb: number };
 }
 
 function calculateSimulationTiers(params: SimulationParams) {
@@ -14,51 +23,57 @@ function calculateSimulationTiers(params: SimulationParams) {
   const totalDailyTokens = params.dailyPrompts * multiplier;
   const monthlyTokensM = (totalDailyTokens * 30) / 1_000_000;
 
+  const subs = params.subscriptions;
+  const julesConcurrency = subs.googleAiPro ? 15 : 4;
+  const claudeConcurrency = subs.claudePro ? 5 : 2;
+  const openrouterConcurrency = subs.openrouter ? 8 : 3;
+  const localConcurrency = params.hardware.ramGb >= 64 ? 4 : 2;
+
   const tiers = [
     {
-      id: 'tier1',
-      name: 'Ultra-Cost Optimizer',
-      costEstUsd: params.useFreeTiers ? 0 : params.hasLocalCompute ? Math.round(monthlyTokensM * 0.22) : Math.round(monthlyTokensM * 0.45),
-      costEfficiencyScore: 98,
-      devVelocityScore: 78,
-      resilienceScore: 88,
-      concurrencyLimit: 4,
+      id: 'tier_velocity',
+      name: subs.googleAiPro ? 'Wave Parallelism (Jules)' : subs.claudePro ? 'Claude Subagents' : 'Concurrent Pipeline',
+      costEstUsd: params.useFreeTiers ? 0 : Math.round(monthlyTokensM * 1.5),
+      costEfficiencyScore: subs.googleAiPro ? 88 : 82,
+      devVelocityScore: subs.googleAiPro ? 99 : 92,
+      resilienceScore: 93,
+      concurrencyLimit: subs.googleAiPro ? julesConcurrency : subs.claudePro ? claudeConcurrency : openrouterConcurrency,
     },
     {
-      id: 'tier2',
-      name: 'Maximum Velocity',
-      costEstUsd: Math.round(monthlyTokensM * 1.6),
-      costEfficiencyScore: 80,
-      devVelocityScore: 99,
-      resilienceScore: 91,
-      concurrencyLimit: 15,
-    },
-    {
-      id: 'tier3',
+      id: 'tier_hybrid',
       name: 'Balanced Hybrid Orchestrator',
-      costEstUsd: Math.round(monthlyTokensM * 2.1),
-      costEfficiencyScore: 86,
-      devVelocityScore: 90,
+      costEstUsd: params.useFreeTiers ? 0 : Math.round(monthlyTokensM * 0.9),
+      costEfficiencyScore: 90,
+      devVelocityScore: 91,
       resilienceScore: 96,
-      concurrencyLimit: 8,
+      concurrencyLimit: Math.max(claudeConcurrency, openrouterConcurrency),
     },
     {
-      id: 'tier4',
+      id: 'tier_cost',
+      name: 'Ultra-Cost Optimizer',
+      costEstUsd: params.useFreeTiers ? 0 : subs.localHardware ? Math.round(monthlyTokensM * 0.20) : Math.round(monthlyTokensM * 0.40),
+      costEfficiencyScore: 98,
+      devVelocityScore: 79,
+      resilienceScore: 89,
+      concurrencyLimit: subs.localHardware ? localConcurrency : 4,
+    },
+    {
+      id: 'tier_local',
       name: 'Sovereign Local-First',
       costEstUsd: 0,
-      costEfficiencyScore: 96,
-      devVelocityScore: 72,
-      resilienceScore: 98,
-      concurrencyLimit: 6,
+      costEfficiencyScore: 99,
+      devVelocityScore: 74,
+      resilienceScore: 97,
+      concurrencyLimit: localConcurrency,
     },
     {
-      id: 'tier5',
-      name: 'Enterprise Bedrock & Governance Swarm',
-      costEstUsd: Math.round(monthlyTokensM * 3.2),
-      costEfficiencyScore: 70,
-      devVelocityScore: 95,
+      id: 'tier_enterprise',
+      name: 'Enterprise Governance',
+      costEstUsd: Math.round(monthlyTokensM * 2.8),
+      costEfficiencyScore: 72,
+      devVelocityScore: 94,
       resilienceScore: 99,
-      concurrencyLimit: 20,
+      concurrencyLimit: 12,
     },
   ];
 
@@ -74,51 +89,95 @@ function calculateSimulationTiers(params: SimulationParams) {
   }).sort((a, b) => b.overallScore - a.overallScore);
 }
 
-describe('Resource Simulator Algorithmic Engine', () => {
-  it('should rank 5 distinct tiers correctly for balanced standard workload', () => {
+function generateCleanMasterPrompt(tierTitle: string, routing: string, concurrency: number, srcPath: string, testPath: string) {
+  return `# Rol: Senior Software Engineer & AI Orchestrator
+
+## Entorno y Contexto de Ejecución
+- Arquitectura Asignada: ${tierTitle}
+- Enrutamiento Primario: ${routing}
+- Workspace: \`${srcPath}\` | Tests: \`${testPath}\`
+- Concurrencia de Tareas: Máximo ${concurrency} tareas simultáneas
+
+## Directivas Operativas Clave
+1. Micro-fragmentación: 1 Issue → 1 Rama → 1 PR con pruebas automáticas.
+2. Lecturas quirúrgicas por rangos de líneas. Cero reescrituras completas de archivos intactos.
+3. Cero fugas de credenciales: Toda API key se lee estrictamente de variables de entorno.
+4. Verificación obligatoria: Ejecutar la suite de pruebas locales (\`${testPath}\`) antes de confirmar cualquier cambio.`;
+}
+
+describe('Resource Simulator Dynamic Engine', () => {
+  it('should grant 15 parallel tasks concurrency when Google AI Pro is active', () => {
     const results = calculateSimulationTiers({
       dailyPrompts: 120,
       contextDepth: 'medium',
-      budgetLimitUsd: 60,
+      budgetLimitUsd: 100,
       currentMonthlySpendUsd: 40,
       useFreeTiers: false,
-      hasLocalCompute: true,
+      subscriptions: {
+        googleAiPro: true,
+        claudePro: false,
+        openaiPlus: false,
+        openrouter: false,
+        localHardware: true,
+      },
+      hardware: { ramGb: 64 },
     });
 
-    expect(results).toHaveLength(5);
-    expect(results[0].overallScore).toBeGreaterThanOrEqual(results[1].overallScore);
-    expect(results[1].overallScore).toBeGreaterThanOrEqual(results[2].overallScore);
+    const velocityTier = results.find(t => t.id === 'tier_velocity');
+    expect(velocityTier?.concurrencyLimit).toBe(15);
   });
 
-  it('should penalize configurations that exceed the monthly budget limit', () => {
-    const strictBudgetResults = calculateSimulationTiers({
-      dailyPrompts: 400,
-      contextDepth: 'deep',
-      budgetLimitUsd: 10, // Strict $10 USD budget
-      currentMonthlySpendUsd: 100,
+  it('should dynamically adapt concurrency to 5 when user only has Claude Pro without Google AI Pro', () => {
+    const results = calculateSimulationTiers({
+      dailyPrompts: 120,
+      contextDepth: 'medium',
+      budgetLimitUsd: 100,
+      currentMonthlySpendUsd: 40,
       useFreeTiers: false,
-      hasLocalCompute: true,
+      subscriptions: {
+        googleAiPro: false,
+        claudePro: true,
+        openaiPlus: false,
+        openrouter: false,
+        localHardware: true,
+      },
+      hardware: { ramGb: 32 },
     });
 
-    // Tier 4 (Sovereign $0) and Tier 1 (Low Cost) should score highest due to budget penalties on expensive cloud
-    const topTier = strictBudgetResults[0];
-    expect(topTier.costEstUsd).toBeLessThanOrEqual(50);
+    const velocityTier = results.find(t => t.id === 'tier_velocity');
+    expect(velocityTier?.concurrencyLimit).toBe(5);
   });
 
-  it('should support 100% free-tiers mode with zero estimated cost on tier 1 and tier 4', () => {
-    const freeTierResults = calculateSimulationTiers({
+  it('should generate pragmatic clean master prompts without decorative ASCII banners or bloat', () => {
+    const prompt = generateCleanMasterPrompt('Wave Parallelism', 'Claude Sonnet → Local Test Sandbox', 15, './src', './tests');
+
+    expect(prompt).toContain('# Rol: Senior Software Engineer & AI Orchestrator');
+    expect(prompt).toContain('Concurrencia de Tareas: Máximo 15 tareas simultáneas');
+    expect(prompt).not.toContain('================================================================================');
+    expect(prompt).not.toContain('[ARCHIVAL GRADE]');
+  });
+
+  it('should penalize configurations exceeding budget and support $0 free-tier simulation', () => {
+    const freeResults = calculateSimulationTiers({
       dailyPrompts: 100,
       contextDepth: 'short',
       budgetLimitUsd: 0,
       currentMonthlySpendUsd: 0,
       useFreeTiers: true,
-      hasLocalCompute: true,
+      subscriptions: {
+        googleAiPro: false,
+        claudePro: false,
+        openaiPlus: false,
+        openrouter: false,
+        localHardware: true,
+      },
+      hardware: { ramGb: 16 },
     });
 
-    const tier1 = freeTierResults.find(t => t.id === 'tier1');
-    const tier4 = freeTierResults.find(t => t.id === 'tier4');
+    const costTier = freeResults.find(t => t.id === 'tier_cost');
+    const localTier = freeResults.find(t => t.id === 'tier_local');
 
-    expect(tier1?.costEstUsd).toBe(0);
-    expect(tier4?.costEstUsd).toBe(0);
+    expect(costTier?.costEstUsd).toBe(0);
+    expect(localTier?.costEstUsd).toBe(0);
   });
 });

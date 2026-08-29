@@ -15,7 +15,6 @@
     { key: 'simulator', href: baseUrl('simulator') },
     { key: 'contact', href: '#contact' },
     { key: 'agenda', href: baseUrl('agenda') },
-    { key: 'simulator', href: baseUrl('simulator') },
   ];
 
   function handleScroll() {

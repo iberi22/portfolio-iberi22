@@ -1,18 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.svelte';
-import ResourceSkills from '../components/ResourceSkills.svelte';
-import Footer from '../components/Footer.svelte';
-
-const title = 'Agent Skills, Prompts & Diagnostic Resources — iberi22';
-const description =
-  'Agent-ready & human-friendly library of deterministic skills, architecture prompts, and pre-meet diagnostic tools for coding agents (Jules, Claude Code, Hermes, OpenCode). Copy raw Markdown directly or inspect canonical sources on GitHub.';
+import { baseUrl } from '../lib/baseUrl';
 ---
 
-<Layout title={title} description={description}>
-  <Nav client:load />
-  <main class="pt-16">
-    <ResourceSkills client:load />
-  </main>
-  <Footer client:load />
-</Layout>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0;url=${baseUrl('agenda')}`} />
+    <link rel="canonical" href={baseUrl('agenda')} />
+    <title>Redirigiendo a Agenda...</title>
+    <script is:inline define:vars={{ targetUrl: baseUrl('agenda') }}>
+      window.location.replace(targetUrl);
+    </script>
+  </head>
+  <body class="bg-[#0a0a0a] text-white flex items-center justify-center min-h-screen font-mono text-xs">
+    <div class="text-center space-y-4">
+      <p class="text-accent animate-pulse">Redirigiendo a /agenda...</p>
+    </div>
+  </body>
+</html>

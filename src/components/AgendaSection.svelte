@@ -228,7 +228,7 @@
       </div>
     </div>
 
-    <!-- Data-Driven Decision & Scenario Simulation Methodology -->
+    <!-- Data-Driven Decision & Scenario Simulation Methodology (Comentado temporalmente)
     <div class="glass-card p-8 md:p-10 mt-12 border-accent/20 bg-bg-surface-dark/80 entry-rise" style="animation-delay: 540ms">
       <div class="flex items-center gap-3 mb-4">
         <span class="px-2.5 py-1 rounded text-[10px] font-mono font-bold uppercase bg-accent/10 text-accent border border-accent/30">
@@ -278,7 +278,6 @@
         </div>
       </div>
 
-      <!-- Interactive Pre-Meet Diagnostic Tool CTA Card -->
       <div class="mt-8 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 bg-accent/5 -mx-4 md:-mx-6 -mb-4 md:-mb-6 p-6 rounded-b-2xl border-t border-accent/20">
         <div class="space-y-1.5 text-center sm:text-left">
           <div class="flex items-center justify-center sm:justify-start gap-2">
@@ -298,6 +297,7 @@
         </a>
       </div>
     </div>
+    -->
 
     <!-- Booking Form -->
     <div class="mt-14 max-w-3xl mx-auto entry-rise" style="animation-delay: 570ms">

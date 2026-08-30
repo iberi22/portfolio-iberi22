@@ -16,7 +16,7 @@
         <a href="#about" class="hover:text-accent transition-colors">{t('nav.about')}</a>
         <a href="#projects" class="hover:text-accent transition-colors">{t('nav.projects')}</a>
         <a href={baseUrl('blog')} class="hover:text-accent transition-colors">{t('nav.blog')}</a>
-        <a href={baseUrl('resources')} class="text-accent hover:text-accent-light transition-colors">{t('nav.resources')}</a>
+        <!-- <a href={baseUrl('resources')} class="text-accent hover:text-accent-light transition-colors">{t('nav.resources')}</a> -->
         <a href="#contact" class="hover:text-accent transition-colors">{t('nav.contact')}</a>
         <a href={baseUrl('agenda')} class="text-accent hover:text-accent-light transition-colors">{t('nav.agenda')}</a>
       </div>

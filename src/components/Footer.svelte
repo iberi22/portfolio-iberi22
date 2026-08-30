@@ -16,7 +16,7 @@
         <a href="#about" class="hover:text-accent transition-colors">{t('nav.about')}</a>
         <a href="#projects" class="hover:text-accent transition-colors">{t('nav.projects')}</a>
         <a href={baseUrl('blog')} class="hover:text-accent transition-colors">{t('nav.blog')}</a>
-        <a href={baseUrl('simulator')} class="text-accent hover:text-accent-light transition-colors">{t('nav.simulator')}</a>
+        <a href={baseUrl('resources')} class="text-accent hover:text-accent-light transition-colors">{t('nav.resources')}</a>
         <a href="#contact" class="hover:text-accent transition-colors">{t('nav.contact')}</a>
         <a href={baseUrl('agenda')} class="text-accent hover:text-accent-light transition-colors">{t('nav.agenda')}</a>
       </div>
@@ -26,8 +26,23 @@
       </a>
     </div>
 
+    <!-- Agent & Human Friendly Manifesto Statement -->
+    <div class="pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-text-muted">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[11px]">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Friend for Agents & Humans</span>
+        </span>
+        <span class="text-text-muted hidden sm:inline">·</span>
+        <span class="text-text-muted hidden sm:inline">Markdown-Native & Local-First Architecture</span>
+      </div>
+      <p class="text-center md:text-right text-[11px] text-text-muted max-w-md">
+        Diseñado para humanos, optimizado para agentes de codificación autónomos (Jules, Claude Code, Hermes, OpenCode).
+      </p>
+    </div>
+
     <!-- Copyright & Attribution -->
-    <div class="pt-6 border-t border-white/5 text-center">
+    <div class="pt-4 border-t border-white/5 text-center">
       <p class="text-text-muted text-xs">
         <span class="text-accent/40">&copy;</span> {new Date().getFullYear()} <span class="text-accent/70">iberi22</span>
         <span class="text-text-muted mx-2">/</span>

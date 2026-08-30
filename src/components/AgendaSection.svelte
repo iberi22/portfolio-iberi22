@@ -290,7 +290,7 @@
           </p>
         </div>
         <a
-          href={baseUrl('simulator')}
+          href={baseUrl('resources')}
           class="shrink-0 inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-accent text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-accent-light transition-all shadow-lg shadow-accent/20 hover:scale-[1.02]"
         >
           <span>{t('agenda.diagCtaBtn')}</span>

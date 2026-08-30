@@ -164,6 +164,12 @@ const jsonLd = article ? {
     <meta name="twitter:creator" content="@iberi22" />
     <meta name="twitter:site" content="@iberi22" />
 
+    <!-- AI Agent & Human Friendly Standards -->
+    <meta name="ai-agent-ready" content="true" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="agent-protocol" content="SWAL-Gestalt-Xavier-v3" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
     <!-- JSON-LD Structured Data Schema -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     {breadcrumbLd && (

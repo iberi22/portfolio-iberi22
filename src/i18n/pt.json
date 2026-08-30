@@ -7,7 +7,8 @@
     "git": "GIT",
     "github": "GITHUB",
     "agenda": "Agendar",
-    "simulator": "Simulador"
+    "simulator": "Simulador",
+    "resources": "Simulador"
   },
   "hero": {
     "badge": "Desenvolvedor Full-Stack Senior · 10+ Anos em Produção",

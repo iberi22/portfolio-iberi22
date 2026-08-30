@@ -7,7 +7,8 @@
     "git": "GIT",
     "github": "GITHUB",
     "agenda": "预约",
-    "simulator": "模拟器"
+    "simulator": "模拟器",
+    "resources": "模拟器"
   },
   "hero": {
     "badge": "资深全栈工程师 · 10+ 年生产经验",

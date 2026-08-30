@@ -7,7 +7,8 @@
     "git": "GIT",
     "github": "GITHUB",
     "agenda": "حجز موعد",
-    "simulator": "محاكي الموارد"
+    "simulator": "محاكي الموارد",
+    "resources": "محاكي الموارد"
   },
   "hero": {
     "badge": "كبير مطوري Full-Stack · خبرة +10 سنوات في الإنتاج",

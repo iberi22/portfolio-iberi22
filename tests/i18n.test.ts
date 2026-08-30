@@ -19,7 +19,7 @@ describe('i18n Top 10 World Languages Integrity', () => {
   });
 
   it('should contain all essential navigation keys in every language', () => {
-    const requiredNavKeys = ['about', 'projects', 'blog', 'contact', 'agenda', 'simulator'];
+    const requiredNavKeys = ['about', 'projects', 'blog', 'contact', 'agenda', 'resources'];
     for (const [langCode, dict] of Object.entries(languages)) {
       expect(dict, `Language ${langCode} must have nav section`).toHaveProperty('nav');
       for (const key of requiredNavKeys) {

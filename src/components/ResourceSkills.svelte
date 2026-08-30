@@ -161,7 +161,7 @@ version: 2.0.0
       Colección canónica de especificaciones, directivas <span class="font-mono text-accent">SKILL.md</span> y prompts de diagnóstico diseñados para ser consumidos tanto por desarrolladores como por agentes autónomos de codificación (<span class="text-white">Claude Code, Jules, Hermes, OpenCode</span>).
     </p>
 
-    <!-- Manifesto Box -->
+    <!-- Manifesto Box (Comentado temporalmente)
     <div class="glass-card p-6 mt-6 border-accent/30 bg-accent/5 rounded-2xl">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="space-y-1">
@@ -180,6 +180,7 @@ version: 2.0.0
         </a>
       </div>
     </div>
+    -->
   </div>
 
   <!-- Skills Catalog Grid -->

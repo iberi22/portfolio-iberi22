@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { baseUrl } from '../lib/baseUrl';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0;url=${baseUrl('resources')}`} />
+    <link rel="canonical" href={baseUrl('resources')} />
+    <title>Redirigiendo a Recursos & Skills...</title>
+    <script is:inline define:vars={{ targetUrl: baseUrl('resources') }}>
+      window.location.replace(targetUrl);
+    </script>
+  </head>
+  <body class="bg-[#0a0a0a] text-white flex items-center justify-center min-h-screen font-mono text-xs">
+    <div class="text-center space-y-4">
+      <p class="text-accent animate-pulse">Redirigiendo a /resources...</p>
+      <p class="text-text-muted">Si no eres redirigido automáticamente, <a href={baseUrl('resources')} class="underline text-accent">haz clic aquí</a>.</p>
+    </div>
+  </body>
+</html>

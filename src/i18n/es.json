@@ -294,6 +294,7 @@
     "mailHeader": "SOLICITUD DE NETWORKING PROFESIONAL & INTERCAMBIO TÉCNICO",
     "mailArea": "Área de Enfoque / Conversación",
     "mailFooter1": "Modalidad: 1 reunión semanal de networking/asesoría (Viernes), planificada con 1 semana de antelación.",
-    "mailFooter2": "Herramientas / Ecosistema: Hermes, OpenClaw, GitCore, Gestalt, Jules, Ollama/vLLM"
+    "mailFooter2": "Herramientas / Ecosistema: Hermes, OpenClaw, GitCore, Gestalt, Jules, Ollama/vLLM",
+    "fmtLangNote": "Plataformas de traducción disponibles para facilitar la comunicación. Si no hablas español, la reunión se realiza en inglés."
   }
 }

@@ -103,7 +103,10 @@
 
   .field::placeholder {
     color: var(--color-text-muted);
+    opacity: 0.55;
   }
+  .field::-webkit-input-placeholder { color: var(--color-text-muted); opacity: 0.55; }
+  .field::-moz-placeholder { color: var(--color-text-muted); opacity: 0.55; }
 
   .field:focus {
     border-color: var(--color-accent);

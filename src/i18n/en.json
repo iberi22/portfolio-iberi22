@@ -659,6 +659,7 @@
     "mailHeader": "PROFESSIONAL NETWORKING & TECHNICAL EXCHANGE REQUEST",
     "mailArea": "Focus Area / Topics",
     "mailFooter1": "Modality: 1 weekly networking/advisory session (Fridays), scheduled 1 week in advance.",
-    "mailFooter2": "Tools / Ecosystem: Hermes, OpenClaw, GitCore, Gestalt, Jules, Ollama/vLLM"
+    "mailFooter2": "Tools / Ecosystem: Hermes, OpenClaw, GitCore, Gestalt, Jules, Ollama/vLLM",
+    "fmtLangNote": "Translation platforms supported. If you don't speak Spanish, we meet in English."
   }
 }

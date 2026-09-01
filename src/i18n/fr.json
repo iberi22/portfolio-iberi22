@@ -573,7 +573,8 @@
     "formInfraPh": "e.g., Gemini/OpenAI API, Ubuntu Linux VPS, Local Mac Studio, AWS...",
     "formPayNote": "For the Base Diagnostic ($20 USD), payment is processed securely via Stripe after registering specifications.",
     "formSubmitAlt": "Submit Training / Setup Request",
-    "formSubmitStripe": "Pay $20 USD with Stripe ↗"
+    "formSubmitStripe": "Pay $20 USD with Stripe ↗",
+    "fmtLangNote": "Plateformes de traduction prises en charge. Si vous ne parlez pas espagnol, la réunion se déroule en anglais."
   },
   "simulator": {
     "badge": "100% SERVERLESS · LOCAL-FIRST PRIVACY · SWAL SIMULATION FRAMEWORK",

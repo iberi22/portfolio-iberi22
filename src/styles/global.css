@@ -229,6 +229,32 @@ html.theme-light {
     letter-spacing: 0.04em;
   }
 
+
+  /* Form fields — global: placeholder 20% más translúcido */
+  .field {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--color-bg-surface-dark);
+    padding: 0.875rem 1.25rem;
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .field::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.55;
+  }
+  /* vendor prefixes para translucidez consistente */
+  .field::-webkit-input-placeholder { color: var(--color-text-muted); opacity: 0.55; }
+  .field::-moz-placeholder { color: var(--color-text-muted); opacity: 0.55; }
+  .field:-ms-input-placeholder { color: var(--color-text-muted); opacity: 0.55; }
+  .field:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.08);
+  }
+
   .entry-rise {
     animation: riseSettle 760ms cubic-bezier(.16, 1, .3, 1) both;
     @starting-style {

@@ -52,18 +52,15 @@
   ];
 
   const tools = [
-    'OpenRouter',
-    'Amazon Bedrock',
-    'Smart API Keys',
-    'Hermes Gateway',
-    'OpenClaw Browser',
-    'GitCore Engine',
-    'Gestalt Swarm',
-    'Google Jules',
-    'Claude Code',
-    'Ollama / vLLM Local',
-    'Custom Agent Skills',
-    'Xavier Memory'
+    'Applied AI',
+    'AI Engineering',
+    'Software Architecture',
+    'Autonomous Agents',
+    'RAG & LLMs',
+    'Cloud Native',
+    'Developer Tooling',
+    'Automation & Workflows',
+    'Open Source'
   ];
 
   const slots = ['agenda.slot1', 'agenda.slot2', 'agenda.slot3'];
@@ -196,6 +193,9 @@
             <li class="flex flex-col gap-1 border-l-2 border-accent/30 pl-4 py-1">
               <span class="text-xs uppercase tracking-wider text-text-muted font-mono">{t(f.k)}</span>
               <span class="text-text-primary text-sm font-semibold">{t(f.v)}</span>
+              {#if f.k === 'agenda.fmtLang'}
+                <span class="text-text-muted text-xs leading-relaxed mt-1">{t('agenda.fmtLangNote')}</span>
+              {/if}
             </li>
           {/each}
         </ul>

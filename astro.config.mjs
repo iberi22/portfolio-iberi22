@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   integrations: [svelte(), mdx()],
   site: 'https://iberi22.github.io',
-  base: process.env.GITHUB_ACTIONS === 'true' ? '/portfolio-iberi22' : '/',
+  base: '/',
   output: 'static',
   trailingSlash: 'always',
   vite: {

@@ -48,7 +48,7 @@ export function updateDocumentDirection(locale?: Locale) {
 
 /** Detect browser language or fall back to localStorage -> es / en */
 export function detectLocale(): Locale {
-  if (typeof window === 'undefined') return 'es';
+  if (typeof window === 'undefined') return 'en';
   const stored = (localStorage.getItem('portfolio_lang') || localStorage.getItem('swal-locale')) as Locale | null;
   if (stored && stored in locales) return stored;
 
@@ -56,7 +56,7 @@ export function detectLocale(): Locale {
   for (const code of nav) {
     if (code in locales) return code as Locale;
   }
-  return 'es';
+  return 'en';
 }
 
 export function setLocale(locale: Locale) {
@@ -89,13 +89,21 @@ export function tRaw(key: string, locale?: Locale): any {
   const keys = key.split('.');
   const l = locale ?? current;
 
+  // Fuerza técnico a inglés: toda interconexión de conocimientos en inglés
+  // agenda, projects, about (stack/specialties), simulator, hero técnico
+  const technicalPrefixes = ['agenda.', 'projects.', 'about.specialties', 'about.stackCategories', 'about.competencies', 'about.stackIndex', 'simulator.', 'hero.tagline', 'hero.badge'];
+  if (technicalPrefixes.some(p => key.startsWith(p))) {
+    const enVal = getNested(locales['en'], keys);
+    if (enVal !== undefined) return enVal;
+  }
+
   let val = getNested(locales[l], keys);
   if (val !== undefined) return val;
 
-  val = getNested(locales['es'], keys);
+  val = getNested(locales['en'], keys);
   if (val !== undefined) return val;
 
-  val = getNested(locales['en'], keys);
+  val = getNested(locales['es'], keys);
   if (val !== undefined) return val;
 
   return null;

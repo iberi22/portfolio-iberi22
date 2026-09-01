@@ -33,3 +33,5 @@ cache/
 # Agent artifacts (local, do not commit)
 .openclaw/
 .chronicle/
+.atl/
+.gitcore/

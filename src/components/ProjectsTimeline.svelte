@@ -85,6 +85,38 @@
       github: 'https://github.com/iberi22/OrionHealth',
       color: 'var(--color-accent-light)'
     },
+    {
+      id: 'worldexams',
+      name: 'WorldExams (SaberParaTodos)',
+      version: 'v1.0.0',
+      category: 'opensource',
+      status: 'active',
+      tech: ['Astro 6', 'Svelte 5', 'TypeScript', 'Tailwind CSS', 'Cloudflare Workers', 'Offline-First'],
+      github: 'https://github.com/iberi22/worldexams',
+      demoUrl: 'https://saberparatodos.space',
+      color: 'var(--color-accent)'
+    },
+    {
+      id: 'shelf',
+      name: 'Shelf',
+      version: 'v0.4.0',
+      category: 'opensource',
+      status: 'active',
+      tech: ['React 19', 'TypeScript', 'Yjs', 'CRDT', 'P2P WebRTC', 'Post-Quantum Crypto', 'PWA'],
+      github: 'https://github.com/iberi22/shelf',
+      demoUrl: 'https://estante-inventario.vercel.app',
+      color: 'var(--color-secondary)'
+    },
+    {
+      id: 'gos',
+      name: 'GOS (Gastronomic Open Standard)',
+      version: 'v0.3.0',
+      category: 'opensource',
+      status: 'active',
+      tech: ['Astro', 'JSON Schema', 'Flutter PWA', 'Offline-First', 'Design System'],
+      github: 'https://github.com/iberi22/gastronomic-open-standard-GOS',
+      color: 'var(--color-accent-light)'
+    },
     /* OCULTO TEMPORALMENTE: GARA-G
     {
       id: 'gara-g',

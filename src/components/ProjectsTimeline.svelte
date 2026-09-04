@@ -15,6 +15,7 @@
     demoUrl?: string;
     color: string;
     researchUrls?: { url: string }[];
+    isFlagship?: boolean;
   }
 
   const baseProjects: BaseProject[] = [
@@ -24,6 +25,7 @@
       version: 'v0.6.0-beta',
       category: 'opensource',
       status: 'active',
+      isFlagship: true,
       tech: ['Rust', 'Docker', 'SQLite-vec', 'pgvector', 'HNSW', 'SurrealDB', 'REST API'],
       github: 'https://github.com/iberi22/xavier',
       color: 'var(--color-accent)'
@@ -83,6 +85,7 @@
       github: 'https://github.com/iberi22/OrionHealth',
       color: 'var(--color-accent-light)'
     },
+    /* OCULTO TEMPORALMENTE: GARA-G
     {
       id: 'gara-g',
       name: 'GARA-G',
@@ -93,6 +96,7 @@
       github: 'https://github.com/iberi22/gara-g',
       color: 'var(--color-accent)'
     },
+    */
     {
       id: 'tripro-mining',
       name: 'Tripro SPA (Chile)',
@@ -273,6 +277,11 @@
               <div class="flex-1">
                 <div class="flex items-center gap-3 mb-2 flex-wrap">
                   <h3 class="text-2xl font-bold text-text-primary">{project.name}</h3>
+                  {#if project.isFlagship}
+                    <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-accent/20 border border-accent text-accent shadow-sm shadow-accent/30 tracking-wider">
+                      ★ PROYECTO ESTRELLA
+                    </span>
+                  {/if}
                   <span class="px-2.5 py-0.5 rounded text-[11px] font-mono bg-bg-surface border border-white/10 text-text-muted">
                     {project.period}
                   </span>

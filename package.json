@@ -12,11 +12,11 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.0.0",
+    "@astrojs/mdx": "^8.0.1",
     "@astrojs/rss": "4.0.19",
     "@astrojs/svelte": "^9.0.1",
     "@tailwindcss/vite": "^4.2.4",
-    "astro": "^7.2.10",
+    "astro": "^7.3.2",
     "svelte": "^5.55.5",
     "tailwindcss": "^4.2.4"
   },

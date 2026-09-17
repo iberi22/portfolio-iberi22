@@ -1,35 +1,28 @@
 # dependencies
 node_modules/
-
 # build output
 dist/
-
 # environment
 .env
 .env.local
 .env.*.local
-
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-
 # OS
 .DS_Store
 Thumbs.db
-
 # logs
 *.log
 npm-debug.log*
-
 # Caches
 .astro/
 cache/
 
 .vercel
 .env*.local
-
 # Agent artifacts (local, do not commit)
 .openclaw/
 .chronicle/
@@ -54,6 +47,7 @@ cache/
 .gitcore/chronicles/
 .gitcore/waves/
 .gitcore/sdd/
+.gitcore/releases/
 .gitcore/issues/
 .gitcore/features.details/
 .gitcore/CONTEXT_LOG.md
@@ -73,6 +67,7 @@ cache/
 .atl/
 .gestalt/
 .jules/
+.xavier/
 .xavier-backups/
 .skill-registry.cache.json
 

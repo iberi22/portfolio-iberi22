@@ -13,6 +13,7 @@
     tech: string[];
     github?: string;
     demoUrl?: string;
+    isPrivate?: boolean;
     color: string;
     researchUrls?: { url: string }[];
     isFlagship?: boolean;
@@ -28,17 +29,28 @@
       isFlagship: true,
       tech: ['Rust', 'Docker', 'SQLite-vec', 'pgvector', 'HNSW', 'SurrealDB', 'REST API'],
       github: 'https://github.com/iberi22/xavier',
+      demoUrl: 'https://xavier.swal.network',
       color: 'var(--color-accent)'
     },
     {
-      id: 'gitcore',
-      name: 'GitCore',
-      version: 'v3.8.0',
+      id: 'edge-mesh',
+      name: 'edge-mesh',
+      version: 'v0.5.0',
       category: 'opensource',
-      status: 'active',
-      tech: ['Rust', 'Agent Orchestration', 'Git/GitHub API', 'Jules Waves', 'Automated QA', 'Shell'],
-      github: 'https://github.com/iberi22/GitCore',
+      status: 'production',
+      tech: ['Rust', 'TypeScript', 'CRDT', 'P2P Mesh', 'ML-KEM-768 Crypto', 'WebRTC'],
+      github: 'https://github.com/iberi22/edge-mesh',
       color: 'var(--color-secondary)'
+    },
+    {
+      id: 'swal-ui',
+      name: '@swal/ui',
+      version: 'v0.2.0',
+      category: 'opensource',
+      status: 'production',
+      tech: ['Svelte 5', 'Tailwind CSS 4', 'Design Tokens', 'Bone Warm Theme'],
+      github: 'https://github.com/iberi22/swal-ui',
+      color: 'var(--color-accent)'
     },
     {
       id: 'gestalt',
@@ -66,48 +78,6 @@
       ]
     },
     {
-      id: 'edge-mesh',
-      name: 'edge-mesh',
-      version: 'v0.5.0',
-      category: 'opensource',
-      status: 'beta',
-      tech: ['Rust', 'TypeScript', 'CRDT', 'P2P Mesh', 'ML-DSA-65 Crypto', 'WebRTC'],
-      github: 'https://github.com/iberi22/edge-mesh',
-      color: 'var(--color-secondary)'
-    },
-    {
-      id: 'orion',
-      name: 'OrionHealth',
-      version: 'v0.5.0',
-      category: 'opensource',
-      status: 'active',
-      tech: ['Flutter', 'Dart', 'SQLite / SQLCipher', 'Offline-First', 'Health Metrics'],
-      github: 'https://github.com/iberi22/OrionHealth',
-      color: 'var(--color-accent-light)'
-    },
-    {
-      id: 'worldexams',
-      name: 'WorldExams (SaberParaTodos)',
-      version: 'v1.0.0',
-      category: 'opensource',
-      status: 'active',
-      tech: ['Astro 6', 'Svelte 5', 'TypeScript', 'Tailwind CSS', 'Cloudflare Workers', 'Offline-First'],
-      github: 'https://github.com/iberi22/worldexams',
-      demoUrl: 'https://saberparatodos.space',
-      color: 'var(--color-accent)'
-    },
-    {
-      id: 'shelf',
-      name: 'Shelf',
-      version: 'v0.4.0',
-      category: 'opensource',
-      status: 'active',
-      tech: ['React 19', 'TypeScript', 'Yjs', 'CRDT', 'P2P WebRTC', 'Post-Quantum Crypto', 'PWA'],
-      github: 'https://github.com/iberi22/shelf',
-      demoUrl: 'https://estante-inventario.vercel.app',
-      color: 'var(--color-secondary)'
-    },
-    {
       id: 'gos',
       name: 'GOS (Gastronomic Open Standard)',
       version: 'v0.3.0',
@@ -117,18 +87,71 @@
       github: 'https://github.com/iberi22/gastronomic-open-standard-GOS',
       color: 'var(--color-accent-light)'
     },
-    /* OCULTO TEMPORALMENTE: GARA-G
+    {
+      id: 'fize',
+      name: 'Fize',
+      version: 'v1.0.0-prod',
+      category: 'production',
+      status: 'production',
+      isFlagship: true,
+      tech: ['Astro SSR', 'Svelte 5', 'Cloudflare Workers', 'Offline-First', 'KDS Cocina', 'WhatsApp POS'],
+      demoUrl: 'https://fize.swal.network',
+      isPrivate: true,
+      color: 'var(--color-accent)'
+    },
+    {
+      id: 'shelf',
+      name: 'Shelf',
+      version: 'v1.0.0-prod',
+      category: 'production',
+      status: 'production',
+      tech: ['React 19', 'TypeScript', 'Yjs CRDT', 'WebLLM', 'Cloudflare Pages', 'PWA Offline'],
+      demoUrl: 'https://shelf.swal.network',
+      isPrivate: true,
+      color: 'var(--color-secondary)'
+    },
     {
       id: 'gara-g',
       name: 'GARA-G',
-      version: 'v0.3.0',
-      category: 'opensource',
+      version: 'v1.0.0-prod',
+      category: 'production',
+      status: 'production',
+      tech: ['Cloudflare Workers SSR', 'D1 SQL', 'R2 Vault', 'Three.js 3D', 'Fleet Management'],
+      demoUrl: 'https://gara-g.swal.network',
+      isPrivate: true,
+      color: 'var(--color-accent-light)'
+    },
+    {
+      id: 'gitcore',
+      name: 'GitCore',
+      version: 'v3.8.0',
+      category: 'production',
       status: 'active',
-      tech: ['Rust', 'Flutter', 'P2P V2V', 'Polygon', 'Automotive Telemetry'],
-      github: 'https://github.com/iberi22/gara-g',
+      tech: ['Rust', 'Agent Orchestration', 'Git/GitHub API', 'Jules Waves', 'Automated QA', 'Shell'],
+      isPrivate: true,
+      color: 'var(--color-secondary)'
+    },
+    {
+      id: 'worldexams',
+      name: 'WorldExams (SaberParaTodos)',
+      version: 'v1.0.0',
+      category: 'production',
+      status: 'active',
+      tech: ['Astro 6', 'Svelte 5', 'TypeScript', 'Tailwind CSS', 'Cloudflare Workers', 'Offline-First'],
+      demoUrl: 'https://saberparatodos.space',
+      isPrivate: true,
       color: 'var(--color-accent)'
     },
-    */
+    {
+      id: 'orion',
+      name: 'OrionHealth',
+      version: 'v0.5.0',
+      category: 'production',
+      status: 'active',
+      tech: ['Flutter', 'Dart', 'SQLite / SQLCipher', 'Offline-First', 'Health Metrics'],
+      isPrivate: true,
+      color: 'var(--color-accent-light)'
+    },
     {
       id: 'tripro-mining',
       name: 'Tripro SPA (Chile)',
@@ -426,6 +449,17 @@
                         >
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                           <span>{t('projects.btn.viewRepo')}</span>
+                        </a>
+                      {/if}
+                      {#if project.isPrivate}
+                        <a
+                          href="mailto:iberi22@gmail.com?subject=Solicitud%20de%20revisi%C3%B3n%20t%C3%A9cnica%20de%20c%C3%B3digo%20-%20{project.name}"
+                          class="repo-link border-secondary/30 text-secondary hover:border-secondary"
+                        >
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                          </svg>
+                          <span>Revisión de código (NDA)</span>
                         </a>
                       {/if}
                       {#if project.demoUrl}

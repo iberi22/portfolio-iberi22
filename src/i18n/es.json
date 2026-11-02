@@ -180,6 +180,40 @@
       "t1": "PWA shell, service workers y almacenamiento local offline",
       "t2": "Lanzamiento beta con reseñas colaborativas y escaneo de menús",
       "t3": "Hoja de ruta: Recomendaciones gastronómicas personalizadas por IA"
+    },
+    "fize": {
+      "name": "Fize",
+      "tagline": "Sistema Operativo Gastronómico & Kitchen OS",
+      "companyOrContext": "SWAL SaaS",
+      "period": "2026 - Producción",
+      "description": "Plataforma gastronómica en tiempo real para restaurantes. Pantallas KDS de cocina, toma de comandas offline-first con CRDT y canal de pedidos por WhatsApp sin comisiones abusivas.",
+      "architecture": "Astro SSR en Cloudflare Workers + Svelte 5 + sincronización local CRDT con Edge-Mesh + WebSockets para cocina.",
+      "metrics": [
+        "Despliegue serverless global en fize.swal.network",
+        "Modo offline-first completo: la cocina nunca se detiene",
+        "0% comisiones en pedidos directos por WhatsApp"
+      ],
+      "t0": "Diseño de comandas y catálogo de platos",
+      "t1": "Kitchen Display System (KDS) interactivo en tiempo real",
+      "t2": "Despliegue en Cloudflare Workers y dominio fize.swal.network",
+      "t3": "Hoja de ruta: Facturación electrónica automática DIAN"
+    },
+    "gara-g": {
+      "name": "GARA-G",
+      "tagline": "Gestión de Flotas & Taller Mecánico 3D",
+      "companyOrContext": "SWAL SaaS",
+      "period": "2026 - Producción",
+      "description": "Sistema digital integral para talleres mecánicos y gestión de flotas vehiculares. Visualización 3D interactiva de piezas con Three.js, presupuesto digital y orden de servicio.",
+      "architecture": "Cloudflare Workers SSR + Base de datos relacional D1 (SQL) + Bóveda R2 de pólizas + Three.js.",
+      "metrics": [
+        "Despliegue edge serverless en gara-g.swal.network",
+        "Base de datos D1 relacional con zero cold-starts",
+        "Inspección vehicular y despiece 3D en el navegador"
+      ],
+      "t0": "Modelado de datos de órdenes de servicio y vehículos",
+      "t1": "Motor 3D en Three.js para despiece y selección de daños",
+      "t2": "Despliegue SSR en Cloudflare Workers y D1",
+      "t3": "Hoja de ruta: Telemetría OBD-II directa vía Bluetooth"
     }
   },
   "blog": {

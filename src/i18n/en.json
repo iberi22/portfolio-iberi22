@@ -503,6 +503,33 @@
         }
       ]
     },
+    "fize": {
+      "name": "Fize",
+      "tagline": "Gastronomic POS & Kitchen Operating System",
+      "companyOrContext": "SWAL SaaS",
+      "period": "2026 - Production",
+      "description": "Real-time gastronomic operating platform for restaurants. Live Kitchen Display System (KDS), offline-first CRDT order management, and zero-commission customer WhatsApp ordering.",
+      "architecture": "Astro SSR on Cloudflare Workers + Svelte 5 + local CRDT sync via Edge-Mesh + WebSockets for kitchen display.",
+      "metrics": [
+        "Global edge serverless deployment on fize.swal.network",
+        "Full offline-first mode: kitchen orders never stop",
+        "0% platform commission on direct customer WhatsApp orders"
+      ],
+      "timeline": [
+        {
+          "date": "2026 Q1",
+          "label": "Menu and order data schema architecture"
+        },
+        {
+          "date": "2026 Q2",
+          "label": "Real-time interactive Kitchen Display System (KDS)"
+        },
+        {
+          "date": "2026 Q3",
+          "label": "Production deployment on Cloudflare Workers (fize.swal.network)"
+        }
+      ]
+    },
     "tripro-mining": {
       "name": "Tripro SPA (Chile)",
       "tagline": "Industrial IoT, Mining Telemetry & Real-Time Dashboards",

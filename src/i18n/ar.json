@@ -14,8 +14,8 @@
     "badge": "كبير مطوري Full-Stack · خبرة +10 سنوات في الإنتاج",
     "firstName": "صاموئيل",
     "lastName": "بيلالكازار",
-    "tagline": "برمجيات إنتاجية مصقولة بعقد من الخبرة العملية.",
-    "taglineExtra": "JavaScript و PHP وهياكل الويب والموبايل — من الفكرة إلى النشر في قطاعات التعدين والضرائب والنشر والتجارة الإلكترونية.",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "عرض المشاريع",
     "getInTouch": "تواصل معي",
     "scroll": "التمرير لأسفل"
@@ -96,8 +96,10 @@
       "showDetails": "عرض المعمارية والمقاييس",
       "hideDetails": "إخفاء التفاصيل",
       "viewRepo": "عرض المستودع",
-      "visitDemo": "زيارة الموقع / الإنتاج",
-      "readStudy": "قراءة الدراسة / الخبر"
+      "visitDemo": "Live Demo / Web",
+      "readStudy": "قراءة الدراسة / الخبر",
+      "requestAudit": "Request Audit Access",
+      "auditSubject": "Audit Access Request"
     },
     "label": {
       "architecture": "المعمارية والقرارات التقنية",
@@ -313,7 +315,7 @@
       "tagline": "شبكة تنقل DePIN وسيارات متصلة V2V",
       "companyOrContext": "Mobility Tech",
       "period": "2026",
-      "description": "شبكة DePIN للتنقل والاتصال بين المركبات (V2V) مع قياس عن بعد في الوقت الفعلي ومساعد ذكاء اصطناعي وسوق لامركزي للسيارات.",
+      "description": "Fleet management and 3D vehicle visualizer. DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
       "architecture": "عمود فقري بـ Rust لمعالجة اتصالات السيارات وتطبيق موبايل بـ Flutter. بروتوكول اتصال بين المركبات للتنبيهات المرورية بدون تغطية خلية.",
       "metrics": [
         "قياس الاتصالات بإنتاجية منخفضة التأخير",

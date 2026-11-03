@@ -14,8 +14,8 @@
     "badge": "سینئر فل اسٹیک ڈویلپر · پروڈکشن میں 10+ سال",
     "firstName": "براہین",
     "lastName": "بیلالکازار",
-    "tagline": "ایک دہائی کے تجربے سے صقل شدہ پروڈکشن سافٹ ویئر۔",
-    "taglineExtra": "جاوا اسکرپٹ، پی ایچ پی، ویب اور موبائل آرکیٹیکچر — خیال سے لے کر کان کنی، ٹیکس، اشاعت اور ای کامرس میں تعیناتی تک۔",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "منصوبے دیکھیں",
     "getInTouch": "رابطہ قائم کریں",
     "scroll": "نیچے اسکرول کریں"
@@ -96,8 +96,10 @@
       "showDetails": "آرکیٹیکچر اور میٹرکس دیکھیں",
       "hideDetails": "تفصیلات چھپائیں",
       "viewRepo": "ریپوزٹری دیکھیں",
-      "visitDemo": "پروڈکشن / ویب سائٹ دیکھیں",
-      "readStudy": "تحقیق / مضمون پڑھیں"
+      "visitDemo": "Live Demo / Web",
+      "readStudy": "تحقیق / مضمون پڑھیں",
+      "requestAudit": "Request Audit Access",
+      "auditSubject": "Audit Access Request"
     },
     "label": {
       "architecture": "آرکیٹیکچر اور تکنیکی فیصلے",
@@ -313,7 +315,7 @@
       "tagline": "DePIN موبیلٹی اور V2V میش نیٹ ورک",
       "companyOrContext": "Mobility Tech",
       "period": "2026",
-      "description": "ریئل ٹائم ٹیلی میٹری اور اے آئی کو پائلٹ کے ساتھ موبیلٹی DePIN نیٹ ورک اور گاڑیوں کا میش (V2V)۔",
+      "description": "Fleet management and 3D vehicle visualizer. DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
       "architecture": "آٹوموٹو ٹیلی میٹری پروسیسنگ کے لیے رسٹ بیک بون اور فلٹر موبائل ایپ۔",
       "metrics": [
         "کم تاخیر والی آٹوموٹو ٹیلی میٹری",

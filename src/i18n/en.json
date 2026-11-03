@@ -89,8 +89,8 @@
     "badge": "Senior Full-Stack Developer · 10+ Years in Production",
     "firstName": "Brahyan",
     "lastName": "Belalcázar",
-    "tagline": "Production software, refined by a decade of experience.",
-    "taglineExtra": "JavaScript, PHP, web and mobile architectures — from concept to deployment across industrial, tax, publishing, and e-commerce sectors.",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "View Projects",
     "getInTouch": "Get in Touch",
     "scroll": "SCROLL"
@@ -171,8 +171,10 @@
       "showDetails": "View Architecture & Metrics",
       "hideDetails": "Hide Details",
       "viewRepo": "View Repository",
-      "visitDemo": "Visit Production / Web",
-      "readStudy": "Read Study / Article"
+      "visitDemo": "Live Demo / Web",
+      "readStudy": "Read Study / Article",
+      "requestAudit": "Request Audit Access",
+      "auditSubject": "Audit Access Request"
     },
     "label": {
       "architecture": "Architecture & Technical Decisions",
@@ -419,7 +421,7 @@
       "tagline": "Decentralized P2P POS & Inventory with Post-Quantum Crypto",
       "companyOrContext": "Retail & Edge Computing",
       "period": "2025 - Present",
-      "description": "Offline-first, peer-to-peer point of sale (POS) and inventory management platform. Combines WebRTC mesh synchronization, CRDT conflict resolution (Yjs), and NIST post-quantum cryptography (ML-KEM-768 & ML-DSA-65).",
+      "description": "Distributed inventory with CRDT mesh synchronization. Offline-first, peer-to-peer point of sale (POS) and inventory management platform. Combines WebRTC mesh synchronization, CRDT conflict resolution (Yjs), and Zero-Knowledge cryptographic vault.",
       "architecture": "React 19 with Yjs CRDTs for multi-device zero-conflict synchronization over WebRTC mesh. Post-quantum cryptographic security layer for at-rest vault encryption and signed envelope transport.",
       "metrics": [
         "Zero-cloud dependency: works 100% offline",
@@ -481,7 +483,7 @@
       "tagline": "DePIN Mobility & V2V Mesh Network",
       "companyOrContext": "Mobility Tech",
       "period": "2026",
-      "description": "DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
+      "description": "Fleet management and 3D vehicle visualizer. DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
       "architecture": "Rust backbone for automotive telemetry processing and Flutter mobile frontend. Vehicle mesh protocol for traffic alerts without cellular coverage.",
       "metrics": [
         "Low-latency vehicle telemetry",
@@ -508,7 +510,7 @@
       "tagline": "Gastronomic POS & Kitchen Operating System",
       "companyOrContext": "SWAL SaaS",
       "period": "2026 - Production",
-      "description": "Real-time gastronomic operating platform for restaurants. Live Kitchen Display System (KDS), offline-first CRDT order management, and zero-commission customer WhatsApp ordering.",
+      "description": "Local-first restaurant POS & KDS with TOFU public key sovereign menu publishing.",
       "architecture": "Astro SSR on Cloudflare Workers + Svelte 5 + local CRDT sync via Edge-Mesh + WebSockets for kitchen display.",
       "metrics": [
         "Global edge serverless deployment on fize.swal.network",

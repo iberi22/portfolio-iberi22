@@ -14,8 +14,8 @@
     "badge": "Ведущий Full-Stack разработчик · 10+ лет в Продакшене",
     "firstName": "Брайан",
     "lastName": "Белалькасар",
-    "tagline": "Промышленный софт, отточенный десятилетием реальной практики.",
-    "taglineExtra": "JavaScript, PHP, веб- и мобильные архитектуры — от идеи до внедрения в горнодобывающей промышленности, налоговом учете, издательстве и электронной коммерции.",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "Посмотреть проекты",
     "getInTouch": "Связаться со мной",
     "scroll": "ПРОКРУТИТЬ"
@@ -96,8 +96,10 @@
       "showDetails": "Посмотреть архитектуру и метрики",
       "hideDetails": "Скрыть детали",
       "viewRepo": "Репозиторий",
-      "visitDemo": "Сайт проекта",
-      "readStudy": "Научная статья"
+      "visitDemo": "Live Demo / Web",
+      "readStudy": "Научная статья",
+      "requestAudit": "Request Audit Access",
+      "auditSubject": "Audit Access Request"
     },
     "label": {
       "architecture": "Архитектура и технические решения",

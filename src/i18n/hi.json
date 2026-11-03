@@ -14,8 +14,8 @@
     "badge": "सीनियर फुल-स्टैक डेवलपर · प्रोडक्शन में 10+ वर्ष",
     "firstName": "ब्रायन",
     "lastName": "बेलालकासर",
-    "tagline": "एक दशक के अनुभव से निखरा हुआ प्रोडक्शन सॉफ्टवेयर।",
-    "taglineExtra": "जावास्क्रिप्ट, पीएचपी, वेब और मोबाइल आर्किटेक्चर — विचार से लेकर खनन, कर, प्रकाशन और ई-कॉमर्स क्षेत्रों में तैनाती तक।",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "परियोजनाएं देखें",
     "getInTouch": "संपर्क करें",
     "scroll": "नीचे स्क्रॉल करें"
@@ -96,8 +96,10 @@
       "showDetails": "आर्किटेक्चर और मेट्रिक्स देखें",
       "hideDetails": "विवरण छिपाएं",
       "viewRepo": "रिपॉजिटरी देखें",
-      "visitDemo": "उत्पादन / वेब देखें",
-      "readStudy": "अध्ययन / लेख पढ़ें"
+      "visitDemo": "Live Demo / Web",
+      "readStudy": "अध्ययन / लेख पढ़ें",
+      "requestAudit": "Request Audit Access",
+      "auditSubject": "Audit Access Request"
     },
     "label": {
       "architecture": "आर्किटेक्चर और तकनीकी निर्णय",
@@ -313,7 +315,7 @@
       "tagline": "DePIN गतिशीलता और V2V मेश नेटवर्क",
       "companyOrContext": "Mobility Tech",
       "period": "2026",
-      "description": "वास्तविक समय टेलीमेट्री और एआई को-पायलट के साथ गतिशीलता DePIN नेटवर्क और वाहन मेश (V2V)।",
+      "description": "Fleet management and 3D vehicle visualizer. DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
       "architecture": "ऑटोमोटिव टेलीमेट्री प्रोसेसिंग के लिए रस्ट बैकबोन और फ़्लटर मोबाइल ऐप।",
       "metrics": [
         "कम विलंबता वाहन टेलीमेट्री",

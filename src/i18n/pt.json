@@ -14,8 +14,8 @@
     "badge": "Desenvolvedor Full-Stack Senior · 10+ Anos em Produção",
     "firstName": "Brahyan",
     "lastName": "Belalcázar",
-    "tagline": "Software em produção, refinado por uma década de experiência.",
-    "taglineExtra": "JavaScript, PHP, arquiteturas web e móveis — da ideia ao ambiente de produção em mineração, setor fiscal, editorial e e-commerce.",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "Ver Projetos",
     "getInTouch": "Entrar em Contato",
     "scroll": "ROLAR"
@@ -96,8 +96,10 @@
       "showDetails": "Ver Arquitetura & Métricas",
       "hideDetails": "Ocultar Detalhes",
       "viewRepo": "Ver Repositório",
-      "visitDemo": "Visitar Produção / Web",
-      "readStudy": "Ler Estudo / Notícia"
+      "visitDemo": "Live Demo / Web",
+      "readStudy": "Ler Estudo / Notícia",
+      "requestAudit": "Request Audit Access",
+      "auditSubject": "Audit Access Request"
     },
     "label": {
       "architecture": "Arquitetura & Decisões Técnicas",
@@ -313,7 +315,7 @@
       "tagline": "Mobilidade DePIN & Rede Mesh Veicular V2V",
       "companyOrContext": "Mobility Tech",
       "period": "2026",
-      "description": "Rede DePIN de mobilidade e malha veicular (V2V) com telemetria em tempo real, co-piloto de IA e mercado descentralizado para o setor automotivo.",
+      "description": "Fleet management and 3D vehicle visualizer. DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
       "architecture": "Backbone em Rust para processamento de telemetria automotiva e aplicativo móvel Flutter. Protocolo de malha veicular para alertas de tráfego sem sinal celular.",
       "metrics": [
         "Telemetria veicular de baixa latência",

@@ -14,8 +14,8 @@
     "badge": "সিনিয়র ফুল-স্ট্যাক ডেভেলপার · প্রোডাকশনে ১০+ বছর",
     "firstName": "ব্রায়ান",
     "lastName": "বেলালকাজার",
-    "tagline": "এক দশকের অভিজ্ঞতায় সমৃদ্ধ প্রোডাকশন সফটওয়্যার।",
-    "taglineExtra": "জাভাস্ক্রিপ্ট, পিএইচপি, ওয়েব এবং মোবাইল আর্কিটেকচার — ধারণা থেকে শুরু করে মাইনিং, ট্যাক্স, প্রকাশনা এবং ই-কমার্স খাতে স্থাপন।",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "প্রকল্পগুলো দেখুন",
     "getInTouch": "যোগাযোগ করুন",
     "scroll": "নিচে স্ক্রোল করুন"
@@ -96,8 +96,10 @@
       "showDetails": "আর্কিটেকচার ও মেট্রিক্স দেখুন",
       "hideDetails": "বিস্তারিত লুকান",
       "viewRepo": "রিপোজিটরি দেখুন",
-      "visitDemo": "প্রোডাকশন / ওয়েব দেখুন",
-      "readStudy": "গবেষণা / প্রবন্ধ পড়ুন"
+      "visitDemo": "Live Demo / Web",
+      "readStudy": "গবেষণা / প্রবন্ধ পড়ুন",
+      "requestAudit": "Request Audit Access",
+      "auditSubject": "Audit Access Request"
     },
     "label": {
       "architecture": "আর্কিটেকচার ও কারিগরি সিদ্ধান্ত",
@@ -313,7 +315,7 @@
       "tagline": "DePIN গতিশীলতা এবং V2V মেস নেটওয়ার্ক",
       "companyOrContext": "Mobility Tech",
       "period": "2026",
-      "description": "রিয়েল-টাইম টেলিমোট্রি এবং এআই কো-পাইলট সহ গতিশীলতা DePIN নেটওয়ার্ক এবং যানবাহন মেস (V2V)।",
+      "description": "Fleet management and 3D vehicle visualizer. DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
       "architecture": "অটোমোটিভ টেলিমোট্রি প্রসেসিংয়ের জন্য রাস্ট ব্যাকবোন এবং ফ্লাটার অ্যাপ।",
       "metrics": [
         "কম বিলম্বযুক্ত যানবাহন টেলিমোট্রি",

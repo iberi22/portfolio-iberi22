@@ -89,8 +89,8 @@
     "badge": "Desarrollador Full-Stack Senior · 10+ Años en Producción",
     "firstName": "Brahyan",
     "lastName": "Belalcázar",
-    "tagline": "Software en producción, refinado por una década de experiencia.",
-    "taglineExtra": "JavaScript, PHP, arquitecturas web y móviles — de la idea al despliegue en sectores industrial, fiscal, editorial y e-commerce.",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "Ver Proyectos",
     "getInTouch": "Contactar",
     "scroll": "DESPLAZAR"
@@ -167,7 +167,7 @@
     },
     "shelf": {
       "tagline": "POS e Inventario P2P Descentralizado con Criptografía Post-Cuántica",
-      "description": "Plataforma descentralizada de punto de venta e inventario offline-first. Combina redes mesh WebRTC, sincronización CRDT sin conflictos (Yjs) y criptografía post-cuántica NIST (ML-KEM-768 y ML-DSA-65).",
+      "description": "Distributed inventory with CRDT mesh synchronization. Offline-first, peer-to-peer point of sale (POS) and inventory management platform. Combines WebRTC mesh synchronization, CRDT conflict resolution (Yjs), and Zero-Knowledge cryptographic vault.",
       "t0": "Núcleo CRUD de POS e inventarios, escáner de códigos de barra y PWA",
       "t1": "Red mesh WebRTC P2P y sincronización de estado Yjs CRDT",
       "t2": "Bóveda cifrada con KDF post-cuántico NIST y sobres firmados",
@@ -186,7 +186,7 @@
       "tagline": "Sistema Operativo Gastronómico & Kitchen OS",
       "companyOrContext": "SWAL SaaS",
       "period": "2026 - Producción",
-      "description": "Plataforma gastronómica en tiempo real para restaurantes. Pantallas KDS de cocina, toma de comandas offline-first con CRDT y canal de pedidos por WhatsApp sin comisiones abusivas.",
+      "description": "Local-first restaurant POS & KDS with TOFU public key sovereign menu publishing.",
       "architecture": "Astro SSR en Cloudflare Workers + Svelte 5 + sincronización local CRDT con Edge-Mesh + WebSockets para cocina.",
       "metrics": [
         "Despliegue serverless global en fize.swal.network",
@@ -203,7 +203,7 @@
       "tagline": "Gestión de Flotas & Taller Mecánico 3D",
       "companyOrContext": "SWAL SaaS",
       "period": "2026 - Producción",
-      "description": "Sistema digital integral para talleres mecánicos y gestión de flotas vehiculares. Visualización 3D interactiva de piezas con Three.js, presupuesto digital y orden de servicio.",
+      "description": "Fleet management and 3D vehicle visualizer. DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
       "architecture": "Cloudflare Workers SSR + Base de datos relacional D1 (SQL) + Bóveda R2 de pólizas + Three.js.",
       "metrics": [
         "Despliegue edge serverless en gara-g.swal.network",

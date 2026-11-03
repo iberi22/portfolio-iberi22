@@ -14,8 +14,8 @@
     "badge": "资深全栈工程师 · 10+ 年生产经验",
     "firstName": "Brahyan",
     "lastName": "Belalcázar",
-    "tagline": "十年磨一剑，专注打造高可靠生产级软件。",
-    "taglineExtra": "JavaScript, PHP, Web 与移动端架构 — 涵盖工业采矿、财税咨询、出版及电子商务全流程。",
+    "tagline": "Production software, featuring SWAL sovereign architecture & Zero-Knowledge Protocol.",
+    "taglineExtra": "Local-First (WebCrypto P-256 + AES-GCM XCB1), passwordless Magic Link, zero-cloud plaintext storage, and autonomous multi-agent orchestration ($0 CI spend). refined by a decade of experience across industrial, tax, publishing, and e-commerce sectors.",
     "viewProjects": "查看项目",
     "getInTouch": "取得联系",
     "scroll": "向下滚动"
@@ -96,8 +96,10 @@
       "showDetails": "查看架构与指标",
       "hideDetails": "隐藏详情",
       "viewRepo": "查看源码仓库",
-      "visitDemo": "访问生产环境 / 网站",
-      "readStudy": "阅读论文 / 报道"
+      "visitDemo": "Live Demo / Web",
+      "readStudy": "阅读论文 / 报道",
+      "requestAudit": "Request Audit Access",
+      "auditSubject": "Audit Access Request"
     },
     "label": {
       "architecture": "技术架构与决策",
@@ -313,7 +315,7 @@
       "tagline": "DePIN 出行与车联网 V2V Mesh 网络",
       "companyOrContext": "Mobility Tech",
       "period": "2026",
-      "description": "面向汽车领域的 DePIN 出行网络与车对车（V2V）Mesh 网络，支持实时遥测、AI 驾驶副驾及去中心化市场。",
+      "description": "Fleet management and 3D vehicle visualizer. DePIN mobility network and vehicle mesh (V2V) with real-time telemetry, AI co-pilot, and decentralized marketplace for automotive sector.",
       "architecture": "Rust 编写的高性能车联网遥测处理后端，配合 Flutter 移动端。具备无蜂窝网络覆盖下的车际预警协议。",
       "metrics": [
         "低延迟车载遥测数据处理",
